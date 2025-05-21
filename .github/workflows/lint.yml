@@ -21,9 +21,9 @@ jobs:
 
       - name: Install ESLint and GHA Formatter
         run: |
-          npm install globals
-          npm install eslint-formatter-gha
-          npm install eslint-plugin-jsdoc
+          npm install --global globals
+          npm install --global eslint-formatter-gha
+          npm install --global eslint-plugin-jsdoc
 
       - name: Run ESLint with GHA Formatter
         run: npx eslint . -f gha
