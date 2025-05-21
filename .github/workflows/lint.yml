@@ -20,7 +20,10 @@ jobs:
           node-version: '20'
 
       - name: Install ESLint and GHA Formatter
-        run: npm install eslint eslint-formatter-gha
+        run: |
+          npm install globals
+          npm install eslint-formatter-gha
+          npm install eslint-plugin-jsdoc
 
       - name: Run ESLint with GHA Formatter
         run: npx eslint . -f gha
