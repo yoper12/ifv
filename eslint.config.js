@@ -28,10 +28,10 @@ export default defineConfig([
             "quotes": ["error", "double"],
             "no-unused-vars": "error",
             "prefer-const": "error",
+            "eqeqeq": ["warn", "smart"],
             "jsdoc/check-syntax": "error",
             "jsdoc/check-types": "error",
             "jsdoc/valid-types": "error",
-            "eqeqeq": ["warn", "smart"],
         },
         linterOptions: {
             reportUnusedInlineConfigs: "error",
@@ -46,9 +46,9 @@ export default defineConfig([
         language: "json/json",
         rules: {
             "json/no-duplicate-keys": "error",
-            "no-empty-keys": "error",
-            "no-unsafe-values": "warn",
-            "no-unnormalized-keys": "error",
+            "json/no-empty-keys": "error",
+            "json/no-unsafe-values": "warn",
+            "json/no-unnormalized-keys": "error",
         },
     }
 ]);
