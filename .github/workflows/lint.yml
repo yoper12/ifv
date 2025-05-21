@@ -1,4 +1,4 @@
-name: Lint
+name: ESLint
 
 on:
   pull_request:
@@ -7,16 +7,20 @@ on:
       - main
 
 jobs:
-  eslint:
+  lint:
+    name: Run ESLint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
-      - run: npm install eslint
-      - uses: sibiraj-s/action-eslint@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          annotations: true
-          all-files: true
+          node-version: '20'
+
+      - name: Install ESLint and GHA Formatter
+        run: npm install eslint eslint-formatter-gha
+
+      - name: Run ESLint with GHA Formatter
+        run: npx eslint . -f gha
