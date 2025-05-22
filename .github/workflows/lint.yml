@@ -32,8 +32,6 @@ jobs:
     if: github.event_name == 'pull_request'
     permissions:
       contents: read
-      checks: write
-      issues: write
       pull-requests: write
     steps:
       - name: Check out Git repository
@@ -52,6 +50,7 @@ jobs:
 
       - name: Suggest fixes
         if: always()
-        uses: reviewdog/action-suggester@v1
+        uses: parkerbxyz/suggest-changes@v2.0.1
         with:
-          tool_name: eslint
+          comment: 'Please commit the suggested changes from ESLint.'
+          event: 'REQUEST_CHANGES'
