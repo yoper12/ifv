@@ -45,12 +45,7 @@ jobs:
       - name: Install ESLint
         run: npm install --save-dev globals eslint-formatter-gha eslint-plugin-jsdoc @eslint/json @eslint/js @stylistic/eslint-plugin-js
 
-      - name: Fix ESLint issues
-        run: npx eslint . --fix
-
-      - name: Suggest fixes
-        if: always()
-        uses: parkerbxyz/suggest-changes@v2.0.1
+      - name: Suggest fixes for ESLint issues
+        uses: reviewdog/action-eslint@v1.33.2
         with:
-          comment: 'Please commit the suggested changes from ESLint.'
-          event: 'REQUEST_CHANGES'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
