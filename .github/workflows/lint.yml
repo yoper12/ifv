@@ -46,12 +46,7 @@ jobs:
         run: npx eslint . --fix
 
       - name: Suggest fixes
+        if: always()
         uses: reviewdog/action-suggester@v1
         with:
           tool_name: eslint
-      - name: Install ESLint and GHA Formatter
-        run: |
-          npm install --save-dev globals eslint-formatter-gha eslint-plugin-jsdoc @eslint/json @eslint/js
-
-      - name: Run ESLint with GHA Formatter
-        run: npx eslint . -f gha
