@@ -30,6 +30,11 @@ jobs:
     name: Suggest ESLint fixes
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      checks: write
+      issues: write
+      pull-requests: write
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
