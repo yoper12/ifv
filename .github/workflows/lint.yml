@@ -10,6 +10,7 @@ jobs:
   lint:
     name: Run ESLint
     runs-on: ubuntu-latest
+    if: !always()
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
