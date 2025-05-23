@@ -49,3 +49,4 @@ jobs:
         uses: CatChen/eslint-suggestion-action@v4.1.17
         with:
             config-path: eslint.config.mjs
+            fail-check: true
