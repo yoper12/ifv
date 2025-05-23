@@ -48,4 +48,4 @@ jobs:
       - name: Suggest fixes for ESLint issues
         uses: CatChen/eslint-suggestion-action@v4.1.17
         with:
-            config-path: .eslint.config.mjs
+            config-path: eslint.config.mjs

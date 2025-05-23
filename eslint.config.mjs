@@ -38,7 +38,7 @@ export default defineConfig([
             "jsdoc/check-syntax": "error",
             "jsdoc/check-types": "error",
             "jsdoc/valid-types": "error",
-            "stylistic/1tbs": "error",
+            "stylistic/brace-style": ["error", "1tbs"],
             "stylistic/comma-dangle": ["error", "always-multiline"],
             "stylistic/comma-spacing": "error",
             "stylistic/function-call-spacing": ["error", "never"],
