@@ -46,6 +46,6 @@ jobs:
         run: npm install --save-dev globals eslint-formatter-gha eslint-plugin-jsdoc @eslint/json @eslint/js @stylistic/eslint-plugin-js
 
       - name: Suggest fixes for ESLint issues
-        uses: reviewdog/action-eslint@v1.33.2
+        uses: CatChen/eslint-suggestion-action@v4.1.17
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+            config-path: .eslint.config.mjs
