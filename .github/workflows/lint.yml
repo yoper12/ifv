@@ -7,6 +7,25 @@ on:
       - main
 
 jobs:
+  lint:
+    name: Run ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install ESLint and its plugins
+        run: |
+          npm install --save-dev globals eslint-formatter-gha eslint-plugin-jsdoc @eslint/json @eslint/js @stylistic/eslint-plugin-js
+
+      - name: Run ESLint
+        run: npx eslint . -f gha
+
   suggest-fixes:
     name: Suggest ESLint fixes
     runs-on: ubuntu-latest
