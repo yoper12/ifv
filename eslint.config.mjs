@@ -1,3 +1,8 @@
+// to use eslint locally with this configuration install the following packages:
+//   npm install --save-dev @eslint/css@0.8.1 @eslint/js@9.27.0 @eslint/json@0.12.0 @stylistic/eslint-plugin@4.4.0 eslint@9.27.0 eslint-plugin-jsdoc@50.6.17 globals@16.2.0
+// and run it with `npx eslint .` in the root of this repository
+// you can also install the eslint add-on for your editor - for VS Code this is https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
+
 import globals from "globals";
 import js from "@eslint/js";
 import css from "@eslint/css";
