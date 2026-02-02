@@ -305,11 +305,6 @@
         color: var(--secondary-text);
     }
 
-    .column > .column__header > h2 > .day__number,
-    .column > .column__header > h2 > .day__name {
-        color: var(--tertiary-text);
-    }
-
     .background .background_item,
     .background .background_item:last-of-type {
         border-color: var(--hr-borders);
@@ -465,6 +460,7 @@
         padding-block: 16px;
         padding-inline: 31px;
         margin-top: 3px;
+        border-color: var(--kolor-wcag);
     }
 
     .scheduler .scheduler__header-cell {
@@ -493,6 +489,10 @@
 
     .info-text {
         color: var(--secondary-text);
+    }
+
+    .info-text a {
+        color: var(--primary-text);
     }
 
     .content-container .box__title,
@@ -1240,4 +1240,15 @@
     .checkbox-item input[type="checkbox"]:checked {
         transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.1s ease-out;
     }
+    .icon--attachment {
+        color: var(--tertiary-text);
+    }
+    .go_to_dashboard {
+        color: var(--primary-text);
+        background-color: #3a3a3a;
+        border-color: #343434;
+    }
+    .go_to_dashboard > img {
+        filter: invert(1);
+}
 }
