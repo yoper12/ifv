@@ -222,6 +222,38 @@
     "allowedHostsCss": ["uczen.eduvulcan.pl", "dziennik-uczen.vulcan.net.pl"]
   },
   {
+    "name": "Dark theme",
+    "description": "Adds dark theme",
+    "files": {
+      "js": ["darkTheme/index.js"],
+      "css": ["darkTheme/main.css", "darkTheme/evHome.css", "darkTheme/colors.css"]
+    },
+    "allowedHostsCss": ["uczen.eduvulcan.pl", "dziennik-uczen.vulcan.net.pl", "wiadomosci.eduvulcan.pl", "dziennik-wiadomosci.vulcan.net.pl", "eduvulcan.pl"],
+    "settings": [
+        {
+            "id": "darkThemeEnabled",
+            "name": "Dark theme enabled",
+            "description": "Whether dark theme should be enabled.",
+            "type": "select",
+            "default": "auto",
+            "options": [
+                {
+                    "value": "auto",
+                    "name": "Auto"
+                },
+                {
+                    "value": "enabled",
+                    "name": "Enabled"
+                },
+                {
+                    "value": "disabled",
+                    "name": "Disabled"
+                }
+            ]
+        }
+    ]
+  },
+  {
     "name": "Count averages",
     "description": "Counts averages in grades table and gives access to \"Uczeń na tle klasy\".",
     "files": {
