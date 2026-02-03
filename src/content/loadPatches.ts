@@ -25,7 +25,10 @@ export async function loadPatchesForConfig(
         const patch = patches[path];
         const { meta, init } = patch;
 
-        if (meta.world !== config.world || meta.runAt !== config.runAt)
+        if (
+            (meta.world ?? "ISOLATED" !== config.world) ||
+            (meta.runAt ?? "document_idle" !== config.runAt)
+        )
             continue;
         if (!meta.matches.some((pattern) => pattern.test(currentUrl))) continue;
 

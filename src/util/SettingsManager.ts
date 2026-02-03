@@ -46,8 +46,15 @@ export class SettingsManager {
         newValue: Setting["defaultValue"],
     ) {
         const storageKey = `patch_settings_${patchId}`;
+
+        const data = (await chrome.storage.sync.get(storageKey)) as Record<
+            string,
+            PatchSettings
+        >;
+        const existingSettings: PatchSettings = data[storageKey] ?? {};
+
         await chrome.storage.sync.set({
-            [storageKey]: { [settingId]: newValue },
+            [storageKey]: { ...existingSettings, [settingId]: newValue },
         });
     }
 

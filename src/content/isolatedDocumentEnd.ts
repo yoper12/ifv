@@ -16,4 +16,25 @@ async function loadPatches() {
 loadPatches();
 
 // @ts-expect-error - navigation api is not yet included in lib.dom.ts
-window.navigation.addEventListener("navigatesuccess", loadPatches);
+if (window.navigation) {
+    // @ts-expect-error - navigation api is not yet included in lib.dom.ts
+    window.navigation.addEventListener("navigatesuccess", loadPatches);
+} else {
+    let lastUrl = location.href;
+
+    function checkUrlChange() {
+        if (location.href !== lastUrl) {
+            lastUrl = location.href;
+            loadPatches();
+        }
+    }
+
+    const observer = new MutationObserver(checkUrlChange);
+
+    observer.observe(document.documentElement, {
+        childList: true,
+        subtree: true,
+    });
+
+    window.addEventListener("popstate", checkUrlChange);
+}

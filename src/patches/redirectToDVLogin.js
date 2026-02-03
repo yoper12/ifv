@@ -12,7 +12,9 @@ window.appendModule({
         !window.location.pathname.split("/")[2],
 });
 
-const pathSegment = window.location.pathname.split("/")[1];
+const pathSegment = encodeURIComponent(
+    window.location.pathname.split("/")[1] ?? "",
+);
 
 const targetSpan = document.querySelector(
     ".input-components ~ .form-gap > span",
