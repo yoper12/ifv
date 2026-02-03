@@ -76,14 +76,14 @@ After:
 - Aligning detailed grades button
 - Redirecting to board
 - Auto-redirecting to █████████ login page
-    </details>
+  </details>
 
 ## Development Workflow
 
 ### Build the extension
 
 1. Make sure you have [Bun](https://bun.sh/) installed.
-2. Install required dependencies using `bun install`, then use `bun simple-git-hooks` to set up pre-commit hook, which formats your code using prettier.
+2. Install required dependencies using `bun install`, then use `bun simple-git-hooks` to set up pre-commit hook, which formats your code using prettier and lints it with eslint.
 3. Use `bun dev` to start development server or `bun build` to build a package.
 
 ### Firefox

@@ -7,7 +7,7 @@ const getLogoElement = () =>
 
 function setUpRedirectToBoard() {
     const logoElement = getLogoElement();
-    if (!!window.location.hostname.match(/^(dziennik-)?wiadomosci.*/)) {
+    if (window.location.hostname.match(/^(dziennik-)?wiadomosci.*/)) {
         const url = `https://${window.location.hostname.replace(
             "wiadomosci",
             "uczen",

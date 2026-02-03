@@ -39,7 +39,7 @@ function move() {
 
     button.addEventListener("click", async () => {
         button.classList.toggle("hidden");
-        if (!!window.location.hostname.match(/^(dziennik-)?wiadomosci.*/)) {
+        if (window.location.hostname.match(/^(dziennik-)?wiadomosci.*/)) {
             location.replace(
                 `https://${window.location.hostname.replace(
                     "wiadomosci",

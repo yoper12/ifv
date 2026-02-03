@@ -11,16 +11,14 @@ function modifyGradesRequests() {
     };
 
     XMLHttpRequest.prototype.send = function () {
-        const xhr = this;
+        if (this._requestURL && this._requestURL.includes("/api/Oceny?")) {
+            const originalOnReadyStateChange = this.onreadystatechange;
 
-        if (xhr._requestURL && xhr._requestURL.includes("/api/Oceny?")) {
-            const originalOnReadyStateChange = xhr.onreadystatechange;
-
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
+            this.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
                     try {
-                        let data = JSON.parse(xhr.responseText);
-                        const originalResponse = JSON.parse(xhr.responseText);
+                        let data = JSON.parse(this.responseText);
+                        const originalResponse = JSON.parse(this.responseText);
 
                         console.debug(
                             "Oryginalna odpowiedź:",
@@ -52,7 +50,7 @@ function modifyGradesRequests() {
                                                         if (
                                                             grade.wpis &&
                                                             grade.wpis.match(
-                                                                /^[0-6](\+|\-)?$/,
+                                                                /^[0-6](\+|-)?$/,
                                                             )
                                                         ) {
                                                             let value =
@@ -107,13 +105,13 @@ function modifyGradesRequests() {
                             console.debug("Zmodyfikowana odpowiedź:", data);
                         }
 
-                        Object.defineProperty(xhr, "responseText", {
+                        Object.defineProperty(this, "responseText", {
                             get: function () {
                                 return data;
                             },
                         });
 
-                        Object.defineProperty(xhr, "response", {
+                        Object.defineProperty(this, "response", {
                             get: function () {
                                 return data;
                             },

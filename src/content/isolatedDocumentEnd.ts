@@ -15,5 +15,5 @@ async function loadPatches() {
 
 loadPatches();
 
-// @ts-ignore
+// @ts-expect-error - navigation api is not yet included in lib.dom.ts
 window.navigation.addEventListener("navigatesuccess", loadPatches);

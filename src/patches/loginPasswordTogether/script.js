@@ -22,6 +22,7 @@ function swapLoginInput() {
     );
     // Force firefox to check inputs again
     const centerBox = document.querySelector(".center-box");
+    // eslint-disable-next-line no-self-assign
     centerBox.innerHTML = centerBox.innerHTML;
 }
 

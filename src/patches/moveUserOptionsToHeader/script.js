@@ -90,7 +90,7 @@ const moveUserOptionsToHeader = async () => {
         .querySelector(".header_logo_tools_user-wrapper")
         .appendChild(userAvatar);
 
-    addEventListener("popstate", (e) => {
+    addEventListener("popstate", () => {
         if (
             document.querySelector(".modal-user").classList.contains("active")
         ) {

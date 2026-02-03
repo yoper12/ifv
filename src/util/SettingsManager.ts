@@ -1,4 +1,9 @@
-import { Meta } from "../types/Meta.ts";
+import type { Meta } from "../types/Meta.ts";
+import type { Setting } from "../types/Setting.ts";
+
+interface PatchSettings {
+    [key: string]: Setting["defaultValue"];
+}
 
 export class SettingsManager {
     /**
@@ -7,12 +12,15 @@ export class SettingsManager {
      * @param patchMeta Metadata defined in patch definition.
      * @returns A promise that resolves to the configuration object for the patch.
      */
-    static async getPatchSettings(patchMeta: Meta): Promise<any> {
+    static async getPatchSettings(patchMeta: Meta): Promise<PatchSettings> {
         const storageKey = `patch_settings_${patchMeta.id}`;
-        const storedData: Record<string, any> =
-            (await chrome.storage.sync.get(storageKey))[storageKey] || {};
+        const data = (await chrome.storage.sync.get(storageKey)) as Record<
+            string,
+            PatchSettings
+        >;
+        const storedData: PatchSettings = data[storageKey] ?? {};
 
-        const settings: Record<string, any> = {};
+        const settings: PatchSettings = {};
 
         if (patchMeta.settings) {
             for (const setting of patchMeta.settings) {
@@ -35,7 +43,7 @@ export class SettingsManager {
     static async savePatchSetting(
         patchId: string,
         settingId: string,
-        newValue: any,
+        newValue: Setting["defaultValue"],
     ) {
         const storageKey = `patch_settings_${patchId}`;
         await chrome.storage.sync.set({
