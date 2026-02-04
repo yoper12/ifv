@@ -41,13 +41,17 @@ export async function loadPatchesForConfig(
 
         const settings = await SettingsManager.getPatchSettings(meta);
 
-        try {
-            await init(settings);
-        } catch (err) {
-            console.error(
-                `Error initializing patch "${meta.name}" (${meta.id}):`,
-                err,
-            );
-        }
+        (async () => {
+            try {
+                await init(settings);
+            } catch (err) {
+                if (err.name === "AbortError") return; // Cleanup funtions can intentionally throw this error when aborting dom waiters/watchers
+
+                console.error(
+                    `Error initializing patch "${meta.name}" (${meta.id}):`,
+                    err,
+                );
+            }
+        })();
     }
 }
