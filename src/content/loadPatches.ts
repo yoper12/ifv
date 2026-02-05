@@ -39,11 +39,9 @@ export async function loadPatchesForConfig(
 
         if ((await SettingsManager.isPatchEnabled(meta.id)) === false) continue;
 
-        const settings = await SettingsManager.getPatchSettings(meta);
-
         (async () => {
             try {
-                await init(settings);
+                await init(await SettingsManager.getPatchSettings(meta));
             } catch (err) {
                 if (err.name === "AbortError") return; // Cleanup funtions can intentionally throw this error when aborting dom waiters/watchers
 
