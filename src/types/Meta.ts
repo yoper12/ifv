@@ -23,7 +23,7 @@ export interface Meta {
     /**
      * The settings associated with the patch.
      */
-    settings?: readonly Array<Setting>;
+    settings?: readonly Setting[];
     /**
      * The strategy for running the patch.
      * Want to run on every DOM change? Use `once` here and `watchElement.ts` from `utils/` in your `init()` function.
