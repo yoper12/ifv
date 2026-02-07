@@ -45,6 +45,9 @@ export type Patch =
 /**
  * Defines a patch with the provided configuration.
  *
+ * @param patch The patch configuration object.
+ * @returns The same patch configuration object, used for type inference.
+ *
  * @example
  * ```typescript
  * import { definePatch } from "../types/Patch.ts";
@@ -59,9 +62,6 @@ export type Patch =
  *   },
  * });
  * ```
- *
- * @param patch The patch configuration object.
- * @returns The same patch configuration object, used for type inference.
  */
 export function definePatch<const S extends readonly Setting[]>(
     patch: PatchWithSettings<S>,
