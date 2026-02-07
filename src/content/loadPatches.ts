@@ -31,13 +31,14 @@ export async function loadPatchesForConfig(
         )
             continue;
         if (!meta.matches.some((pattern) => pattern.test(currentUrl))) continue;
+        if (!meta.deviceTypes.includes(getDeviceType())) continue;
+
+        if ((await SettingsManager.isPatchEnabled(meta.id)) === false) continue;
 
         if (meta.runStrategy === "once") {
             if (loadedPatches.has(meta.id)) continue;
             loadedPatches.add(meta.id);
         }
-
-        if ((await SettingsManager.isPatchEnabled(meta.id)) === false) continue;
 
         (async () => {
             try {
@@ -52,4 +53,8 @@ export async function loadPatchesForConfig(
             }
         })();
     }
+}
+
+function getDeviceType(): "desktop" | "mobile" {
+    return window.innerWidth < 1024 ? "mobile" : "desktop";
 }

@@ -21,6 +21,12 @@ export interface Meta {
      */
     matches: Array<RegExp>;
     /**
+     * The types of devices the patch is applicable to.
+     *
+     * @default ["desktop", "mobile"]
+     */
+    deviceTypes?: Array<"desktop" | "mobile">;
+    /**
      * The settings associated with the patch.
      */
     settings?: readonly Setting[];
