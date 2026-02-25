@@ -5,7 +5,57 @@ interface PatchSettings {
     [key: string]: Setting["defaultValue"];
 }
 
+type StorageValue = boolean | PatchSettings;
+
 export class SettingsManager {
+    private static cache?: Record<string, StorageValue>;
+
+    private static pendingWrites: Record<string, StorageValue> = {};
+    private static writeTimeout?: number;
+
+    /**
+     * Retrieves the current cache of settings, initializing it if necessary.
+     *
+     * @returns A promise that resolves to the current cache of settings.
+     */
+    private static async getCache(): Promise<Record<string, StorageValue>> {
+        if (!this.cache) {
+            this.cache = await chrome.storage.sync.get(null);
+
+            chrome.storage.onChanged.addListener((changes, areaName) => {
+                if (areaName === "sync" && this.cache) {
+                    for (const [key, { newValue }] of Object.entries(changes)) {
+                        this.cache[key] = newValue as StorageValue;
+                    }
+                }
+            });
+        }
+
+        return this.cache;
+    }
+
+    /**
+     * Schedules a write to the storage with debouncing to minimize the number of writes.
+     *
+     * @param key The storage key to write to.
+     * @param value The value to write to storage.
+     */
+    private static scheduleWrite(key: string, value: StorageValue) {
+        this.pendingWrites[key] = value;
+
+        if (this.cache) this.cache[key] = value;
+
+        if (this.writeTimeout) {
+            clearTimeout(this.writeTimeout);
+        }
+
+        this.writeTimeout = setTimeout(() => {
+            const dataToWrite = { ...this.pendingWrites };
+            this.pendingWrites = {};
+            chrome.storage.sync.set(dataToWrite).catch(console.error);
+        }, 300);
+    }
+
     /**
      * Retrieves the configuration settings for a given patch.
      *
@@ -13,12 +63,10 @@ export class SettingsManager {
      * @returns A promise that resolves to the configuration object for the patch.
      */
     static async getPatchSettings(patchMeta: Meta): Promise<PatchSettings> {
+        const cache = await this.getCache();
         const storageKey = `patch_settings_${patchMeta.id}`;
-        const data = (await chrome.storage.sync.get(storageKey)) as Record<
-            string,
-            PatchSettings
-        >;
-        const storedData: PatchSettings = data[storageKey] ?? {};
+        const storedData =
+            (cache[storageKey] as PatchSettings | undefined) ?? {};
 
         const settings: PatchSettings = {};
 
@@ -45,16 +93,14 @@ export class SettingsManager {
         settingId: string,
         newValue: Setting["defaultValue"],
     ) {
+        const cache = await this.getCache();
         const storageKey = `patch_settings_${patchId}`;
+        const existingSettings =
+            (cache[storageKey] as PatchSettings | undefined) ?? {};
 
-        const data = (await chrome.storage.sync.get(storageKey)) as Record<
-            string,
-            PatchSettings
-        >;
-        const existingSettings: PatchSettings = data[storageKey] ?? {};
-
-        await chrome.storage.sync.set({
-            [storageKey]: { ...existingSettings, [settingId]: newValue },
+        this.scheduleWrite(storageKey, {
+            ...existingSettings,
+            [settingId]: newValue,
         });
     }
 
@@ -65,8 +111,8 @@ export class SettingsManager {
      * @returns A promise that resolves when the patch has been enabled.
      */
     static async enablePatch(patchId: string): Promise<void> {
-        const storageKey = `patch_enabled_${patchId}`;
-        await chrome.storage.sync.set({ [storageKey]: true });
+        await this.getCache();
+        this.scheduleWrite(`patch_enabled_${patchId}`, true);
     }
 
     /**
@@ -76,8 +122,8 @@ export class SettingsManager {
      * @returns A promise that resolves when the patch has been disabled.
      */
     static async disablePatch(patchId: string): Promise<void> {
-        const storageKey = `patch_enabled_${patchId}`;
-        await chrome.storage.sync.set({ [storageKey]: false });
+        await this.getCache();
+        this.scheduleWrite(`patch_enabled_${patchId}`, false);
     }
 
     /**
@@ -87,10 +133,9 @@ export class SettingsManager {
      * @returns A promise that resolves to true if the patch is enabled, false otherwise.
      */
     static async isPatchEnabled(patchId: string): Promise<boolean> {
+        const cache = await this.getCache();
         const storageKey = `patch_enabled_${patchId}`;
-        const result: Record<string, boolean | undefined> =
-            await chrome.storage.sync.get(storageKey);
-        return result[storageKey] ?? true;
+        return (cache[storageKey] as boolean | undefined) ?? true;
     }
 
     /**
