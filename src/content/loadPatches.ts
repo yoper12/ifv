@@ -7,6 +7,7 @@ interface PatchLoaderConfig {
 }
 
 const activePatches = new Map<string, Patch>();
+const patchLifecyclePromises = new Map<string, Promise<void>>();
 
 /**
  * Loads and initializes patches based on the provided configuration.
@@ -37,13 +38,16 @@ export async function loadPatchesForConfig(
         if ((await SettingsManager.isPatchEnabled(meta.id)) === false) continue;
 
         eligiblePatchIds.add(meta.id);
-
         if (activePatches.has(meta.id)) continue;
-
         activePatches.set(meta.id, patch);
 
-        (async () => {
+        const previousTask =
+            patchLifecyclePromises.get(meta.id) || Promise.resolve();
+
+        const currentTask = previousTask.then(async () => {
             try {
+                if (!activePatches.has(meta.id)) return;
+
                 await init(await SettingsManager.getPatchSettings(meta));
             } catch (err) {
                 if (err.name === "AbortError") return; // Cleanup functions can intentionally throw this error when aborting dom waiters/watchers
@@ -53,7 +57,8 @@ export async function loadPatchesForConfig(
                     err,
                 );
             }
-        })();
+        });
+        patchLifecyclePromises.set(meta.id, currentTask);
     }
 
     for (const [patchId, patch] of activePatches) {
@@ -65,7 +70,10 @@ export async function loadPatchesForConfig(
 
         activePatches.delete(patchId);
 
-        (async () => {
+        const previousTask =
+            patchLifecyclePromises.get(patchId) || Promise.resolve();
+
+        const currentTask = previousTask.then(async () => {
             if (!patch.cleanup) return;
 
             try {
@@ -78,7 +86,8 @@ export async function loadPatchesForConfig(
                     err,
                 );
             }
-        })();
+        });
+        patchLifecyclePromises.set(patchId, currentTask);
     }
 }
 
