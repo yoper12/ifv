@@ -342,8 +342,14 @@ class ElementBuilder<K extends keyof HTMLElementTagNameMap = "div"> {
      *   .insertBefore(reference);
      * ```
      */
-    insertBefore(reference: HTMLElement): this {
-        reference.parentNode?.insertBefore(this._element, reference);
+    insertBefore(
+        reference: HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>,
+    ): this {
+        const refElement =
+            reference instanceof ElementBuilder
+                ? reference.getElement()
+                : reference;
+        refElement.parentNode?.insertBefore(this._element, refElement);
         return this;
     }
 
@@ -362,10 +368,16 @@ class ElementBuilder<K extends keyof HTMLElementTagNameMap = "div"> {
      *   .insertAfter(reference);
      * ```
      */
-    insertAfter(reference: HTMLElement): this {
-        reference.parentNode?.insertBefore(
+    insertAfter(
+        reference: HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>,
+    ): this {
+        const refElement =
+            reference instanceof ElementBuilder
+                ? reference.getElement()
+                : reference;
+        refElement.parentNode?.insertBefore(
             this._element,
-            reference.nextSibling,
+            refElement.nextSibling,
         );
         return this;
     }
@@ -440,12 +452,14 @@ class ElementBuilder<K extends keyof HTMLElementTagNameMap = "div"> {
      * ```
      */
     if(condition: boolean, callback: (_element: this) => void): this {
+        this.lastConditionMet = condition;
+
         if (condition) {
-            this.lastConditionMet = true;
+            const previousState = this.lastConditionMet;
             callback(this);
-        } else {
-            this.lastConditionMet = false;
+            this.lastConditionMet = previousState;
         }
+
         return this;
     }
 
@@ -466,10 +480,13 @@ class ElementBuilder<K extends keyof HTMLElementTagNameMap = "div"> {
     elseIf(condition: boolean, callback: (_element: this) => void): this {
         if (this.lastConditionMet === undefined)
             throw new Error("elseIf() cannot be used before or without if()");
+
         if (!this.lastConditionMet && condition) {
-            this.lastConditionMet = true;
             callback(this);
+
+            this.lastConditionMet = true;
         }
+
         return this;
     }
 
@@ -490,9 +507,12 @@ class ElementBuilder<K extends keyof HTMLElementTagNameMap = "div"> {
     else(callback: (_element: this) => void): this {
         if (this.lastConditionMet === undefined)
             throw new Error("else() cannot be used before or without if()");
+
         if (!this.lastConditionMet) {
             callback(this);
         }
+
+        this.lastConditionMet = undefined;
         return this;
     }
 
