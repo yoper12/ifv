@@ -15,6 +15,8 @@ interface PatchWithSettings<S extends readonly Setting[]> {
     /**
      * Optional cleanup function.
      * Should remove event listeners, disconnect observers, and remove injected DOM element if the patch needs to be unloaded (e.g., on URL change or toggle off).
+     *
+     * **This function is never called if you set `runStrategy` to `"once"` in the patch's metadata, since the patch will never be unloaded in that case.**
      */
     cleanup?: () => void | Promise<void>;
 }
@@ -31,6 +33,8 @@ interface PatchWithoutSettings {
     /**
      * Optional cleanup function.
      * Should remove event listeners, disconnect observers, and remove injected DOM element if the patch needs to be unloaded (e.g., on URL change or toggle off).
+     *
+     * **This function is never called if you set `runStrategy` to `"once"` in the patch's metadata, since the patch will never be unloaded in that case.**
      */
     cleanup?: () => void | Promise<void>;
 }
