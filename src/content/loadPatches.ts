@@ -34,7 +34,8 @@ export async function loadPatchesForConfig(
         )
             continue;
         if (!meta.matches.some((pattern) => pattern.test(currentUrl))) continue;
-        if (!meta.deviceTypes.includes(getDeviceType())) continue;
+        if (meta.deviceTypes && !meta.deviceTypes.includes(getDeviceType()))
+            continue;
 
         if ((await SettingsManager.isPatchEnabled(meta.id)) === false) continue;
 
