@@ -1,6 +1,6 @@
 import type { Patch } from "../types/Patch.ts";
-import { Logger } from "../util/Logger.ts";
-import { SettingsManager } from "../util/SettingsManager.ts";
+import { Logger } from "./Logger.ts";
+import { SettingsManager } from "./SettingsManager.ts";
 
 interface PatchLoaderConfig {
     world: "MAIN" | "ISOLATED";
