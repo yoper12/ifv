@@ -1,5 +1,6 @@
 import type { Meta } from "../types/Meta.ts";
 import type { Setting } from "../types/Setting.ts";
+import { Logger } from "./Logger.ts";
 
 interface PatchSettings {
     [key: string]: Setting["defaultValue"];
@@ -21,6 +22,7 @@ export class SettingsManager {
     private static async getCache(): Promise<Record<string, StorageValue>> {
         if (!this.cache) {
             this.cache = await chrome.storage.sync.get(null);
+            Logger.info(`Initialized settings cache:`, this.cache);
 
             chrome.storage.onChanged.addListener((changes, areaName) => {
                 if (areaName === "sync" && this.cache) {
@@ -43,7 +45,10 @@ export class SettingsManager {
     private static scheduleWrite(key: string, value: StorageValue) {
         this.pendingWrites[key] = value;
 
-        if (this.cache) this.cache[key] = value;
+        if (this.cache) {
+            this.cache[key] = value;
+            Logger.info(`Updated settings cache:`, { [key]: value });
+        }
 
         if (this.writeTimeout) {
             clearTimeout(this.writeTimeout);
@@ -52,7 +57,16 @@ export class SettingsManager {
         this.writeTimeout = setTimeout(() => {
             const dataToWrite = { ...this.pendingWrites };
             this.pendingWrites = {};
-            chrome.storage.sync.set(dataToWrite).catch(console.error);
+            chrome.storage.sync
+                .set(dataToWrite)
+                .catch((err) =>
+                    Logger.error(
+                        `Error writing data to storage:`,
+                        dataToWrite,
+                        err,
+                    ),
+                );
+            Logger.info(`Saved settings to storage:`, dataToWrite);
         }, 300);
     }
 

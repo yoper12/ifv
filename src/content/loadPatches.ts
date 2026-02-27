@@ -1,4 +1,5 @@
 import type { Patch } from "../types/Patch.ts";
+import { Logger } from "../util/Logger.ts";
 import { SettingsManager } from "../util/SettingsManager.ts";
 
 interface PatchLoaderConfig {
@@ -48,11 +49,17 @@ export async function loadPatchesForConfig(
             try {
                 if (!activePatches.has(meta.id)) return;
 
+                const t0 = performance.now();
                 await init(await SettingsManager.getPatchSettings(meta));
+                const t1 = performance.now();
+
+                Logger.info(
+                    `Initialized patch "${meta.name}" (${meta.id}) in ${(t1 - t0).toFixed(2)}ms`,
+                );
             } catch (err) {
                 if (err.name === "AbortError") return; // Cleanup functions can intentionally throw this error when aborting dom waiters/watchers
 
-                console.error(
+                Logger.error(
                     `Error initializing patch "${meta.name}" (${meta.id}):`,
                     err,
                 );
@@ -77,11 +84,17 @@ export async function loadPatchesForConfig(
             if (!patch.cleanup) return;
 
             try {
+                const t0 = performance.now();
                 await patch.cleanup();
+                const t1 = performance.now();
+
+                Logger.info(
+                    `Cleaned up patch "${patch.meta.name}" (${patch.meta.id}) in ${(t1 - t0).toFixed(2)}ms`,
+                );
             } catch (err) {
                 if (err.name === "AbortError") return; // Cleanup functions can intentionally throw this error when aborting dom waiters/watchers
 
-                console.error(
+                Logger.error(
                     `Error cleaning up patch "${patch.meta.name}" (${patch.meta.id}):`,
                     err,
                 );

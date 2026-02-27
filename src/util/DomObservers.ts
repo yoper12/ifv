@@ -1,3 +1,5 @@
+import { Logger } from "./Logger.ts";
+
 export class DomObservers {
     /**
      * Waits for an element to be rendered in the DOM.
@@ -26,9 +28,24 @@ export class DomObservers {
         }
 
         return new Promise((resolve, reject) => {
+            function cleanup() {
+                clearTimeout(warnTimer);
+                observer.disconnect();
+            }
+
+            const warnTimer = setTimeout(() => {
+                Logger.warn(
+                    `Waiting for an element to render for over 5 seconds. This might indicate a problem in the patch or the selector function.`,
+                    {
+                        selector: selector.toString(),
+                        parent: parent,
+                    },
+                );
+            }, 5000);
+
             const observer = new MutationObserver(() => {
                 if (!parent.isConnected) {
-                    observer.disconnect();
+                    cleanup();
                     reject(
                         new Error(
                             "Parent element disconnected while waiting for render.",
@@ -38,14 +55,14 @@ export class DomObservers {
                 }
 
                 if (selector()) {
-                    observer.disconnect();
+                    cleanup();
                     resolve();
                 }
             });
 
             if (signal) {
                 signal.addEventListener("abort", () => {
-                    observer.disconnect();
+                    cleanup();
                     reject(new DOMException("Aborted", "AbortError"));
                 });
             }
@@ -83,9 +100,24 @@ export class DomObservers {
         }
 
         await new Promise<void>((resolve, reject) => {
+            function cleanup() {
+                clearTimeout(warnTimer);
+                observer.disconnect();
+            }
+
+            const warnTimer = setTimeout(() => {
+                Logger.warn(
+                    `Waiting for an element to replace for over 5 seconds. This might indicate a problem in the patch or the selector function.`,
+                    {
+                        selector: selector.toString(),
+                        parent: parent,
+                    },
+                );
+            }, 5000);
+
             const observer = new MutationObserver(() => {
                 if (!parent.isConnected) {
-                    observer.disconnect();
+                    cleanup();
                     reject(
                         new Error(
                             "Parent element disconnected while waiting for replacement.",
@@ -95,14 +127,14 @@ export class DomObservers {
                 }
 
                 if (!initialElement.isConnected) {
-                    observer.disconnect();
+                    cleanup();
                     resolve();
                 }
             });
 
             if (signal) {
                 signal.addEventListener("abort", () => {
-                    observer.disconnect();
+                    cleanup();
                     reject(new DOMException("Aborted", "AbortError"));
                 });
             }
@@ -173,7 +205,7 @@ export class DomObservers {
      *
      * @param selector A function that returns the target element or null if the element does not exist.
      * @param callback A function to be called when the target element is replaced.
-     * @param parent The root element to observe for changes. You should not use document.body here, since this watcher is long-term and using it would cause observable performance impact. Make sure the parent element exists when calling this method.
+     * @param parent The root element to observe for changes. You should **not** use document.body here, since this watcher is long-term and using it would cause observable performance impact. Make sure the parent element exists when calling this method.
      * @param signal An optional `AbortSignal` that can be used to stop the watcher. Use this in your patch's cleanup function to prevent memory leaks.
      * @returns A promise that resolves when the watcher has been set up.
      *
@@ -195,6 +227,13 @@ export class DomObservers {
         parent: HTMLElement,
         signal?: AbortSignal,
     ): Promise<void> {
+        if (!parent?.isConnected) {
+            Logger.error("Parent element is not connected to the DOM.", {
+                parent,
+            });
+            return;
+        }
+
         signal?.throwIfAborted();
 
         let currentElement = selector();
