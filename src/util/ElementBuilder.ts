@@ -1,4 +1,4 @@
-class ElementBuilder<K extends keyof HTMLElementTagNameMap = "div"> {
+export class ElementBuilder<K extends keyof HTMLElementTagNameMap = "div"> {
     _element: HTMLElementTagNameMap[K];
     private lastConditionMet: boolean | undefined = undefined;
 
@@ -434,6 +434,23 @@ class ElementBuilder<K extends keyof HTMLElementTagNameMap = "div"> {
         } else {
             this.hide();
         }
+        return this;
+    }
+
+    /**
+     * Removes the element from the DOM.
+     *
+     * @returns The current instance of `ElementBuilder` for method chaining.
+     *
+     * @example
+     * ```typescript
+     * createElement("div")
+     *   .setTextContent("This div will be removed")
+     *   .remove();
+     * ```
+     */
+    remove(): this {
+        this._element.remove();
         return this;
     }
 

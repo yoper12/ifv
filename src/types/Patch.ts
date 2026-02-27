@@ -1,17 +1,31 @@
 import type { Meta } from "./Meta.ts";
 import type { Setting } from "./Setting.ts";
 
-interface PatchWithSettings<S extends readonly Setting[]> {
+export interface PatchDefWithSettings<S extends readonly Setting[]> {
     /**
      * Metadata information for a patch.
      */
     meta: Omit<Meta, "settings"> & { settings: S };
     /**
-     * The initialization function for the patch.
+     * Optional CSS string to be applied when the patch is active.
+     *
+     * @example
+     * ```typescript
+     * import css from "./style.css?inline"
+     *
+     * export default definePatch({
+     *   meta: { ... },
+     *   css,
+     * });
+     * ```
+     */
+    css?: string;
+    /**
+     * Opitional initialization function for the patch.
      *
      * @param settings The configuration settings for the patch.
      */
-    init: (settings: InferSettings<S>) => void | Promise<void>;
+    init?: (settings: InferSettings<S>) => void | Promise<void>;
     /**
      * Optional cleanup function.
      * Should remove event listeners, disconnect observers, and remove injected DOM element if the patch needs to be unloaded (e.g., on URL change or toggle off).
@@ -21,15 +35,31 @@ interface PatchWithSettings<S extends readonly Setting[]> {
     cleanup?: () => void | Promise<void>;
 }
 
-interface PatchWithoutSettings {
+export interface PatchDefWithoutSettings {
     /**
      * Metadata information for a patch.
      */
     meta: Omit<Meta, "settings">;
     /**
-     * The initialization function for the patch.
+     * Optional CSS string to be applied when the patch is active.
+     *
+     * @example
+     * ```typescript
+     * import css from "./style.css?inline"
+     *
+     * export default definePatch({
+     *   meta: { ... },
+     *   css,
+     * });
+     * ```
      */
-    init: () => void | Promise<void>;
+    css?: string;
+    /**
+     * Opitional initialization function for the patch.
+     *
+     * @param settings The configuration settings for the patch.
+     */
+    init?: () => void | Promise<void>;
     /**
      * Optional cleanup function.
      * Should remove event listeners, disconnect observers, and remove injected DOM element if the patch needs to be unloaded (e.g., on URL change or toggle off).
@@ -39,40 +69,16 @@ interface PatchWithoutSettings {
     cleanup?: () => void | Promise<void>;
 }
 
-/**
- * A patch that can be applied to a webpage.
- */
-export type Patch =
-    | PatchWithSettings<readonly Setting[]>
-    | PatchWithoutSettings;
+export type PatchDefinition =
+    | PatchDefWithSettings<readonly Setting[]>
+    | PatchDefWithoutSettings;
 
-/**
- * Defines a patch with the provided configuration.
- *
- * @param patch The patch configuration object.
- * @returns The same patch configuration object, used for type inference.
- *
- * @example
- * ```typescript
- * import { definePatch } from "../types/Patch.ts";
- *
- * export default definePatch({
- *   meta: { ... },
- *   init() {
- *     // Patch initialization code here
- *   },
- *   cleanup() {
- *     // Optional cleanup code here
- *   },
- * });
- * ```
- */
-export function definePatch<const S extends readonly Setting[]>(
-    patch: PatchWithSettings<S>,
-): PatchWithSettings<S>;
-export function definePatch(patch: PatchWithoutSettings): PatchWithoutSettings;
-export function definePatch(patch: Patch): Patch {
-    return patch;
+export interface Patch {
+    meta: Meta;
+    init: (
+        settings?: Record<string, Setting["defaultValue"]>,
+    ) => void | Promise<void>;
+    cleanup?: () => void | Promise<void>;
 }
 
 /**
