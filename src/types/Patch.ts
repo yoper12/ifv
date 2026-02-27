@@ -7,19 +7,20 @@ export interface PatchDefWithSettings<S extends readonly Setting[]> {
      */
     meta: Omit<Meta, "settings"> & { settings: S };
     /**
-     * Optional CSS string to be applied when the patch is active.
+     * Optional CSS string or an array of CSS strings to be applied when the patch is active.
      *
      * @example
      * ```typescript
-     * import css from "./style.css?inline"
+     * import css1 from "./style1.css?inline"
+     * import css2 from "./style2.css?inline"
      *
      * export default definePatch({
      *   meta: { ... },
-     *   css,
+     *   css: [css1, css2],
      * });
      * ```
      */
-    css?: string;
+    css?: string | Array<string>;
     /**
      * Opitional initialization function for the patch.
      *
@@ -41,19 +42,20 @@ export interface PatchDefWithoutSettings {
      */
     meta: Omit<Meta, "settings">;
     /**
-     * Optional CSS string to be applied when the patch is active.
+     * Optional CSS string or an array of CSS strings to be applied when the patch is active.
      *
      * @example
      * ```typescript
-     * import css from "./style.css?inline"
+     * import css1 from "./style1.css?inline"
+     * import css2 from "./style2.css?inline"
      *
      * export default definePatch({
      *   meta: { ... },
-     *   css,
+     *   css: [css1, css2],
      * });
      * ```
      */
-    css?: string;
+    css?: string | Array<string>;
     /**
      * Opitional initialization function for the patch.
      *

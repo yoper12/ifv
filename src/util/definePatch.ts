@@ -43,9 +43,12 @@ export function definePatch(patch: PatchDefinition): Patch {
 
         async init(settings: Record<string, Setting["defaultValue"]> = {}) {
             if (patch.css && !styleElement) {
+                const css = Array.isArray(patch.css)
+                    ? patch.css.join("\n")
+                    : patch.css;
                 styleElement = createElement("style")
                     .setId(`patch-css-${patch.meta.id}`)
-                    .setTextContent(patch.css)
+                    .setTextContent(css)
                     .appendTo(document.head);
             }
 
