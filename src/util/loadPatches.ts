@@ -24,6 +24,10 @@ export async function loadPatchesForConfig(
     const currentUrl = window.location.href;
     const eligiblePatches = new Map<string, Patch>();
 
+    Logger.info(
+        `Loading patches for world "${config.world}" at "${config.runAt}" on URL: ${currentUrl}`,
+    );
+
     for (const path in patches) {
         const patch = patches[path];
         const { meta } = patch;

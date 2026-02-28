@@ -1,3 +1,5 @@
+const DEV = import.meta.env?.DEV;
+
 export class Logger {
     /**
      * Used to log informational messages (lowest priority). This will be disabled in production builds to avoid performance impact.
@@ -9,7 +11,7 @@ export class Logger {
      * ```
      */
     static get info() {
-        if (!import.meta?.env?.DEV) return () => {};
+        if (!DEV) return () => {};
 
         return console.info.bind(
             console,
@@ -29,7 +31,7 @@ export class Logger {
      * ```
      */
     static get debug() {
-        if (!import.meta?.env?.DEV) return () => {};
+        if (!DEV) return () => {};
 
         return console.debug.bind(
             console,
@@ -49,7 +51,7 @@ export class Logger {
      * ```
      */
     static get warn() {
-        if (!import.meta?.env?.DEV) return () => {};
+        if (!DEV) return () => {};
 
         return console.warn.bind(
             console,
