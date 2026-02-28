@@ -22,11 +22,11 @@ export async function loadPatchesForConfig(
     config: PatchLoaderConfig,
 ) {
     const currentUrl = window.location.href;
-    const eligiblePatchIds = new Set<string>();
+    const eligiblePatches = new Map<string, Patch>();
 
     for (const path in patches) {
         const patch = patches[path];
-        const { meta, init } = patch;
+        const { meta } = patch;
 
         if (
             (meta.world ?? "ISOLATED") !== config.world ||
@@ -36,67 +36,61 @@ export async function loadPatchesForConfig(
         if (!meta.matches.some((pattern) => pattern.test(currentUrl))) continue;
         if (meta.deviceTypes && !meta.deviceTypes.includes(getDeviceType()))
             continue;
-
         if ((await SettingsManager.isPatchEnabled(meta.id)) === false) continue;
 
-        eligiblePatchIds.add(meta.id);
-        if (activePatches.has(meta.id)) continue;
-        activePatches.set(meta.id, patch);
+        eligiblePatches.set(meta.id, patch);
+    }
+
+    for (const [patchId, patch] of activePatches) {
+        const isEligible = eligiblePatches.has(patchId);
+        const runStrategy = patch.meta.runStrategy ?? "onUrlChange";
+
+        if (!isEligible || runStrategy === "onUrlChange") {
+            activePatches.delete(patchId);
+
+            const previousTask =
+                patchLifecyclePromises.get(patchId) || Promise.resolve();
+            const currentTask = previousTask.then(async () => {
+                try {
+                    const t0 = performance.now();
+                    await patch.cleanup();
+                    const t1 = performance.now();
+                    Logger.info(
+                        `Cleaned up patch "${patch.meta.name}" (${patch.meta.id}) in ${(t1 - t0).toFixed(2)}ms`,
+                    );
+                } catch (err) {
+                    if (err.name === "AbortError") return;
+                    Logger.error(
+                        `Error cleaning up patch "${patch.meta.name}" (${patch.meta.id}):`,
+                        err,
+                    );
+                }
+            });
+            patchLifecyclePromises.set(patchId, currentTask);
+        }
+    }
+
+    for (const [patchId, patch] of eligiblePatches) {
+        if (activePatches.has(patchId)) continue;
+
+        activePatches.set(patchId, patch);
+        const { meta, init } = patch;
 
         const previousTask =
-            patchLifecyclePromises.get(meta.id) || Promise.resolve();
-
+            patchLifecyclePromises.get(patchId) || Promise.resolve();
         const currentTask = previousTask.then(async () => {
             try {
-                if (!activePatches.has(meta.id)) return;
-
+                if (!activePatches.has(patchId)) return;
                 const t0 = performance.now();
                 await init(await SettingsManager.getPatchSettings(meta));
                 const t1 = performance.now();
-
                 Logger.info(
                     `Initialized patch "${meta.name}" (${meta.id}) in ${(t1 - t0).toFixed(2)}ms`,
                 );
             } catch (err) {
-                if (err.name === "AbortError") return; // Cleanup functions can intentionally throw this error when aborting dom waiters/watchers
-
+                if (err.name === "AbortError") return;
                 Logger.error(
                     `Error initializing patch "${meta.name}" (${meta.id}):`,
-                    err,
-                );
-            }
-        });
-        patchLifecyclePromises.set(meta.id, currentTask);
-    }
-
-    for (const [patchId, patch] of activePatches) {
-        if (eligiblePatchIds.has(patchId)) continue;
-        if ((patch.meta.world ?? "ISOLATED") !== config.world) continue;
-        if ((patch.meta.runAt ?? "document_idle") !== config.runAt) continue;
-
-        if (patch.meta.runStrategy === "once") continue;
-
-        activePatches.delete(patchId);
-
-        const previousTask =
-            patchLifecyclePromises.get(patchId) || Promise.resolve();
-
-        const currentTask = previousTask.then(async () => {
-            if (!patch.cleanup) return;
-
-            try {
-                const t0 = performance.now();
-                await patch.cleanup();
-                const t1 = performance.now();
-
-                Logger.info(
-                    `Cleaned up patch "${patch.meta.name}" (${patch.meta.id}) in ${(t1 - t0).toFixed(2)}ms`,
-                );
-            } catch (err) {
-                if (err.name === "AbortError") return; // Cleanup functions can intentionally throw this error when aborting dom waiters/watchers
-
-                Logger.error(
-                    `Error cleaning up patch "${patch.meta.name}" (${patch.meta.id}):`,
                     err,
                 );
             }

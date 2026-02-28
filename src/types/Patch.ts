@@ -80,7 +80,7 @@ export interface Patch {
     init: (
         settings?: Record<string, Setting["defaultValue"]>,
     ) => void | Promise<void>;
-    cleanup?: () => void | Promise<void>;
+    cleanup: () => void | Promise<void>;
 }
 
 /**
