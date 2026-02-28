@@ -49,7 +49,7 @@ export function definePatch(patch: PatchDefinition): Patch {
                 styleElement = createElement("style")
                     .setId(`patch-css-${patch.meta.id}`)
                     .setTextContent(css)
-                    .appendTo(document.head);
+                    .appendTo(document.head || document.documentElement);
             }
 
             if (patch.init) {
