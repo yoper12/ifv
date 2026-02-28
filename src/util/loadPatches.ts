@@ -1,4 +1,4 @@
-import type { Patch } from "../types/Patch.ts";
+import type { Patch } from "@/types/Patch.ts";
 import { Logger } from "./Logger.ts";
 import { SettingsManager } from "./SettingsManager.ts";
 

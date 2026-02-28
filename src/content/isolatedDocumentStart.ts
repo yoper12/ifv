@@ -1,8 +1,8 @@
-import type { Patch } from "../types/Patch.ts";
-import { loadPatchesForConfig } from "../util/loadPatches.ts";
-import { onUrlChange } from "../util/spaRouter.ts";
+import type { Patch } from "@/types/Patch.ts";
+import { loadPatchesForConfig } from "@/util/loadPatches.ts";
+import { onUrlChange } from "@/util/spaRouter.ts";
 
-const patches = import.meta.glob<Patch>("../patches/**/index.ts", {
+const patches = import.meta.glob<Patch>("@/patches/**/index.ts", {
     import: "default",
     eager: true,
 });

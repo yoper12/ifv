@@ -1,5 +1,5 @@
-import type { Meta } from "../types/Meta.ts";
-import type { Setting } from "../types/Setting.ts";
+import type { Meta } from "@/types/Meta.ts";
+import type { Setting } from "@/types/Setting.ts";
 import { Logger } from "./Logger.ts";
 
 interface PatchSettings {
