@@ -1,6 +1,7 @@
 import js from "@eslint/js";
 import tseslint from "typescript-eslint";
 import globals from "globals";
+import svelte from "eslint-plugin-svelte";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
 import { defineConfig } from "eslint/config";
 
@@ -18,5 +19,6 @@ export default defineConfig([
             },
         },
     },
+    ...svelte.configs.recommended,
     eslintConfigPrettier,
 ]);
