@@ -76,19 +76,19 @@ After:
 - Aligning detailed grades button
 - Redirecting to board
 - Auto-redirecting to █████████ login page
-  </details>
+      </details>
 
 ## Development Workflow
 
 ### Build the extension
 
 1. Make sure you have [Bun](https://bun.sh/) installed.
-2. Install required dependencies using `bun install`, then use `bun simple-git-hooks` to set up pre-commit hook, which formats your code using prettier and lints it with eslint.
-3. Use `bun dev` to start development server or `bun build` to build a package.
+2. Install required dependencies and setup project using `bun install`.
+3. Use `bun dev` or `dev:firefox` to start development server or `bun build` to build a package.
 
 ### Firefox
 
-To load add-on from files in Firefox, you need to go to `about:debugging#/runtime/this-firefox` and click `Load Temporary Add-on...`. After that you need to select the `manifest.json` file from `dist/` folder in the file picker.<br>
+To load add-on from files in Firefox, you need to go to `about:debugging#/runtime/this-firefox` and click `Load Temporary Add-on...`. After that you need to select the `manifest.json` file from `.output/` folder in the file picker.<br>
 <img src="./public/screenshots/firefoxDebug.png">
 
 ### Chrome

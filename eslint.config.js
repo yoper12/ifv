@@ -8,7 +8,7 @@ export default defineConfig([
     js.configs.recommended,
     tseslint.configs.recommended,
     {
-        ignores: ["dist/**", "node_modules/**", ".git/**"],
+        ignores: ["dist/**", "node_modules/**", ".git/**", ".wxt/**"],
     },
     {
         languageOptions: {
