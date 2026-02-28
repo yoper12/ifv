@@ -76,7 +76,7 @@ After:
 - Aligning detailed grades button
 - Redirecting to board
 - Auto-redirecting to █████████ login page
-      </details>
+  </details>
 
 ## Development Workflow
 
@@ -84,7 +84,8 @@ After:
 
 1. Make sure you have [Bun](https://bun.sh/) installed.
 2. Install required dependencies and setup project using `bun install`.
-3. Use `bun dev` or `dev:firefox` to start development server or `bun build` to build a package.
+3. Execute `bunx wxt prepare` to prepare types for futher development.
+4. Use `bun dev`/`dev:firefox` to start development server or `bun build`/`bun build:firefox` to build a package.
 
 ### Firefox
 
