@@ -2,27 +2,7 @@ const DEV = import.meta.env?.DEV;
 
 export class Logger {
     /**
-     * Used to log informational messages (lowest priority). This will be disabled in production builds to avoid performance impact.
-     *
-     * @returns A logging function that accepts the same arguments as `console.info`.
-     * @example
-     * ```typescript
-     * Logger.info("This is an informational message.", { some: "data" });
-     * ```
-     */
-    static get info() {
-        if (!DEV) return () => {};
-
-        return console.info.bind(
-            console,
-            `%c[${new Date().toLocaleTimeString()}] %c[INFO]`,
-            "color: gray;",
-            "color: cyan;",
-        );
-    }
-
-    /**
-     * Used to log debugging messages (medium-low priority). This will be disabled in production builds to avoid performance impact.
+     * Used to log debugging messages (lowest priority). This will be disabled in production builds to avoid performance impact.
      *
      * @returns A logging function that accepts the same arguments as `console.debug`.
      * @example
@@ -36,6 +16,26 @@ export class Logger {
         return console.debug.bind(
             console,
             `%c[${new Date().toLocaleTimeString()}] %c[DEBUG]`,
+            "color: gray;",
+            "color: cyan;",
+        );
+    }
+
+    /**
+     * Used to log informational messages (medium-low priority). This will be disabled in production builds to avoid performance impact.
+     *
+     * @returns A logging function that accepts the same arguments as `console.info`.
+     * @example
+     * ```typescript
+     * Logger.info("This is an informational message.", { some: "data" });
+     * ```
+     */
+    static get info() {
+        if (!DEV) return () => {};
+
+        return console.info.bind(
+            console,
+            `%c[${new Date().toLocaleTimeString()}] %c[INFO]`,
             "color: gray;",
             "color: royalblue;",
         );

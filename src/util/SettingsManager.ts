@@ -22,7 +22,7 @@ export class SettingsManager {
     private static async getCache(): Promise<Record<string, StorageValue>> {
         if (!this.cache) {
             this.cache = await chrome.storage.sync.get(null);
-            Logger.info(`Initialized settings cache:`, this.cache);
+            Logger.debug(`Initialized settings cache:`, this.cache);
 
             chrome.storage.onChanged.addListener((changes, areaName) => {
                 if (areaName === "sync" && this.cache) {
@@ -47,7 +47,7 @@ export class SettingsManager {
 
         if (this.cache) {
             this.cache[key] = value;
-            Logger.info(`Updated settings cache:`, { [key]: value });
+            Logger.debug(`Updated settings cache:`, { [key]: value });
         }
 
         if (this.writeTimeout) {
@@ -66,7 +66,7 @@ export class SettingsManager {
                         err,
                     ),
                 );
-            Logger.info(`Saved settings to storage:`, dataToWrite);
+            Logger.debug(`Saved settings to storage:`, dataToWrite);
         }, 300);
     }
 

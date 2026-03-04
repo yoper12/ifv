@@ -24,7 +24,7 @@ export async function loadPatchesForConfig(
     const currentUrl = window.location.href;
     const eligiblePatches = new Map<string, Patch>();
 
-    Logger.info(
+    Logger.debug(
         `Loading patches for world "${config.world}" at "${config.runAt}" on URL: ${currentUrl}`,
     );
 
@@ -59,7 +59,7 @@ export async function loadPatchesForConfig(
                     const t0 = performance.now();
                     await patch.cleanup();
                     const t1 = performance.now();
-                    Logger.info(
+                    Logger.debug(
                         `Cleaned up patch "${patch.meta.name}" (${patch.meta.id}) in ${(t1 - t0).toFixed(2)}ms`,
                     );
                 } catch (err) {
@@ -89,7 +89,7 @@ export async function loadPatchesForConfig(
                 const t0 = performance.now();
                 await init(await SettingsManager.getPatchSettings(meta));
                 const t1 = performance.now();
-                Logger.info(
+                Logger.debug(
                     `Initialized patch "${meta.name}" (${meta.id}) in ${(t1 - t0).toFixed(2)}ms`,
                 );
             } catch (err) {
