@@ -1,12 +1,12 @@
-import type { Setting } from "@/types/Setting.ts";
+import type { Setting } from "@/types/Setting";
 import type {
     Patch,
     PatchDefWithSettings,
     PatchDefWithoutSettings,
     PatchDefinition,
-} from "@/types/Patch.ts";
-import type { ElementBuilder } from "./ElementBuilder.ts";
-import { createElement } from "./ElementBuilder.ts";
+} from "@/types/Patch";
+import type { ElementBuilder } from "./ElementBuilder";
+import { createElement } from "./ElementBuilder";
 
 /**
  * Defines a patch with the provided configuration.
@@ -16,7 +16,7 @@ import { createElement } from "./ElementBuilder.ts";
  *
  * @example
  * ```typescript
- * import { definePatch } from "@/util/definePatch.ts";
+ * import { definePatch } from "@/util/definePatch";
  * import css from "./style.css?inline"
  *
  * export default definePatch({

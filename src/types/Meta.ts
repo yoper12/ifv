@@ -1,4 +1,4 @@
-import type { Setting } from "./Setting.ts";
+import type { Setting } from "./Setting";
 
 /**
  * Metadata information for a patch.

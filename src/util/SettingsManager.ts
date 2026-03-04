@@ -1,6 +1,6 @@
-import type { Meta } from "@/types/Meta.ts";
-import type { Setting } from "@/types/Setting.ts";
-import { Logger } from "./Logger.ts";
+import type { Meta } from "@/types/Meta";
+import type { Setting } from "@/types/Setting";
+import { Logger } from "./Logger";
 
 interface PatchSettings {
     [key: string]: Setting["defaultValue"];
@@ -12,7 +12,7 @@ export class SettingsManager {
     private static cache?: Record<string, StorageValue>;
 
     private static pendingWrites: Record<string, StorageValue> = {};
-    private static writeTimeout?: number;
+    private static writeTimeout?: ReturnType<typeof setTimeout>;
 
     /**
      * Retrieves the current cache of settings, initializing it if necessary.

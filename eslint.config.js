@@ -8,8 +8,15 @@ import { defineConfig } from "eslint/config";
 export default defineConfig([
     js.configs.recommended,
     tseslint.configs.recommended,
+    svelte.configs.recommended,
     {
-        ignores: ["dist/**", "node_modules/**", ".git/**", ".wxt/**"],
+        ignores: [
+            "dist/**",
+            "node_modules/**",
+            ".git/**",
+            ".wxt/**",
+            ".output/**",
+        ],
     },
     {
         languageOptions: {
@@ -19,6 +26,5 @@ export default defineConfig([
             },
         },
     },
-    ...svelte.configs.recommended,
     eslintConfigPrettier,
 ]);

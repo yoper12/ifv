@@ -1,4 +1,4 @@
-import type { Patch } from "@/types/Patch.ts";
+import type { Patch } from "@/types/Patch";
 import { defineContentScript } from "#imports";
 import { loadPatchesForConfig } from "@/util/loadPatches";
 import { onUrlChange } from "@/util/spaRouter";

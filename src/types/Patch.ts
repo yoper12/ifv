@@ -1,5 +1,5 @@
-import type { Meta } from "./Meta.ts";
-import type { Setting } from "./Setting.ts";
+import type { Meta } from "./Meta";
+import type { Setting } from "./Setting";
 
 export interface PatchDefWithSettings<S extends readonly Setting[]> {
     /**

@@ -1,6 +1,6 @@
-import type { Patch } from "@/types/Patch.ts";
-import { Logger } from "./Logger.ts";
-import { SettingsManager } from "./SettingsManager.ts";
+import type { Patch } from "@/types/Patch";
+import { Logger } from "./Logger";
+import { SettingsManager } from "./SettingsManager";
 
 interface PatchLoaderConfig {
     world: "MAIN" | "ISOLATED";
@@ -63,7 +63,8 @@ export async function loadPatchesForConfig(
                         `Cleaned up patch "${patch.meta.name}" (${patch.meta.id}) in ${(t1 - t0).toFixed(2)}ms`,
                     );
                 } catch (err) {
-                    if (err.name === "AbortError") return;
+                    if (err instanceof Error && err.name === "AbortError")
+                        return;
                     Logger.error(
                         `Error cleaning up patch "${patch.meta.name}" (${patch.meta.id}):`,
                         err,
@@ -92,7 +93,7 @@ export async function loadPatchesForConfig(
                     `Initialized patch "${meta.name}" (${meta.id}) in ${(t1 - t0).toFixed(2)}ms`,
                 );
             } catch (err) {
-                if (err.name === "AbortError") return;
+                if (err instanceof Error && err.name === "AbortError") return;
                 Logger.error(
                     `Error initializing patch "${meta.name}" (${meta.id}):`,
                     err,
