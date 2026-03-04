@@ -2,14 +2,14 @@ import type { Meta } from "./Meta";
 import type { Setting } from "./Setting";
 
 export interface PatchDefWithSettings<S extends readonly Setting[]> {
-    /**
-     * Metadata information for a patch.
-     */
+    /** Metadata information for a patch. */
     meta: Omit<Meta, "settings"> & { settings: S };
     /**
-     * Optional CSS string or an array of CSS strings to be applied when the patch is active.
+     * Optional CSS string or an array of CSS strings to be applied when the
+     * patch is active.
      *
      * @example
+     *
      * ```typescript
      * import css1 from "./style1.css?inline"
      * import css2 from "./style2.css?inline"
@@ -28,23 +28,26 @@ export interface PatchDefWithSettings<S extends readonly Setting[]> {
      */
     init?: (settings: InferSettings<S>) => void | Promise<void>;
     /**
-     * Optional cleanup function.
-     * Should remove event listeners, disconnect observers, and remove injected DOM element if the patch needs to be unloaded (e.g., on URL change or toggle off).
+     * Optional cleanup function. Should remove event listeners, disconnect
+     * observers, and remove injected DOM element if the patch needs to be
+     * unloaded (e.g., on URL change or toggle off).
      *
-     * **This function is never called if you set `runStrategy` to `"once"` in the patch's metadata, since the patch will never be unloaded in that case.**
+     * **This function is never called if you set `runStrategy` to `"once"` in
+     * the patch's metadata, since the patch will never be unloaded in that
+     * case.**
      */
     cleanup?: () => void | Promise<void>;
 }
 
 export interface PatchDefWithoutSettings {
-    /**
-     * Metadata information for a patch.
-     */
+    /** Metadata information for a patch. */
     meta: Omit<Meta, "settings">;
     /**
-     * Optional CSS string or an array of CSS strings to be applied when the patch is active.
+     * Optional CSS string or an array of CSS strings to be applied when the
+     * patch is active.
      *
      * @example
+     *
      * ```typescript
      * import css1 from "./style1.css?inline"
      * import css2 from "./style2.css?inline"
@@ -63,10 +66,13 @@ export interface PatchDefWithoutSettings {
      */
     init?: () => void | Promise<void>;
     /**
-     * Optional cleanup function.
-     * Should remove event listeners, disconnect observers, and remove injected DOM element if the patch needs to be unloaded (e.g., on URL change or toggle off).
+     * Optional cleanup function. Should remove event listeners, disconnect
+     * observers, and remove injected DOM element if the patch needs to be
+     * unloaded (e.g., on URL change or toggle off).
      *
-     * **This function is never called if you set `runStrategy` to `"once"` in the patch's metadata, since the patch will never be unloaded in that case.**
+     * **This function is never called if you set `runStrategy` to `"once"` in
+     * the patch's metadata, since the patch will never be unloaded in that
+     * case.**
      */
     cleanup?: () => void | Promise<void>;
 }
@@ -83,26 +89,21 @@ export interface Patch {
     cleanup: () => void | Promise<void>;
 }
 
-/**
- * Infers the settings object type from an array of settings definitions.
- */
+/** Infers the settings object type from an array of settings definitions. */
 type InferSettings<S extends readonly Setting[]> = {
     [K in S[number] as K["id"]]: SettingValueType<K>;
 } & {};
 
-/**
- * Maps a setting definition to its object type.
- */
-type SettingValueType<S extends Setting> = S["type"] extends "boolean"
-    ? boolean
-    : S["type"] extends "number"
-      ? number
-      : S["type"] extends "multiselect"
-        ? S extends { options: { value: infer V }[] }
-            ? V[]
-            : string[]
-        : S["type"] extends "select"
-          ? S extends { options: { value: infer V }[] }
-              ? V
-              : string
-          : string;
+/** Maps a setting definition to its object type. */
+type SettingValueType<S extends Setting> =
+    S["type"] extends "boolean" ? boolean
+    : S["type"] extends "number" ? number
+    : S["type"] extends "multiselect" ?
+        S extends { options: { value: infer V }[] } ?
+            V[]
+        :   string[]
+    : S["type"] extends "select" ?
+        S extends { options: { value: infer V }[] } ?
+            V
+        :   string
+    :   string;

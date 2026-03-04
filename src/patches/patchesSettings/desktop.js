@@ -1,8 +1,9 @@
 import { generateSettingsList } from "./generateSettingsList.js";
 
-const ifvLogoUrl = window.location.hostname.includes("eduvulcan")
-    ? "https://raw.githubusercontent.com/banocean/ifv/refs/heads/main/assets/logo/logo-128-blue.png"
-    : "https://raw.githubusercontent.com/banocean/ifv/refs/heads/main/assets/logo/logo-128-red.png";
+const ifvLogoUrl =
+    window.location.hostname.includes("eduvulcan") ?
+        "https://raw.githubusercontent.com/banocean/ifv/refs/heads/main/assets/logo/logo-128-blue.png"
+    :   "https://raw.githubusercontent.com/banocean/ifv/refs/heads/main/assets/logo/logo-128-red.png";
 const settingsIconUrl =
     "https://raw.githubusercontent.com/banocean/ifv/refs/heads/main/assets/icons/settings.svg";
 const closeIconUrl =

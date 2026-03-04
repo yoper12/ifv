@@ -76,7 +76,7 @@ After:
 - Aligning detailed grades button
 - Redirecting to board
 - Auto-redirecting to █████████ login page
-  </details>
+      </details>
 
 ## Development Workflow
 

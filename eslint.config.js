@@ -20,10 +20,7 @@ export default defineConfig([
     },
     {
         languageOptions: {
-            globals: {
-                ...globals.browser,
-                ...globals.webextensions,
-            },
+            globals: { ...globals.browser, ...globals.webextensions },
         },
     },
     eslintConfigPrettier,

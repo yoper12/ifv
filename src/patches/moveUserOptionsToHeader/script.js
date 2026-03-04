@@ -101,8 +101,8 @@ const moveUserOptionsToHeader = async () => {
 
 window.appendModule({
     isLoaded: () =>
-        document.querySelector(".header__logo-product")?.firstChild &&
-        document.querySelector(".header__hamburger__icon button"),
+        document.querySelector(".header__logo-product")?.firstChild
+        && document.querySelector(".header__hamburger__icon button"),
     onlyOnReloads: true,
     run: moveUserOptionsToHeader,
     doesRunHere: () =>

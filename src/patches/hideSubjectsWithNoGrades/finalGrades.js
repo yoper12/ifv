@@ -16,11 +16,11 @@ const hideEmptyColumns = async () => {
         const check = cells.some((cell) => cell.textContent.trim().length > 0);
 
         const columnCells = document.querySelectorAll(
-            "tr th:nth-child(" +
-                (idx + 1) +
-                "), tr td:nth-child(" +
-                (idx + 1) +
-                ")",
+            "tr th:nth-child("
+                + (idx + 1)
+                + "), tr td:nth-child("
+                + (idx + 1)
+                + ")",
         );
         columnCells.forEach((cell) => {
             cell.style.display = check ? "" : "none";
@@ -65,10 +65,9 @@ async function prep() {
                 );
                 semester.querySelectorAll(".info-row").forEach((e) => {
                     if (
-                        e
-                            .querySelector(".info-text > span")
-                            .textContent.trim() === "" ||
-                        e
+                        e.querySelector(".info-text > span").textContent.trim()
+                            === ""
+                        || e
                             .querySelector(".info-text > span")
                             .textContent.trim() === "0"
                     ) {

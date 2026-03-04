@@ -2,9 +2,7 @@ import { waitForRender } from "./apis/waitForElement.js";
 
 const fixGoingBack = async () => {
     const observer = new MutationObserver(mutationHandler);
-    observer.observe(document.body, {
-        childList: true,
-    });
+    observer.observe(document.body, { childList: true });
 };
 
 const mutationHandler = async (mutationList) => {
@@ -64,6 +62,6 @@ window.appendModule({
             "wiadomosci.eduvulcan.pl",
             "dziennik-uczen.vulcan.net.pl",
             "dziennik-wiadomosci.vulcan.net.pl",
-        ].includes(window.location.hostname) &&
-        typeof InstallTrigger !== "undefined",
+        ].includes(window.location.hostname)
+        && typeof InstallTrigger !== "undefined",
 });

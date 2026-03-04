@@ -9,11 +9,7 @@ export default defineConfig({
         name: "Hephaestus",
         description:
             "Poprawia uciążliwe elementy stron usług █████████ oraz ████████ ██████",
-        browser_specific_settings: {
-            gecko: {
-                id: "j.skup.test@gmail.com",
-            },
-        },
+        browser_specific_settings: { gecko: { id: "j.skup.test@gmail.com" } },
         permissions: ["storage"],
         host_permissions: [
             "*://dziennik-uczen.vulcan.net.pl/*",

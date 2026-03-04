@@ -56,6 +56,6 @@ window.appendModule({
         window.location.hostname.match(/^(dziennik-)?(uczen|wiadomosci).*/),
     onlyOnReloads: true,
     isLoaded: () =>
-        !!document.querySelector(".header_logo_tools-container") &&
-        document.querySelector(".app__content__header__h1_subtitle > h1"),
+        !!document.querySelector(".header_logo_tools-container")
+        && document.querySelector(".app__content__header__h1_subtitle > h1"),
 });

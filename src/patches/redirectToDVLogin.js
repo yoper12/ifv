@@ -8,8 +8,8 @@ window.appendModule({
     onlyOnReloads: true,
     run: redirectToLoginPage,
     doesRunHere: () =>
-        window.location.hostname === "dziennik-uczen.vulcan.net.pl" &&
-        !window.location.pathname.split("/")[2],
+        window.location.hostname === "dziennik-uczen.vulcan.net.pl"
+        && !window.location.pathname.split("/")[2],
 });
 
 const pathSegment = encodeURIComponent(

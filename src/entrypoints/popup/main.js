@@ -17,8 +17,8 @@ filterInput.addEventListener("input", () => {
             option
                 .querySelector(".title")
                 .innerText.toLowerCase()
-                .includes(filter) ||
-            option
+                .includes(filter)
+            || option
                 .querySelector(".desc")
                 .innerText.toLowerCase()
                 .includes(filter)
@@ -81,14 +81,14 @@ const render = async () => {
                 <p class="desc">${patch.description}</p>
             </div>
             ${
-                patch.devices === "mobileOnly"
-                    ? `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#8e8e8e" title="This patch is mobile only"><path d="M400-160h160v-40H400v40ZM280-40q-33 0-56.5-23.5T200-120v-720q0-33 23.5-56.5T280-920h400q33 0 56.5 23.5T760-840v720q0 33-23.5 56.5T680-40H280Zm0-200v120h400v-120H280Zm0-80h400v-400H280v400Zm0-480h400v-40H280v40Zm0 560v120-120Zm0-560v-40 40Z"/></svg>`
-                    : ""
+                patch.devices === "mobileOnly" ?
+                    `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#8e8e8e" title="This patch is mobile only"><path d="M400-160h160v-40H400v40ZM280-40q-33 0-56.5-23.5T200-120v-720q0-33 23.5-56.5T280-920h400q33 0 56.5 23.5T760-840v720q0 33-23.5 56.5T680-40H280Zm0-200v120h400v-120H280Zm0-80h400v-400H280v400Zm0-480h400v-40H280v40Zm0 560v120-120Zm0-560v-40 40Z"/></svg>`
+                :   ""
             }
             ${
-                patch.devices === "desktopOnly"
-                    ? `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#8e8e8e" title="This patch is desktop only"><path d="M40-120v-80h880v80H40Zm120-120q-33 0-56.5-23.5T80-320v-440q0-33 23.5-56.5T160-840h640q33 0 56.5 23.5T880-760v440q0 33-23.5 56.5T800-240H160Zm0-80h640v-440H160v440Zm0 0v-440 440Z"/></svg>`
-                    : ""
+                patch.devices === "desktopOnly" ?
+                    `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#8e8e8e" title="This patch is desktop only"><path d="M40-120v-80h880v80H40Zm120-120q-33 0-56.5-23.5T80-320v-440q0-33 23.5-56.5T160-840h640q33 0 56.5 23.5T880-760v440q0 33-23.5 56.5T800-240H160Zm0-80h640v-440H160v440Zm0 0v-440 440Z"/></svg>`
+                :   ""
             }
             <div class="toggle-wrapper">
                 <input class="toggle-input" type="checkbox" ${
@@ -128,8 +128,8 @@ const render = async () => {
 (async () => {
     const changeAllButton = document.querySelector(".filter > button");
     let nextApplyAllAction =
-        (await chrome.storage.sync.get("nextApplyAllAction"))
-            .nextApplyAllAction || false;
+        (await chrome.storage.sync.get("nextApplyAllAction")).nextApplyAllAction
+        || false;
 
     const toggleAllButton = async () => {
         chrome.storage.sync.set({ nextApplyAllAction: !nextApplyAllAction });

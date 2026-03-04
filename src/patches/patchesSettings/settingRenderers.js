@@ -9,20 +9,26 @@
  * @property {string} id Unikalny identyfikator ustawienia.
  * @property {string} name Nazwa ustawienia wyświetlana użytkownikowi.
  * @property {string} description Opis ustawienia.
- * @property {string} type Typ ustawienia (np. "select", "text", "boolean", "multiselect", "color", "number").
- * @property {string|boolean|number|string[]} default Domyślna wartość ustawienia.
- * @property {SettingOption[]} [options] Tablica opcji dla ustawień typu "select" i "multiselect".
+ * @property {string} type Typ ustawienia (np. "select", "text", "boolean",
+ *   "multiselect", "color", "number").
+ * @property {string | boolean | number | string[]} default Domyślna wartość
+ *   ustawienia.
+ * @property {SettingOption[]} [options] Tablica opcji dla ustawień typu
+ *   "select" i "multiselect".
  * @property {number} [step] Krok dla ustawień typu "number".
  */
 
 /**
  * Obiekt mapujący typy ustawień na funkcje renderujące odpowiednie inputy HTML.
- * Każda funkcja renderująca przyjmuje obiekt ustawienia, nazwę patcha oraz aktualną wartość ustawienia.
+ * Każda funkcja renderująca przyjmuje obiekt ustawienia, nazwę patcha oraz
+ * aktualną wartość ustawienia.
+ *
  * @type {Object<string, function(Setting, string, any): string>}
  */
 export const settingRenderers = {
     /**
      * Renderuje input typu select (lista rozwijana).
+     *
      * @param {Setting} setting Obiekt konfiguracji ustawienia.
      * @param {string} patchName Nazwa patcha.
      * @param {string} currentValue Aktualna wartość ustawienia.
@@ -45,6 +51,7 @@ export const settingRenderers = {
     `,
     /**
      * Renderuje input typu text (pole tekstowe).
+     *
      * @param {Setting} setting Obiekt konfiguracji ustawienia.
      * @param {string} patchName Nazwa patcha.
      * @param {string} currentValue Aktualna wartość ustawienia.
@@ -55,6 +62,7 @@ export const settingRenderers = {
     `,
     /**
      * Renderuje input typu boolean (checkbox).
+     *
      * @param {Setting} setting Obiekt konfiguracji ustawienia.
      * @param {string} patchName Nazwa patcha.
      * @param {boolean} currentValue Aktualna wartość ustawienia.
@@ -72,17 +80,18 @@ export const settingRenderers = {
     `,
     /**
      * Renderuje input typu multiselect (wiele checkboxów).
+     *
      * @param {Setting} setting Obiekt konfiguracji ustawienia.
      * @param {string} patchName Nazwa patcha.
      * @param {string[]} currentValue Aktualnie zaznaczone wartości.
      * @returns {string} Ciąg HTML reprezentujący grupę checkboxów.
      */
     multiselect: (setting, patchName, currentValue) => {
-        const selectedValues = Array.isArray(currentValue)
-            ? currentValue
-            : typeof currentValue === "string" && currentValue.length > 0
-              ? currentValue.split(",")
-              : [];
+        const selectedValues =
+            Array.isArray(currentValue) ? currentValue
+            : typeof currentValue === "string" && currentValue.length > 0 ?
+                currentValue.split(",")
+            :   [];
         return `
             <div class="setting-multiselect">
                 ${setting.options
@@ -95,9 +104,9 @@ export const settingRenderers = {
                             data-setting="${setting.id}"
                             value="${option.value}"
                             ${
-                                selectedValues.includes(option.value)
-                                    ? "checked"
-                                    : ""
+                                selectedValues.includes(option.value) ?
+                                    "checked"
+                                :   ""
                             }>
                         <label for="${patchName}-${setting.id}-${
                             option.value
@@ -111,6 +120,7 @@ export const settingRenderers = {
     },
     /**
      * Renderuje input typu color (próbnik kolorów).
+     *
      * @param {Setting} setting Obiekt konfiguracji ustawienia.
      * @param {string} patchName Nazwa patcha.
      * @param {string} currentValue Aktualna wartość koloru (hex).
@@ -121,6 +131,7 @@ export const settingRenderers = {
     `,
     /**
      * Renderuje input typu number (pole numeryczne).
+     *
      * @param {Setting} setting Obiekt konfiguracji ustawienia.
      * @param {string} patchName Nazwa patcha.
      * @param {number} currentValue Aktualna wartość liczbowa.

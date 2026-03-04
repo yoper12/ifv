@@ -9,9 +9,9 @@ const createButton = () => {
     });
     document
         .querySelector(
-            window.innerWidth < 1024
-                ? ".app__content > .mobile__frame"
-                : ".app__content > .desktop__frame",
+            window.innerWidth < 1024 ?
+                ".app__content > .mobile__frame"
+            :   ".app__content > .desktop__frame",
         )
         .appendChild(button);
 };
@@ -23,7 +23,7 @@ window.appendModule({
     isLoaded: () =>
         document.querySelector(
             ".app__content > .mobile__frame, .app__content > .desktop__frame",
-        ) &&
-        document.querySelector(".app__content__header > .toolbar > button") &&
-        !document.querySelector(".spinner"),
+        )
+        && document.querySelector(".app__content__header > .toolbar > button")
+        && !document.querySelector(".spinner"),
 });

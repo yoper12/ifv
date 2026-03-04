@@ -12,6 +12,8 @@
         "eslint-plugin-svelte": "^3.15.0",
         "globals": "^17.3.0",
         "prettier": "^3.8.1",
+        "prettier-plugin-jsdoc": "^1.8.0",
+        "prettier-plugin-svelte": "^3.5.1",
         "pretty-quick": "^4.2.2",
         "simple-git-hooks": "^2.13.1",
         "svelte": "^5.53.6",
@@ -28,7 +30,9 @@
         "build:firefox": "wxt build -b firefox",
         "zip": "wxt zip",
         "zip:firefox": "wxt zip -b firefox",
+        "format": "prettier --write .",
         "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
         "type-check": "tsc --noEmit",
         "check": "svelte-check --tsconfig ./tsconfig.json"
     },

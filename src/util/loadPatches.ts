@@ -15,7 +15,8 @@ const patchLifecyclePromises = new Map<string, Promise<void>>();
  *
  * @param patches A record of patch modules to be loaded.
  * @param config The configuration specifying the world and runAt timing.
- * @returns A promise that resolves when all applicable patches have been initialized.
+ * @returns A promise that resolves when all applicable patches have been
+ *   initialized.
  */
 export async function loadPatchesForConfig(
     patches: Record<string, Patch>,
@@ -33,8 +34,8 @@ export async function loadPatchesForConfig(
         const { meta } = patch;
 
         if (
-            (meta.world ?? "ISOLATED") !== config.world ||
-            (meta.runAt ?? "document_idle") !== config.runAt
+            (meta.world ?? "ISOLATED") !== config.world
+            || (meta.runAt ?? "document_idle") !== config.runAt
         )
             continue;
         if (!meta.matches.some((pattern) => pattern.test(currentUrl))) continue;

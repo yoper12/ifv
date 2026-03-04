@@ -1,24 +1,14 @@
 import type { Setting } from "./Setting";
 
-/**
- * Metadata information for a patch.
- */
+/** Metadata information for a patch. */
 export interface Meta {
-    /**
-     * The name of the patch.
-     */
+    /** The name of the patch. */
     name: string;
-    /**
-     * The unique identifier of the patch.
-     */
+    /** The unique identifier of the patch. */
     id: string;
-    /**
-     * A brief description of what the patch does.
-     */
+    /** A brief description of what the patch does. */
     description: string;
-    /**
-     * The URL pattern where the patch should be applied.
-     */
+    /** The URL pattern where the patch should be applied. */
     matches: Array<RegExp>;
     /**
      * The types of devices the patch is applicable to.
@@ -26,13 +16,12 @@ export interface Meta {
      * @default ["desktop", "mobile"]
      */
     deviceTypes?: Array<"desktop" | "mobile">;
-    /**
-     * The settings associated with the patch.
-     */
+    /** The settings associated with the patch. */
     settings?: readonly Setting[];
     /**
-     * The strategy for running the patch.
-     * Want to run on every DOM change? Use `once` here and `watchElement.ts` from `utils/` in your `init()` function.
+     * The strategy for running the patch. Want to run on every DOM change? Use
+     * `once` here and `watchElement.ts` from `utils/` in your `init()`
+     * function.
      *
      * @default "onUrlChange"
      */

@@ -37,7 +37,8 @@ export class SettingsManager {
     }
 
     /**
-     * Schedules a write to the storage with debouncing to minimize the number of writes.
+     * Schedules a write to the storage with debouncing to minimize the number
+     * of writes.
      *
      * @param key The storage key to write to.
      * @param value The value to write to storage.
@@ -74,7 +75,8 @@ export class SettingsManager {
      * Retrieves the configuration settings for a given patch.
      *
      * @param patchMeta Metadata defined in patch definition.
-     * @returns A promise that resolves to the configuration object for the patch.
+     * @returns A promise that resolves to the configuration object for the
+     *   patch.
      */
     static async getPatchSettings(patchMeta: Meta): Promise<PatchSettings> {
         const cache = await this.getCache();
@@ -144,7 +146,8 @@ export class SettingsManager {
      * Checks if a specific patch is currently enabled.
      *
      * @param patchId ID of the patch to check.
-     * @returns A promise that resolves to true if the patch is enabled, false otherwise.
+     * @returns A promise that resolves to true if the patch is enabled, false
+     *   otherwise.
      */
     static async isPatchEnabled(patchId: string): Promise<boolean> {
         const cache = await this.getCache();

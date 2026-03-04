@@ -94,8 +94,8 @@ export class SelectorRenderer {
 
     #isWeekChanged() {
         return (
-            !this.firstDayName ||
-            document.querySelector(
+            !this.firstDayName
+            || document.querySelector(
                 ".app__content .MuiPaper-root .MuiAccordionSummary-content > h2",
             )?.innerText !== this.firstDayName
         );
@@ -140,10 +140,7 @@ export class SelectorRenderer {
             document.querySelector(
                 ".content-container__tab-subheader:has(.week-selector) + div",
             ),
-            {
-                childList: true,
-                subtree: true,
-            },
+            { childList: true, subtree: true },
         );
     }
 
@@ -163,8 +160,8 @@ export class SelectorRenderer {
             const day = getWeekStartingMonday(today.getDay());
             this.currentWeekDay = this.cachedWeek.findIndex(
                 (timetableDay) =>
-                    (timetableDay.day || "-, ").split(", ")[0].toLowerCase() ===
-                    dayNames[day],
+                    (timetableDay.day || "-, ").split(", ")[0].toLowerCase()
+                    === dayNames[day],
             );
             if (this.currentWeekDay === -1)
                 this.currentWeekDay = this.cachedWeek.length - 1;

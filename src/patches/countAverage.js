@@ -26,30 +26,32 @@ function modifyGradesRequests() {
                         );
 
                         if (
-                            data &&
-                            data.ocenyPrzedmioty &&
-                            Array.isArray(data.ocenyPrzedmioty) &&
-                            !data.ustawienia.isSredniaAndPunkty
+                            data
+                            && data.ocenyPrzedmioty
+                            && Array.isArray(data.ocenyPrzedmioty)
+                            && !data.ustawienia.isSredniaAndPunkty
                         ) {
                             data.ocenyPrzedmioty.forEach((subject) => {
                                 let sum = 0;
                                 let totalWeight = 0;
 
                                 if (
-                                    subject.kolumnyOcenyCzastkowe &&
-                                    Array.isArray(subject.kolumnyOcenyCzastkowe)
+                                    subject.kolumnyOcenyCzastkowe
+                                    && Array.isArray(
+                                        subject.kolumnyOcenyCzastkowe,
+                                    )
                                 ) {
                                     subject.kolumnyOcenyCzastkowe.forEach(
                                         (column) => {
                                             if (
-                                                column.oceny &&
-                                                Array.isArray(column.oceny)
+                                                column.oceny
+                                                && Array.isArray(column.oceny)
                                             ) {
                                                 column.oceny.forEach(
                                                     (grade) => {
                                                         if (
-                                                            grade.wpis &&
-                                                            grade.wpis.match(
+                                                            grade.wpis
+                                                            && grade.wpis.match(
                                                                 /^[0-6](\+|-)?$/,
                                                             )
                                                         ) {
@@ -79,8 +81,8 @@ function modifyGradesRequests() {
                                                                     );
 
                                                             sum +=
-                                                                value *
-                                                                grade.waga;
+                                                                value
+                                                                * grade.waga;
                                                             totalWeight +=
                                                                 grade.waga;
                                                         }
@@ -131,7 +133,4 @@ function modifyGradesRequests() {
     };
 }
 
-window.appendModule({
-    run: modifyGradesRequests,
-    onlyOnReloads: true,
-});
+window.appendModule({ run: modifyGradesRequests, onlyOnReloads: true });

@@ -159,6 +159,6 @@ window.appendModule({
     doesRunHere: () => window.location.href.endsWith("tablica"),
     onlyOnReloads: false,
     isLoaded: () =>
-        document.querySelector(".plan-zajec") &&
-        !document.querySelector(".spinner"),
+        document.querySelector(".plan-zajec")
+        && !document.querySelector(".spinner"),
 });

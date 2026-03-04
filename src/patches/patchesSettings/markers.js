@@ -1,7 +1,7 @@
 /**
  * Usuwa znaczniki <mark> z elementu
  *
- * @param {Node} element element, z którego usuwamy znaczniki <mark>
+ * @param {Node} element Element, z którego usuwamy znaczniki <mark>
  * @returns {void}
  */
 export async function removeMarks(element) {
@@ -20,8 +20,8 @@ export async function removeMarks(element) {
 /**
  * Zaznacza tekst w elemencie, który pasuje do podanego zapytania.
  *
- * @param {Node} element element, w którym zaznaczamy tekst
- * @param {string} textQueryToHighlight string do wyszukania
+ * @param {Node} element Element, w którym zaznaczamy tekst
+ * @param {string} textQueryToHighlight String do wyszukania
  * @returns {void}
  */
 export async function markTextInElement(element, textQueryToHighlight) {

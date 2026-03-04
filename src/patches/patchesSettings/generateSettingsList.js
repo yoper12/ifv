@@ -113,10 +113,10 @@ function setupSearchbar(patchesSettingsDiv) {
             }
 
             let combinedTextContent =
-                patchNameEl.textContent.toLowerCase() +
-                " " +
-                patchDescEl.textContent.toLowerCase() +
-                " ";
+                patchNameEl.textContent.toLowerCase()
+                + " "
+                + patchDescEl.textContent.toLowerCase()
+                + " ";
 
             patchDiv.querySelectorAll(".setting").forEach((settingDiv) => {
                 combinedTextContent +=

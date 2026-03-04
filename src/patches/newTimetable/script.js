@@ -34,9 +34,9 @@ const mapStartingHours = (data) => {
                 if (lesson.startingHour) all.add(lesson.startingHour);
     const result = [...all].sort();
     const [firstHour, firstMinutes] = (result[0] || "08:00").split(":");
-    return Number(firstHour) <= 7 && Number(firstMinutes) <= 30
-        ? result
-        : ["7:00", ...result];
+    return Number(firstHour) <= 7 && Number(firstMinutes) <= 30 ?
+            result
+        :   ["7:00", ...result];
 };
 
 const getStartingHours = () =>
@@ -124,11 +124,10 @@ const run = async () => {
 };
 
 const isLoaded = () =>
-    document.querySelector(".app__content .MuiCollapse-root")?.style
-        ?.minHeight &&
-    document.querySelector("section.app__content .mobile__frame .plan-zajec") &&
-    !document.querySelector(".spinner") &&
-    document.querySelector(
+    document.querySelector(".app__content .MuiCollapse-root")?.style?.minHeight
+    && document.querySelector("section.app__content .mobile__frame .plan-zajec")
+    && !document.querySelector(".spinner")
+    && document.querySelector(
         ".position__lesson__hours, .conflicted--details--hours",
     );
 

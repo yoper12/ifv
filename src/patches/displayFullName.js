@@ -2,13 +2,13 @@ const isMessagesPage = () =>
     window.location.hostname.match(/(dziennik-)?wiadomosci.*/);
 
 function getStudentData() {
-    return isMessagesPage()
-        ? document
-              .querySelector(".account__name span")
-              ?.firstChild?.textContent?.split(" ")
-              .reverse()
-              .join(" ")
-        : document.querySelector(".side_student")?.firstChild?.textContent;
+    return isMessagesPage() ?
+            document
+                .querySelector(".account__name span")
+                ?.firstChild?.textContent?.split(" ")
+                .reverse()
+                .join(" ")
+        :   document.querySelector(".side_student")?.firstChild?.textContent;
 }
 
 function displayFullName() {

@@ -16,15 +16,12 @@ const normalizeLesson = (lesson) => {
         ".plan-position__adnotation-title",
     )?.innerText;
 
-    const type = lesson.classList.contains("cell--multi--conflicted")
-        ? "conflicted"
-        : lesson.querySelector(".zastepstwo")
-          ? "substitute"
-          : lesson.querySelector(".odwolane")
-            ? "canceled"
-            : annotationText
-              ? "unknown"
-              : "normal";
+    const type =
+        lesson.classList.contains("cell--multi--conflicted") ? "conflicted"
+        : lesson.querySelector(".zastepstwo") ? "substitute"
+        : lesson.querySelector(".odwolane") ? "canceled"
+        : annotationText ? "unknown"
+        : "normal";
 
     return {
         originalElement: lesson,

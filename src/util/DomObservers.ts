@@ -2,19 +2,30 @@ import { Logger } from "./Logger";
 
 export class DomObservers {
     /**
-     * Waits for an element to be rendered in the DOM.
-     * Disconnects automatically if the parent element is removed from the DOM, preventing memory leaks.
-     *
-     * @param selector A function that returns the target element or null if the element does not exist yet.
-     * @param parent The root element to observe for changes. Defaults to `document.body`, you should however consider using a more specific parent element for better performance. Make sure the parent element exists when calling this method.
-     * @param signal An optional `AbortSignal` that can be used to cancel the waiter. If aborted, the promise will reject with an `AbortError`. Use this in your patch's cleanup function to prevent memory leaks, for example: `abortController.abort()`.
-     * @returns A promise that resolves when the element is found.
+     * Waits for an element to be rendered in the DOM. Disconnects automatically
+     * if the parent element is removed from the DOM, preventing memory leaks.
      *
      * @example
+     *
      * ```typescript
-     * await DomObservers.waitForRender(() => document.querySelector('.modal'), document.querySelector('#app'));
-     * console.log('Modal is now in #app!');
+     * await DomObservers.waitForRender(
+     *     () => document.querySelector(".modal"),
+     *     document.querySelector("#app"),
+     * );
+     * console.log("Modal is now in #app!");
      * ```
+     *
+     * @param selector A function that returns the target element or null if the
+     *   element does not exist yet.
+     * @param parent The root element to observe for changes. Defaults to
+     *   `document.body`, you should however consider using a more specific
+     *   parent element for better performance. Make sure the parent element
+     *   exists when calling this method.
+     * @param signal An optional `AbortSignal` that can be used to cancel the
+     *   waiter. If aborted, the promise will reject with an `AbortError`. Use
+     *   this in your patch's cleanup function to prevent memory leaks, for
+     *   example: `abortController.abort()`.
+     * @returns A promise that resolves when the element is found.
      */
     static async waitForRender(
         selector: () => HTMLElement | null,
@@ -36,10 +47,7 @@ export class DomObservers {
             const warnTimer = setTimeout(() => {
                 Logger.warn(
                     `Waiting for an element to render for over 5 seconds. This might indicate a problem in the patch or the selector function.`,
-                    {
-                        selector: selector.toString(),
-                        parent: parent,
-                    },
+                    { selector: selector.toString(), parent: parent },
                 );
             }, 5000);
 
@@ -72,19 +80,29 @@ export class DomObservers {
     }
 
     /**
-     * Waits for an element to be replaced in the DOM.
-     * Disconnects automatically if the parent element is removed from the DOM, preventing memory leaks.
-     *
-     * @param selector A function that returns the target element or null if the element does not exist already.
-     * @param parent The root element to observe for changes. Defaults to `document.body`, you should however consider using a more specific parent element for better performance. Make sure the parent element exists when calling this method.
-     * @param signal An optional `AbortSignal` that can be used to cancel the waiter. If aborted, the promise will reject with an `AbortError`. Use this in your patch's cleanup function to prevent memory leaks.
-     * @returns A promise that resolves when the element has been replaced.
+     * Waits for an element to be replaced in the DOM. Disconnects automatically
+     * if the parent element is removed from the DOM, preventing memory leaks.
      *
      * @example
+     *
      * ```typescript
-     * await DomObservers.waitForReplacement(() => document.querySelector('.modal'), document.querySelector('#app'));
-     * console.log('New modal has been created in #app!');
+     * await DomObservers.waitForReplacement(
+     *     () => document.querySelector(".modal"),
+     *     document.querySelector("#app"),
+     * );
+     * console.log("New modal has been created in #app!");
      * ```
+     *
+     * @param selector A function that returns the target element or null if the
+     *   element does not exist already.
+     * @param parent The root element to observe for changes. Defaults to
+     *   `document.body`, you should however consider using a more specific
+     *   parent element for better performance. Make sure the parent element
+     *   exists when calling this method.
+     * @param signal An optional `AbortSignal` that can be used to cancel the
+     *   waiter. If aborted, the promise will reject with an `AbortError`. Use
+     *   this in your patch's cleanup function to prevent memory leaks.
+     * @returns A promise that resolves when the element has been replaced.
      */
     static async waitForReplacement(
         selector: () => HTMLElement | null,
@@ -108,10 +126,7 @@ export class DomObservers {
             const warnTimer = setTimeout(() => {
                 Logger.warn(
                     `Waiting for an element to replace for over 5 seconds. This might indicate a problem in the patch or the selector function.`,
-                    {
-                        selector: selector.toString(),
-                        parent: parent,
-                    },
+                    { selector: selector.toString(), parent: parent },
                 );
             }, 5000);
 
@@ -146,25 +161,33 @@ export class DomObservers {
     }
 
     /**
-     * Watches for changes in a specific element and triggers the callback when a change occurs. Runs the callback immediately upon setup.
-     * Disconnects automatically if the element is removed from the DOM, preventing memory leaks.
-     *
-     * @param selector A function that returns the target element or null if the element does not exist.
-     * @param callback A function to be called when a change is detected in the target element.
-     * @param signal An optional `AbortSignal` that can be used to stop the watcher. Use this in your patch's cleanup function to prevent memory leaks.
-     * @param observerOptions Options for the `MutationObserver`. Defaults to observing `subtree` and `childList` changes.
-     * @return A promise that resolves when the watcher has been set up.
+     * Watches for changes in a specific element and triggers the callback when
+     * a change occurs. Runs the callback immediately upon setup. Disconnects
+     * automatically if the element is removed from the DOM, preventing memory
+     * leaks.
      *
      * @example
+     *
      * ```typescript
      * DomObservers.watchElement(
-     *   () => document.querySelector('.modal'),
-     *   (disconnect) => {
-     *     console.log('Modal content changed!');
-     *     // Call disconnect() to stop watching
-     *   }
+     *     () => document.querySelector(".modal"),
+     *     (disconnect) => {
+     *         console.log("Modal content changed!");
+     *         // Call disconnect() to stop watching
+     *     },
      * );
      * ```
+     *
+     * @param selector A function that returns the target element or null if the
+     *   element does not exist.
+     * @param callback A function to be called when a change is detected in the
+     *   target element.
+     * @param signal An optional `AbortSignal` that can be used to stop the
+     *   watcher. Use this in your patch's cleanup function to prevent memory
+     *   leaks.
+     * @param observerOptions Options for the `MutationObserver`. Defaults to
+     *   observing `subtree` and `childList` changes.
+     * @returns A promise that resolves when the watcher has been set up.
      */
     static async watchElement(
         selector: () => HTMLElement | null,
@@ -200,26 +223,36 @@ export class DomObservers {
     }
 
     /**
-     * Watches for the replacement of a specific element and triggers the callback when it is replaced. Runs the callback immediately upon setup.
-     * Disconnects automatically if the parent element is removed from the DOM, preventing memory leaks.
-     *
-     * @param selector A function that returns the target element or null if the element does not exist.
-     * @param callback A function to be called when the target element is replaced.
-     * @param parent The root element to observe for changes. You should **not** use document.body here, since this watcher is long-term and using it would cause observable performance impact. Make sure the parent element exists when calling this method.
-     * @param signal An optional `AbortSignal` that can be used to stop the watcher. Use this in your patch's cleanup function to prevent memory leaks.
-     * @returns A promise that resolves when the watcher has been set up.
+     * Watches for the replacement of a specific element and triggers the
+     * callback when it is replaced. Runs the callback immediately upon setup.
+     * Disconnects automatically if the parent element is removed from the DOM,
+     * preventing memory leaks.
      *
      * @example
+     *
      * ```typescript
      * DomObservers.watchElementReplacement(
-     *   () => document.querySelector('.modal'),
-     *   (disconnect) => {
-     *     console.log('Modal has been replaced!');
-     *     // Call disconnect() to stop watching
-     *   },
-     *   document.querySelector('#app')
+     *     () => document.querySelector(".modal"),
+     *     (disconnect) => {
+     *         console.log("Modal has been replaced!");
+     *         // Call disconnect() to stop watching
+     *     },
+     *     document.querySelector("#app"),
      * );
      * ```
+     *
+     * @param selector A function that returns the target element or null if the
+     *   element does not exist.
+     * @param callback A function to be called when the target element is
+     *   replaced.
+     * @param parent The root element to observe for changes. You should **not**
+     *   use document.body here, since this watcher is long-term and using it
+     *   would cause observable performance impact. Make sure the parent element
+     *   exists when calling this method.
+     * @param signal An optional `AbortSignal` that can be used to stop the
+     *   watcher. Use this in your patch's cleanup function to prevent memory
+     *   leaks.
+     * @returns A promise that resolves when the watcher has been set up.
      */
     static async watchElementReplacement(
         selector: () => HTMLElement | null,

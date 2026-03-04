@@ -9,9 +9,9 @@ selector.classList.add("attendance-tabs");
 
 const createSelector = () => {
     const container =
-        window.innerWidth < 1024
-            ? ".app__content > .mobile__frame"
-            : ".app__content > .desktop__frame";
+        window.innerWidth < 1024 ?
+            ".app__content > .mobile__frame"
+        :   ".app__content > .desktop__frame";
     document
         .querySelector(container)
         .insertBefore(selector, document.querySelector(container + "> *"));
@@ -46,8 +46,8 @@ selector.querySelector("button:last-of-type").addEventListener("click", () => {
 const isAttendancePage = () => window.location.pathname.endsWith("frekwencja");
 
 const isRendered = () =>
-    !!document.querySelector(".content-container:has(.statistics)") &&
-    !!document.querySelector(".tabsview");
+    !!document.querySelector(".content-container:has(.statistics)")
+    && !!document.querySelector(".tabsview");
 
 window.appendModule({
     isLoaded: isRendered,

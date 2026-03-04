@@ -11,10 +11,8 @@ import { createElement } from "./ElementBuilder";
 /**
  * Defines a patch with the provided configuration.
  *
- * @param patch The patch configuration object.
- * @returns The same patch configuration object, used for type inference.
- *
  * @example
+ *
  * ```typescript
  * import { definePatch } from "@/util/definePatch";
  * import css from "./style.css?inline"
@@ -30,6 +28,9 @@ import { createElement } from "./ElementBuilder";
  *   },
  * });
  * ```
+ *
+ * @param patch The patch configuration object.
+ * @returns The same patch configuration object, used for type inference.
  */
 export function definePatch<const S extends readonly Setting[]>(
     patch: PatchDefWithSettings<S>,
@@ -43,9 +44,8 @@ export function definePatch(patch: PatchDefinition): Patch {
 
         async init(settings: Record<string, Setting["defaultValue"]> = {}) {
             if (patch.css && !styleElement) {
-                const css = Array.isArray(patch.css)
-                    ? patch.css.join("\n")
-                    : patch.css;
+                const css =
+                    Array.isArray(patch.css) ? patch.css.join("\n") : patch.css;
                 styleElement = createElement("style")
                     .setId(`patch-css-${patch.meta.id}`)
                     .setTextContent(css)

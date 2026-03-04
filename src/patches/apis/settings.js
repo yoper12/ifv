@@ -1,12 +1,16 @@
 /**
  * Pobiera wartość określonego ustawienia dla danego patcha.
  *
- * @param {string} patchName Pełna nazwa patcha, dla którego pobierane jest ustawienie.
+ * @param {string} patchName Pełna nazwa patcha, dla którego pobierane jest
+ *   ustawienie.
  * @param {string} settingId Identyfikator ustawienia do pobrania.
- * @returns {boolean|string|number|Array<string>} Zapisana wartość ustawienia. Jeśli nie istnieje zwracana jest wartość domyślna.
- *                                                Rzeczywisty typ zwracanej wartości (np. `boolean` dla ustawień typu boolean,
- *                                                `Array<string>` dla multiselect) zależy od konfiguracji danego `settingId`.
- * @throws {Error} Rzuca błąd, jeśli patch o podanej nazwie (`patchName`) lub ustawienie o podanym ID (`settingId`) nie zostanie znalezione.
+ * @returns {boolean | string | number | string[]} Zapisana wartość ustawienia.
+ *   Jeśli nie istnieje zwracana jest wartość domyślna. Rzeczywisty typ
+ *   zwracanej wartości (np. `boolean` dla ustawień typu boolean,
+ *   `Array<string>` dla multiselect) zależy od konfiguracji danego
+ *   `settingId`.
+ * @throws {Error} Rzuca błąd, jeśli patch o podanej nazwie (`patchName`) lub
+ *   ustawienie o podanym ID (`settingId`) nie zostanie znalezione.
  */
 export function getSetting(patchName, settingId) {
     const patches = JSON.parse(sessionStorage.getItem("IFV_PATCHES")) || [];
@@ -53,12 +57,15 @@ export function getSetting(patchName, settingId) {
 /**
  * Zapisuje wartość określonego ustawienia dla danego patcha.
  *
- * @param {string} patchName Nazwa patcha, dla którego zapisywane jest ustawienie.
+ * @param {string} patchName Nazwa patcha, dla którego zapisywane jest
+ *   ustawienie.
  * @param {string} settingId Identyfikator ustawienia do zapisania.
- * @param {boolean|string|number|string[]} value Wartość ustawienia do zapisania. Typ tej wartości powinien być zgodny
- *                  z oczekiwanym typem dla danego `settingId`.
+ * @param {boolean | string | number | string[]} value Wartość ustawienia do
+ *   zapisania. Typ tej wartości powinien być zgodny z oczekiwanym typem dla
+ *   danego `settingId`.
  * @returns {void}
- * @throws {Error} Rzuca błąd, jeśli patch o podanej nazwie (`patchName`) lub ustawienie o podanym ID (`settingId`) nie zostanie znalezione.
+ * @throws {Error} Rzuca błąd, jeśli patch o podanej nazwie (`patchName`) lub
+ *   ustawienie o podanym ID (`settingId`) nie zostanie znalezione.
  */
 export function saveSetting(patchName, settingId, value) {
     const patches = JSON.parse(sessionStorage.getItem("IFV_PATCHES")) || [];
@@ -78,9 +85,9 @@ export function saveSetting(patchName, settingId, value) {
         try {
             patchesSettings = JSON.parse(rawPatchesSettings);
             if (
-                Array.isArray(patchesSettings) ||
-                typeof patchesSettings !== "object" ||
-                patchesSettings === null
+                Array.isArray(patchesSettings)
+                || typeof patchesSettings !== "object"
+                || patchesSettings === null
             ) {
                 patchesSettings = {};
             }

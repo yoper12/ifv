@@ -17,17 +17,12 @@ const getPages = (selector = "aside > section > .MuiList-root > ul") => {
             isDirectLink ? "a" : ".accordion__title__content",
         )?.innerText;
 
-        const items = isDirectLink
-            ? undefined
-            : Array.from(item.querySelector(".items").children);
+        const items =
+            isDirectLink ? undefined : (
+                Array.from(item.querySelector(".items").children)
+            );
 
-        return {
-            type: isDirectLink ? 1 : 2,
-            element: item,
-            items,
-            icon,
-            name,
-        };
+        return { type: isDirectLink ? 1 : 2, element: item, items, icon, name };
     });
 };
 
