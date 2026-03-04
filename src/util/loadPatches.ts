@@ -25,7 +25,7 @@ export async function loadPatchesForConfig(
     const eligiblePatches = new Map<string, Patch>();
 
     Logger.debug(
-        `Loading patches for world "${config.world}" at "${config.runAt}" on URL: ${currentUrl}`,
+        `Loading patches for world "${config.world}" at "${config.runAt}"`,
     );
 
     for (const path in patches) {

@@ -1,4 +1,4 @@
-import { Logger } from "./Logger.ts";
+import { Logger } from "./Logger";
 
 export class DomObservers {
     /**
