@@ -1,7 +1,7 @@
 import type { Patch } from "@/types/Patch";
 import { defineContentScript } from "#imports";
-import { loadPatchesForConfig } from "@/util/loadPatches";
-import { onUrlChange } from "@/util/spaRouter";
+import { loadPatchesForConfig } from "@/utils/loadPatches";
+import { onUrlChange } from "@/utils/spaRouter";
 
 const patches = import.meta.glob<Patch>("@/patches/**/index.ts", {
     import: "default",

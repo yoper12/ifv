@@ -14,7 +14,7 @@ import { createElement } from "./ElementBuilder";
  * @example
  *
  * ```typescript
- * import { definePatch } from "@/util/definePatch";
+ * import { definePatch } from "@/utils/definePatch";
  * import css from "./style.css?inline"
  *
  * export default definePatch({

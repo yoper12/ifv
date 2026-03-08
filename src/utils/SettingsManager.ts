@@ -1,6 +1,7 @@
 import type { Meta } from "@/types/Meta";
 import type { Setting } from "@/types/Setting";
 import { Logger } from "./Logger";
+import { browser } from "#imports";
 
 interface PatchSettings {
     [key: string]: Setting["defaultValue"];
@@ -21,10 +22,10 @@ export class SettingsManager {
      */
     private static async getCache(): Promise<Record<string, StorageValue>> {
         if (!this.cache) {
-            this.cache = await chrome.storage.sync.get(null);
+            this.cache = await browser.storage.sync.get(null);
             Logger.debug(`Initialized settings cache:`, this.cache);
 
-            chrome.storage.onChanged.addListener((changes, areaName) => {
+            browser.storage.onChanged.addListener((changes, areaName) => {
                 if (areaName === "sync" && this.cache) {
                     for (const [key, { newValue }] of Object.entries(changes)) {
                         this.cache[key] = newValue as StorageValue;
@@ -58,7 +59,7 @@ export class SettingsManager {
         this.writeTimeout = setTimeout(() => {
             const dataToWrite = { ...this.pendingWrites };
             this.pendingWrites = {};
-            chrome.storage.sync
+            browser.storage.sync
                 .set(dataToWrite)
                 .catch((err) =>
                     Logger.error(

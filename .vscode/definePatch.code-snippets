@@ -3,7 +3,7 @@
         "scope": "typescript",
         "prefix": "definePatch",
         "body": [
-            "import { definePatch } from \"@/util/definePatch\";",
+            "import { definePatch } from \"@/utils/definePatch\";",
             "",
             "export default definePatch({",
             "    meta: {",
@@ -23,7 +23,7 @@
         "scope": "typescript",
         "prefix": "definePatchSettings",
         "body": [
-            "import { definePatch } from \"@/util/definePatch\";",
+            "import { definePatch } from \"@/utils/definePatch\";",
             "",
             "export default definePatch({",
             "    meta: {",
@@ -50,7 +50,7 @@
         "scope": "typescript",
         "prefix": "definePatchCSS",
         "body": [
-            "import { definePatch } from \"@/util/definePatch\";",
+            "import { definePatch } from \"@/utils/definePatch\";",
             "import css from \"./style.css?inline\"",
             "",
             "export default definePatch({",
