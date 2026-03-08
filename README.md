@@ -4,7 +4,7 @@ Browser extension with improvements for █████████ and ██�
 
 ## Installation
 
-<a href="https://ifv.banocean.com/downloads/firefox"><img src="./assets/add to firefox.svg"></a><img width=10px><a href="https://ifv.banocean.com/downloads/chrome"><img src="./assets/add to chrome.svg"></a>
+<a href="https://ifv.banocean.com/downloads/firefox"><img src="./docs/add to firefox.svg"></a><img width=10px><a href="https://ifv.banocean.com/downloads/chrome"><img src="./docs/add to chrome.svg"></a>
 
 [Installation guide [PL]](https://ifv.banocean.com)<br>
 [Adding the extension to browsers for development](#development-workflow)
@@ -14,38 +14,38 @@ Browser extension with improvements for █████████ and ██�
 <details>
     <summary>Mobile navigation</summary>
 
-| Before:                                                              | After:                                                              |
-| -------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| <img src="./public/screenshots/mobileNavBefore.png" width="300px" /> | <img src="./public/screenshots/mobileNavAfter.png" width="300px" /> |
+| Before:                                                            | After:                                                            |
+| ------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| <img src="./docs/screenshots/mobileNavBefore.png" width="300px" /> | <img src="./docs/screenshots/mobileNavAfter.png" width="300px" /> |
 
 </details>
 <details>
     <summary>PWA support</summary>
-    <img src="./public/screenshots/pwa.png" width="300px" />
+    <img src="./docs/screenshots/pwa.png" width="300px" />
 </details>
 
 <details>
     <summary>Attendance statistics in a separate tab</summary>
 
-| Before:                                                               | After:                                                               |
-| --------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| <img src="./public/screenshots/attendanceBefore.png" width="300px" /> | <img src="./public/screenshots/attendanceAfter.png" width="300px" /> |
+| Before:                                                             | After:                                                             |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| <img src="./docs/screenshots/attendanceBefore.png" width="300px" /> | <img src="./docs/screenshots/attendanceAfter.png" width="300px" /> |
 
 </details>
 <details>
     <summary>Hide weekends in monthly calendars</summary>
 
-| Before:                                                                 | After:                                                                 |
-| ----------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| <img src="./public/screenshots/hideWeekendsBefore.png" width="300px" /> | <img src="./public/screenshots/hideWeekendsAfter.png" width="300px" /> |
+| Before:                                                               | After:                                                               |
+| --------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| <img src="./docs/screenshots/hideWeekendsBefore.png" width="300px" /> | <img src="./docs/screenshots/hideWeekendsAfter.png" width="300px" /> |
 
 </details>
 <details>
     <summary>Display full name</summary>
 
-| Before:                                                          | After:                                                          |
-| ---------------------------------------------------------------- | --------------------------------------------------------------- |
-| <img src="./public/screenshots/fnameBefore.png" width="300px" /> | <img src="./public/screenshots/fnameAfter.png" width="300px" /> |
+| Before:                                                        | After:                                                        |
+| -------------------------------------------------------------- | ------------------------------------------------------------- |
+| <img src="./docs/screenshots/fnameBefore.png" width="300px" /> | <img src="./docs/screenshots/fnameAfter.png" width="300px" /> |
 
 </details>
 <details>
@@ -53,19 +53,19 @@ Browser extension with improvements for █████████ and ██�
 
 Before:
 
-<img src="./public/screenshots/whiteboardBefore.png" width="800px" />
+<img src="./docs/screenshots/whiteboardBefore.png" width="800px" />
 
 After:
 
-<img src="./public/screenshots/whiteboardAfter.png" width="800px" />
+<img src="./docs/screenshots/whiteboardAfter.png" width="800px" />
 </details>
 
 <details>
     <summary>A cleaner █████████ home</summary>
 
-| Before:                                                           | After:                                                           |
-| ----------------------------------------------------------------- | ---------------------------------------------------------------- |
-| <img src="./public/screenshots/evHomeBefore.png" width="300px" /> | <img src="./public/screenshots/evHomeAfter.png" width="300px" /> |
+| Before:                                                         | After:                                                         |
+| --------------------------------------------------------------- | -------------------------------------------------------------- |
+| <img src="./docs/screenshots/evHomeBefore.png" width="300px" /> | <img src="./docs/screenshots/evHomeAfter.png" width="300px" /> |
 
 </details>
 
@@ -76,7 +76,7 @@ After:
 - Aligning detailed grades button
 - Redirecting to board
 - Auto-redirecting to █████████ login page
-      </details>
+  </details>
 
 ## Development Workflow
 
@@ -90,12 +90,12 @@ After:
 ### Firefox
 
 To load add-on from files in Firefox, you need to go to `about:debugging#/runtime/this-firefox` and click `Load Temporary Add-on...`. After that you need to select the `manifest.json` file from `.output/` folder in the file picker.<br>
-<img src="./public/screenshots/firefoxDebug.png">
+<img src="./docs/screenshots/firefoxDebug.png">
 
 ### Chrome
 
 To load extension from files in Chrome, you need to go to `chrome://extensions/` and click `Load unpacked` (with Developer mode enabled)<br>
-<img src="./public/screenshots/chromeDebug.png">
+<img src="./docs/screenshots/chromeDebug.png">
 
 ## License
 
