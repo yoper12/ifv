@@ -12,9 +12,6 @@ type StorageValue = boolean | PatchSettings;
 export class SettingsManager {
     private static cache?: Record<string, StorageValue>;
 
-    private static pendingWrites: Record<string, StorageValue> = {};
-    private static writeTimeout?: ReturnType<typeof setTimeout>;
-
     /**
      * Retrieves the current cache of settings, initializing it if necessary.
      *
@@ -45,31 +42,19 @@ export class SettingsManager {
      * @param value The value to write to storage.
      */
     private static scheduleWrite(key: string, value: StorageValue) {
-        this.pendingWrites[key] = value;
-
         if (this.cache) {
             this.cache[key] = value;
             Logger.debug(`Updated settings cache:`, { [key]: value });
         }
 
-        if (this.writeTimeout) {
-            clearTimeout(this.writeTimeout);
-        }
-
-        this.writeTimeout = setTimeout(() => {
-            const dataToWrite = { ...this.pendingWrites };
-            this.pendingWrites = {};
-            browser.storage.sync
-                .set(dataToWrite)
-                .catch((err) =>
-                    Logger.error(
-                        `Error writing data to storage:`,
-                        dataToWrite,
-                        err,
-                    ),
+        browser.runtime
+            .sendMessage({ type: "SCHEDULE_WRITE", payload: { key, value } })
+            .catch((err) => {
+                Logger.error(
+                    "Error sending save request to service worker:",
+                    err,
                 );
-            Logger.debug(`Saved settings to storage:`, dataToWrite);
-        }, 300);
+            });
     }
 
     /**
