@@ -23,12 +23,12 @@ export function onUrlChange(callback: () => void) {
         } else {
             let lastUrl = location.href;
 
-            const checkUrlChange = () => {
+            function checkUrlChange() {
                 if (location.href !== lastUrl) {
                     lastUrl = location.href;
                     triggerAll();
                 }
-            };
+            }
 
             const observer = new MutationObserver(checkUrlChange);
             observer.observe(document.documentElement, {

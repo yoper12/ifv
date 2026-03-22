@@ -34,7 +34,7 @@ export default defineBackground(() => {
                 clearTimeout(writeTimeout);
             }
 
-            writeTimeout = setTimeout(performWrite, 300);
+            writeTimeout = setTimeout(performWrite, 1000);
 
             sendResponse({ success: true });
         }

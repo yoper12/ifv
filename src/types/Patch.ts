@@ -96,7 +96,7 @@ type InferSettings<S extends readonly Setting[]> = {
 
 /** Maps a setting definition to its object type. */
 type SettingValueType<S extends Setting> =
-    S["type"] extends "boolean" ? boolean
+    S["type"] extends "checkbox" ? boolean
     : S["type"] extends "number" ? number
     : S["type"] extends "multiselect" ?
         S extends { options: { value: infer V }[] } ?

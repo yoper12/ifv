@@ -1,7 +1,7 @@
 /** The union type for all possible settings. */
 export type Setting =
     | TextSetting
-    | BooleanSetting
+    | CheckboxSetting
     | ColorSetting
     | NumberSetting
     | SelectSetting
@@ -25,8 +25,8 @@ interface TextSetting extends BaseSetting<"text"> {
     defaultValue: string;
 }
 
-/** A boolean (switch) setting. */
-interface BooleanSetting extends BaseSetting<"boolean"> {
+/** A checkbox (boolean) setting. */
+interface CheckboxSetting extends BaseSetting<"checkbox"> {
     /** The default value of the setting. */
     defaultValue: boolean;
 }

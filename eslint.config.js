@@ -23,5 +23,9 @@ export default defineConfig([
             globals: { ...globals.browser, ...globals.webextensions },
         },
     },
+    {
+        files: ["**/*.svelte"],
+        languageOptions: { parserOptions: { parser: tseslint.parser } },
+    },
     eslintConfigPrettier,
 ]);
