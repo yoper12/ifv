@@ -4,7 +4,7 @@
     import { SettingsManager } from "@/utils/SettingsManager.js";
     import { onMount } from "svelte";
     import { slide } from "svelte/transition";
-    import CheckboxSetting from "./settingsTypes/CheckboxSetting.svelte";
+    import SwitchSetting from "./settingsTypes/SwitchSetting.svelte";
     import NumberSetting from "./settingsTypes/NumberSetting.svelte";
     import TextSetting from "./settingsTypes/TextSetting.svelte";
     import ColorSetting from "./settingsTypes/ColorSetting.svelte";
@@ -28,23 +28,65 @@
                 <span class="setting-description">{setting.description}</span>
             </div>
             <div class="setting-input">
-                {#if setting.type === "checkbox"}
-                    <CheckboxSetting {currentSettings} {meta} {setting} />
+                {#if setting.type === "switch"}
+                    <SwitchSetting
+                        currentSettings={currentSettings as Record<
+                            string,
+                            boolean
+                        >}
+                        {meta}
+                        {setting}
+                    />
                 {/if}
                 {#if setting.type === "number"}
-                    <NumberSetting {currentSettings} {meta} {setting} />
+                    <NumberSetting
+                        currentSettings={currentSettings as Record<
+                            string,
+                            number
+                        >}
+                        {meta}
+                        {setting}
+                    />
                 {/if}
                 {#if setting.type === "text"}
-                    <TextSetting {currentSettings} {meta} {setting} />
+                    <TextSetting
+                        currentSettings={currentSettings as Record<
+                            string,
+                            string
+                        >}
+                        {meta}
+                        {setting}
+                    />
                 {/if}
                 {#if setting.type === "color"}
-                    <ColorSetting {currentSettings} {meta} {setting} />
+                    <ColorSetting
+                        currentSettings={currentSettings as Record<
+                            string,
+                            string
+                        >}
+                        {meta}
+                        {setting}
+                    />
                 {/if}
                 {#if setting.type === "select"}
-                    <SelectSetting {currentSettings} {meta} {setting} />
+                    <SelectSetting
+                        currentSettings={currentSettings as Record<
+                            string,
+                            string
+                        >}
+                        {meta}
+                        {setting}
+                    />
                 {/if}
                 {#if setting.type === "multiselect"}
-                    <MultiselectSetting {currentSettings} {meta} {setting} />
+                    <MultiselectSetting
+                        currentSettings={currentSettings as Record<
+                            string,
+                            string[]
+                        >}
+                        {meta}
+                        {setting}
+                    />
                 {/if}
             </div>
         </div>

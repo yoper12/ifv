@@ -8,7 +8,10 @@
         meta,
         setting,
     }: {
-        currentSettings: Record<string, Setting["defaultValue"]>;
+        currentSettings: Record<
+            string,
+            Extract<Setting, { type: "multiselect" }>["defaultValue"]
+        >;
         meta: Meta;
         setting: Extract<Setting, { type: "multiselect" }>;
     } = $props();
@@ -66,8 +69,13 @@
         position: relative;
         margin-right: 10px;
         transition:
-            background-color 0.2s ease-in-out,
-            border-color 0.2s ease-in-out;
+            background-color 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+            border-color 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .checkbox-item input[type="checkbox"]:hover {
+        box-shadow: 0 0 0 2px #da9f0040;
+        outline: none;
     }
 
     .checkbox-item input[type="checkbox"]::before {
@@ -80,12 +88,12 @@
         border: solid #27272a;
         border-width: 0 2px 2px 0;
         transform: rotate(45deg);
-        transition: border-color 0.2s ease-in-out;
+        transition: border-color 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .checkbox-item input[type="checkbox"]:checked {
-        background-color: #a87d00;
-        border-color: #da9f00;
+        background-color: #a87d00a0;
+        border-color: #da9f0040;
 
         &::before {
             border-color: #fff;

@@ -9,7 +9,14 @@ const patches = import.meta.glob<Patch>("@/patches/**/index.ts", {
 });
 
 export default defineContentScript({
-    matches: ["<all_urls>"],
+    matches: [
+        "*://dziennik-uczen.vulcan.net.pl/*",
+        "*://dziennik-wiadomosci.vulcan.net.pl/*",
+        "*://uczen.eduvulcan.pl/*",
+        "*://wiadomosci.eduvulcan.pl/*",
+        "*://dziennik-logowanie.vulcan.net.pl/*",
+        "*://eduvulcan.pl/*",
+    ],
     runAt: "document_start",
     world: "ISOLATED",
     main() {

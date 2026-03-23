@@ -8,7 +8,10 @@
         meta,
         setting,
     }: {
-        currentSettings: Record<string, Setting["defaultValue"]>;
+        currentSettings: Record<
+            string,
+            Extract<Setting, { type: "color" }>["defaultValue"]
+        >;
         meta: Meta;
         setting: Extract<Setting, { type: "color" }>;
     } = $props();
@@ -49,26 +52,39 @@
         border: 1px solid #38383b;
         border-radius: 8px;
         font-size: 14px;
-        color: #f4f4f5;
+        color: #dfdfdd;
         box-sizing: border-box;
         transition:
-            border-color 0.2s ease-in-out,
-            box-shadow 0.2s ease-in-out;
+            border-color 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+            box-shadow 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
         margin-top: 5px;
 
         input[type="color"] {
-            margin-left: 7px;
-            width: 32px;
-            height: 32px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            margin-left: 4px;
+            width: auto;
+            height: 28px;
+            aspect-ratio: 1/1;
             padding: 0;
             border: none;
             background: none;
             cursor: pointer;
         }
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border-radius: 4px;
+        }
+        input[type="color"]::-moz-color-swatch {
+            border-radius: 4px;
+        }
         input[type="text"] {
             background: none;
             border: none;
-            color: #f4f4f5;
+            color: #dfdfdd;
             font-size: 14px;
             width: 100%;
             height: 34px;
@@ -79,7 +95,7 @@
         }
     }
     .setting-color:focus-within {
-        border-color: #da9f00;
+        border-color: #da9f0070;
         box-shadow: 0 0 0 2px #da9f0040;
         outline: none;
     }

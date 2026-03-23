@@ -11,14 +11,6 @@ export default defineConfig({
             "Poprawia uciążliwe elementy stron usług █████████ oraz ████████ ██████",
         browser_specific_settings: { gecko: { id: "j.skup.test@gmail.com" } },
         permissions: ["storage"],
-        host_permissions: [
-            "*://dziennik-uczen.vulcan.net.pl/*",
-            "*://dziennik-wiadomosci.vulcan.net.pl/*",
-            "*://uczen.eduvulcan.pl/*",
-            "*://wiadomosci.eduvulcan.pl/*",
-            "*://dziennik-logowanie.vulcan.net.pl/*",
-            "*://eduvulcan.pl/*",
-        ],
     },
     modules: ["@wxt-dev/module-svelte"],
 });

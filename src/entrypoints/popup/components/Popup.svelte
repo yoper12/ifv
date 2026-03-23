@@ -216,7 +216,7 @@
     }
 
     .filter > div:focus-within {
-        border-color: #da9f00;
+        border-color: #da9f0070;
         box-shadow: 0 0 0 2px #da9f0040;
     }
 
@@ -247,8 +247,9 @@
     }
 
     .toggle-all:active {
-        border-color: #da9f00;
+        border-color: #da9f0070;
         box-shadow: 0 0 0 2px #da9f0040;
+        outline: none;
     }
 
     .toggle-all:hover {
@@ -279,7 +280,7 @@
     }
 
     .categories:focus {
-        border-color: #da9f00;
+        border-color: #da9f0070;
         box-shadow: 0 0 0 2px #da9f0040;
         outline: none;
     }
