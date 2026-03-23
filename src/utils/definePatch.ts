@@ -1,10 +1,5 @@
 import type { Setting } from "@/types/Setting";
-import type {
-    Patch,
-    PatchDefWithSettings,
-    PatchDefWithoutSettings,
-    PatchDefinition,
-} from "@/types/Patch";
+import type { Patch, PatchDefWithSettings, PatchDefWithoutSettings, PatchDefinition } from "@/types/Patch";
 import type { ElementBuilder } from "./ElementBuilder";
 import { createElement } from "./ElementBuilder";
 
@@ -32,9 +27,7 @@ import { createElement } from "./ElementBuilder";
  * @param patch The patch configuration object.
  * @returns The same patch configuration object, used for type inference.
  */
-export function definePatch<const S extends readonly Setting[]>(
-    patch: PatchDefWithSettings<S>,
-): Patch;
+export function definePatch<const S extends readonly Setting[]>(patch: PatchDefWithSettings<S>): Patch;
 export function definePatch(patch: PatchDefWithoutSettings): Patch;
 export function definePatch(patch: PatchDefinition): Patch {
     let styleElement: ElementBuilder<"style"> | null = null;
@@ -44,8 +37,7 @@ export function definePatch(patch: PatchDefinition): Patch {
 
         async init(settings: Record<string, Setting["defaultValue"]> = {}) {
             if (patch.css && !styleElement) {
-                const css =
-                    Array.isArray(patch.css) ? patch.css.join("\n") : patch.css;
+                const css = Array.isArray(patch.css) ? patch.css.join("\n") : patch.css;
                 styleElement = createElement("style")
                     .setId(`patch-css-${patch.meta.id}`)
                     .setTextContent(css)

@@ -49,9 +49,7 @@ const moveUserOptionsToHeader = async () => {
         linkText.addEventListener("click", () => {
             executeActionOnAside(async () => {
                 document.querySelector(".user").click();
-                await waitForRender(() =>
-                    document.querySelector(".user__links"),
-                );
+                await waitForRender(() => document.querySelector(".user__links"));
                 document.querySelectorAll(".user__links a")[i].click();
             });
             toggleModal();
@@ -77,23 +75,15 @@ const moveUserOptionsToHeader = async () => {
     });
     userAvatar.addEventListener("click", () => {
         toggleModal();
-        history.pushState(
-            { ...history.state, userModal: true },
-            "",
-            `${location.pathname}#user-modal`,
-        );
+        history.pushState({ ...history.state, userModal: true }, "", `${location.pathname}#user-modal`);
     });
 
     document.body.appendChild(modalElement);
     document.body.appendChild(modalBackground);
-    document
-        .querySelector(".header_logo_tools_user-wrapper")
-        .appendChild(userAvatar);
+    document.querySelector(".header_logo_tools_user-wrapper").appendChild(userAvatar);
 
     addEventListener("popstate", () => {
-        if (
-            document.querySelector(".modal-user").classList.contains("active")
-        ) {
+        if (document.querySelector(".modal-user").classList.contains("active")) {
             toggleModal();
         }
     });
@@ -105,6 +95,5 @@ window.appendModule({
         && document.querySelector(".header__hamburger__icon button"),
     onlyOnReloads: true,
     run: moveUserOptionsToHeader,
-    doesRunHere: () =>
-        !!window.location.hostname.match(/^(dziennik-)?(wiadomosci|uczen).*/),
+    doesRunHere: () => !!window.location.hostname.match(/^(dziennik-)?(wiadomosci|uczen).*/),
 });

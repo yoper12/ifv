@@ -9,23 +9,8 @@ export default defineConfig([
     js.configs.recommended,
     tseslint.configs.recommended,
     svelte.configs.recommended,
-    {
-        ignores: [
-            "dist/**",
-            "node_modules/**",
-            ".git/**",
-            ".wxt/**",
-            ".output/**",
-        ],
-    },
-    {
-        languageOptions: {
-            globals: { ...globals.browser, ...globals.webextensions },
-        },
-    },
-    {
-        files: ["**/*.svelte"],
-        languageOptions: { parserOptions: { parser: tseslint.parser } },
-    },
+    { ignores: ["dist/**", "node_modules/**", ".git/**", ".wxt/**", ".output/**"] },
+    { languageOptions: { globals: { ...globals.browser, ...globals.webextensions } } },
+    { files: ["**/*.svelte"], languageOptions: { parserOptions: { parser: tseslint.parser } } },
     eslintConfigPrettier,
 ]);

@@ -7,11 +7,7 @@
         meta,
         isEnabled,
         toggle,
-    }: {
-        meta: Meta;
-        isEnabled: boolean;
-        toggle: (next: boolean) => Promise<void>;
-    } = $props();
+    }: { meta: Meta; isEnabled: boolean; toggle: (next: boolean) => Promise<void> } = $props();
 
     let isLoaded = $state(false);
     let showSettings = $state(false);
@@ -137,11 +133,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: radial-gradient(
-            ellipse at 50% 120%,
-            rgba(218, 159, 0, 0.15) 0%,
-            transparent 60%
-        );
+        background: radial-gradient(ellipse at 50% 120%, rgba(218, 159, 0, 0.15) 0%, transparent 60%);
         opacity: 0;
         transition: opacity 400ms ease;
         z-index: 0;

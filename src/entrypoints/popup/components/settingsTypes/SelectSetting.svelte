@@ -8,10 +8,7 @@
         meta,
         setting,
     }: {
-        currentSettings: Record<
-            string,
-            Extract<Setting, { type: "select" }>["defaultValue"]
-        >;
+        currentSettings: Record<string, Extract<Setting, { type: "select" }>["defaultValue"]>;
         meta: Meta;
         setting: Extract<Setting, { type: "select" }>;
     } = $props();
@@ -26,9 +23,7 @@
     }}
 >
     {#each setting.options as option (option.value)}
-        <option
-            value={option.value}
-            selected={option.value === currentSettings[setting.id]}
+        <option value={option.value} selected={option.value === currentSettings[setting.id]}
             >{option.label}</option
         >
     {/each}

@@ -7,8 +7,7 @@ export default defineConfig({
     manifestVersion: 3,
     manifest: {
         name: "Hephaestus",
-        description:
-            "Poprawia uciążliwe elementy stron usług █████████ oraz ████████ ██████",
+        description: "Poprawia uciążliwe elementy stron usług █████████ oraz ████████ ██████",
         browser_specific_settings: { gecko: { id: "j.skup.test@gmail.com" } },
         permissions: ["storage"],
     },

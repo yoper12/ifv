@@ -6,8 +6,7 @@ const ifvLogoUrl =
     :   "https://raw.githubusercontent.com/banocean/ifv/refs/heads/main/assets/logo/logo-128-red.png";
 const settingsIconUrl =
     "https://raw.githubusercontent.com/banocean/ifv/refs/heads/main/assets/icons/settings.svg";
-const closeIconUrl =
-    "https://raw.githubusercontent.com/banocean/ifv/refs/heads/main/assets/icons/close.svg";
+const closeIconUrl = "https://raw.githubusercontent.com/banocean/ifv/refs/heads/main/assets/icons/close.svg";
 
 const settingsButton = document.createElement("button");
 const modalDiv = document.createElement("div");
@@ -28,17 +27,13 @@ async function addDesktopSettings() {
     `;
 
     settingsButton.addEventListener("click", showModal);
-    modalDiv
-        .querySelector("#ifv-close-patches-modal")
-        .addEventListener("click", hideModal);
+    modalDiv.querySelector("#ifv-close-patches-modal").addEventListener("click", hideModal);
     modalBackground.addEventListener("click", hideModal);
 
     modalDiv.appendChild(await generateSettingsList());
     document.body.appendChild(modalBackground);
     document.body.appendChild(modalDiv);
-    document
-        .querySelector(".app__aside__desktop + .app__main .header__tools")
-        .appendChild(settingsButton);
+    document.querySelector(".app__aside__desktop + .app__main .header__tools").appendChild(settingsButton);
 }
 
 async function hideModal() {

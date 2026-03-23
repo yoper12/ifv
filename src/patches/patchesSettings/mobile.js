@@ -17,21 +17,13 @@ function addMobileSettings() {
             settingsModal.remove();
         });
         const settingsList = await generateSettingsList();
-        settingsModal
-            .querySelector("div:last-of-type")
-            .appendChild(settingsList);
-        settingsModal
-            .querySelector("div:last-of-type")
-            .classList.add("ifv-patches-mobile");
+        settingsModal.querySelector("div:last-of-type").appendChild(settingsList);
+        settingsModal.querySelector("div:last-of-type").classList.add("ifv-patches-mobile");
         document.body.appendChild(settingsModal);
     });
 
-    waitForRender(
-        () => document.querySelectorAll(".more-popup.list-modal div")[1],
-    ).then(() => {
-        document
-            .querySelectorAll(".more-popup.list-modal div")[1]
-            .appendChild(settingsButton);
+    waitForRender(() => document.querySelectorAll(".more-popup.list-modal div")[1]).then(() => {
+        document.querySelectorAll(".more-popup.list-modal div")[1].appendChild(settingsButton);
     });
 }
 
@@ -39,7 +31,6 @@ window.appendModule({
     run: addMobileSettings,
     onlyOnReloads: true,
     doesRunHere: () =>
-        ["uczen.eduvulcan.pl", "dziennik-uczen.vulcan.net.pl"].includes(
-            window.location.hostname,
-        ) && window.innerWidth < 1024,
+        ["uczen.eduvulcan.pl", "dziennik-uczen.vulcan.net.pl"].includes(window.location.hostname)
+        && window.innerWidth < 1024,
 });

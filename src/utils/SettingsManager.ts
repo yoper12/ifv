@@ -35,8 +35,7 @@ export class SettingsManager {
     }
 
     /**
-     * Schedules a write to the storage with debouncing to minimize the number
-     * of writes.
+     * Schedules a write to the storage with debouncing to minimize the number of writes.
      *
      * @param key The storage key to write to.
      * @param value The value to write to storage.
@@ -47,35 +46,27 @@ export class SettingsManager {
             Logger.debug(`Updated settings cache:`, { [key]: value });
         }
 
-        browser.runtime
-            .sendMessage({ type: "SCHEDULE_WRITE", payload: { key, value } })
-            .catch((err) => {
-                Logger.error(
-                    "Error sending save request to service worker:",
-                    err,
-                );
-            });
+        browser.runtime.sendMessage({ type: "SCHEDULE_WRITE", payload: { key, value } }).catch((err) => {
+            Logger.error("Error sending save request to service worker:", err);
+        });
     }
 
     /**
      * Retrieves the configuration settings for a given patch.
      *
      * @param patchMeta Metadata defined in patch definition.
-     * @returns A promise that resolves to the configuration object for the
-     *   patch.
+     * @returns A promise that resolves to the configuration object for the patch.
      */
     static async getPatchSettings(patchMeta: Meta): Promise<PatchSettings> {
         const cache = await this.getCache();
         const storageKey = `patch_settings_${patchMeta.id}`;
-        const storedData =
-            (cache[storageKey] as PatchSettings | undefined) ?? {};
+        const storedData = (cache[storageKey] as PatchSettings | undefined) ?? {};
 
         const settings: PatchSettings = {};
 
         if (patchMeta.settings) {
             for (const setting of patchMeta.settings) {
-                settings[setting.id] =
-                    storedData[setting.id] ?? setting.defaultValue;
+                settings[setting.id] = storedData[setting.id] ?? setting.defaultValue;
             }
         }
 
@@ -90,20 +81,12 @@ export class SettingsManager {
      * @param newValue The new value to be saved.
      * @returns A promise that resolves when the setting has been saved.
      */
-    static async savePatchSetting(
-        patchId: string,
-        settingId: string,
-        newValue: Setting["defaultValue"],
-    ) {
+    static async savePatchSetting(patchId: string, settingId: string, newValue: Setting["defaultValue"]) {
         const cache = await this.getCache();
         const storageKey = `patch_settings_${patchId}`;
-        const existingSettings =
-            (cache[storageKey] as PatchSettings | undefined) ?? {};
+        const existingSettings = (cache[storageKey] as PatchSettings | undefined) ?? {};
 
-        this.scheduleWrite(storageKey, {
-            ...existingSettings,
-            [settingId]: newValue,
-        });
+        this.scheduleWrite(storageKey, { ...existingSettings, [settingId]: newValue });
     }
 
     /**
@@ -132,8 +115,7 @@ export class SettingsManager {
      * Checks if a specific patch is currently enabled.
      *
      * @param patchId ID of the patch to check.
-     * @returns A promise that resolves to true if the patch is enabled, false
-     *   otherwise.
+     * @returns A promise that resolves to true if the patch is enabled, false otherwise.
      */
     static async isPatchEnabled(patchId: string): Promise<boolean> {
         const cache = await this.getCache();

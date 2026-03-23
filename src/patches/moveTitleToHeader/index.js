@@ -8,9 +8,7 @@ function createButton() {
 
 function updateTitle() {
     const header = document.querySelector(".header__logo-product > span");
-    const title = document.querySelector(
-        ".app__content__header__h1_subtitle > h1",
-    );
+    const title = document.querySelector(".app__content__header__h1_subtitle > h1");
     if (header && title?.innerText && header.innerText !== title.innerText)
         header.innerText = title.innerText;
 }
@@ -52,8 +50,7 @@ function move() {
 
 window.appendModule({
     run: move,
-    doesRunHere: () =>
-        window.location.hostname.match(/^(dziennik-)?(uczen|wiadomosci).*/),
+    doesRunHere: () => window.location.hostname.match(/^(dziennik-)?(uczen|wiadomosci).*/),
     onlyOnReloads: true,
     isLoaded: () =>
         !!document.querySelector(".header_logo_tools-container")

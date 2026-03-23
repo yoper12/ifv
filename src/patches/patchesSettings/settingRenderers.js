@@ -9,19 +9,16 @@
  * @property {string} id Unikalny identyfikator ustawienia.
  * @property {string} name Nazwa ustawienia wyświetlana użytkownikowi.
  * @property {string} description Opis ustawienia.
- * @property {string} type Typ ustawienia (np. "select", "text", "boolean",
- *   "multiselect", "color", "number").
- * @property {string | boolean | number | string[]} default Domyślna wartość
- *   ustawienia.
- * @property {SettingOption[]} [options] Tablica opcji dla ustawień typu
- *   "select" i "multiselect".
+ * @property {string} type Typ ustawienia (np. "select", "text", "boolean", "multiselect", "color",
+ *   "number").
+ * @property {string | boolean | number | string[]} default Domyślna wartość ustawienia.
+ * @property {SettingOption[]} [options] Tablica opcji dla ustawień typu "select" i "multiselect".
  * @property {number} [step] Krok dla ustawień typu "number".
  */
 
 /**
- * Obiekt mapujący typy ustawień na funkcje renderujące odpowiednie inputy HTML.
- * Każda funkcja renderująca przyjmuje obiekt ustawienia, nazwę patcha oraz
- * aktualną wartość ustawienia.
+ * Obiekt mapujący typy ustawień na funkcje renderujące odpowiednie inputy HTML. Każda funkcja renderująca
+ * przyjmuje obiekt ustawienia, nazwę patcha oraz aktualną wartość ustawienia.
  *
  * @type {Object<string, function(Setting, string, any): string>}
  */
@@ -35,9 +32,7 @@ export const settingRenderers = {
      * @returns {string} Ciąg HTML reprezentujący input select.
      */
     select: (setting, patchName, currentValue) => `
-        <select class="setting-select" data-patch="${patchName}" data-setting="${
-            setting.id
-        }">
+        <select class="setting-select" data-patch="${patchName}" data-setting="${setting.id}">
             ${setting.options
                 .map(
                     (option) => `
@@ -89,9 +84,8 @@ export const settingRenderers = {
     multiselect: (setting, patchName, currentValue) => {
         const selectedValues =
             Array.isArray(currentValue) ? currentValue
-            : typeof currentValue === "string" && currentValue.length > 0 ?
-                currentValue.split(",")
-            :   [];
+            : typeof currentValue === "string" && currentValue.length > 0 ? currentValue.split(",")
+            : [];
         return `
             <div class="setting-multiselect">
                 ${setting.options
@@ -103,14 +97,8 @@ export const settingRenderers = {
                             data-patch="${patchName}"
                             data-setting="${setting.id}"
                             value="${option.value}"
-                            ${
-                                selectedValues.includes(option.value) ?
-                                    "checked"
-                                :   ""
-                            }>
-                        <label for="${patchName}-${setting.id}-${
-                            option.value
-                        }">${option.name}</label>
+                            ${selectedValues.includes(option.value) ? "checked" : ""}>
+                        <label for="${patchName}-${setting.id}-${option.value}">${option.name}</label>
                     </div>
                 `,
                     )
@@ -140,8 +128,6 @@ export const settingRenderers = {
     number: (setting, patchName, currentValue) => `
         <input type="number" class="setting-number" data-patch="${patchName}" data-setting="${
             setting.id
-        }" value="${currentValue}" step="${setting.step || 1}" placeholder="${
-            setting.default
-        }">
+        }" value="${currentValue}" step="${setting.step || 1}" placeholder="${setting.default}">
     `,
 };

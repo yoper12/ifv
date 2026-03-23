@@ -2,9 +2,8 @@ const urlCallbacks = new Set<() => void>();
 let isObserverInitialized = false;
 
 /**
- * Registers a callback to be invoked whenever the URL changes, including SPA
- * navigations. Used only in content scripts to deduplicate event listeners
- * across them.
+ * Registers a callback to be invoked whenever the URL changes, including SPA navigations. Used only in
+ * content scripts to deduplicate event listeners across them.
  */
 export function onUrlChange(callback: () => void) {
     urlCallbacks.add(callback);
@@ -31,10 +30,7 @@ export function onUrlChange(callback: () => void) {
             }
 
             const observer = new MutationObserver(checkUrlChange);
-            observer.observe(document.documentElement, {
-                childList: true,
-                subtree: true,
-            });
+            observer.observe(document.documentElement, { childList: true, subtree: true });
 
             window.addEventListener("popstate", checkUrlChange);
         }

@@ -4,8 +4,7 @@ import { removeMarks, markTextInElement } from "./markers.js";
 
 const searchIconUrl =
     "https://raw.githubusercontent.com/banocean/ifv/refs/heads/main/assets/icons/search.svg";
-const clearIconUrl =
-    "https://raw.githubusercontent.com/banocean/ifv/refs/heads/main/assets/icons/clear.svg";
+const clearIconUrl = "https://raw.githubusercontent.com/banocean/ifv/refs/heads/main/assets/icons/clear.svg";
 
 export async function generateSettingsList() {
     const patches = JSON.parse(sessionStorage.getItem("IFV_PATCHES")) || [];
@@ -61,11 +60,7 @@ export async function generateSettingsList() {
             const renderer = settingRenderers[setting.type];
             if (renderer) {
                 const currentValue = getSetting(patch.name, setting.id);
-                settingInputDiv.innerHTML = renderer(
-                    setting,
-                    patch.name,
-                    currentValue,
-                );
+                settingInputDiv.innerHTML = renderer(setting, patch.name, currentValue);
             }
 
             settingContainerDiv.appendChild(settingInputDiv);
@@ -91,9 +86,7 @@ function setupSearchbar(patchesSettingsDiv) {
 
     searchInput.addEventListener("input", () => {
         const query = searchInput.value.trim().toLowerCase();
-        const noResultsMessageDiv = patchesSettingsDiv.querySelector(
-            ".no-results-message",
-        );
+        const noResultsMessageDiv = patchesSettingsDiv.querySelector(".no-results-message");
         let visiblePatchesCount = 0;
 
         patchesSettingsDiv.querySelectorAll(".patch").forEach((patchDiv) => {
@@ -113,20 +106,13 @@ function setupSearchbar(patchesSettingsDiv) {
             }
 
             let combinedTextContent =
-                patchNameEl.textContent.toLowerCase()
-                + " "
-                + patchDescEl.textContent.toLowerCase()
-                + " ";
+                patchNameEl.textContent.toLowerCase() + " " + patchDescEl.textContent.toLowerCase() + " ";
 
             patchDiv.querySelectorAll(".setting").forEach((settingDiv) => {
                 combinedTextContent +=
-                    settingDiv
-                        .querySelector(".setting-name")
-                        .textContent.toLowerCase() + " ";
+                    settingDiv.querySelector(".setting-name").textContent.toLowerCase() + " ";
                 combinedTextContent +=
-                    settingDiv
-                        .querySelector(".setting-description")
-                        .textContent.toLowerCase() + " ";
+                    settingDiv.querySelector(".setting-description").textContent.toLowerCase() + " ";
             });
 
             if (combinedTextContent.includes(query)) {
@@ -137,14 +123,8 @@ function setupSearchbar(patchesSettingsDiv) {
                 markTextInElement(patchDescEl, query);
 
                 patchDiv.querySelectorAll(".setting").forEach((settingDiv) => {
-                    markTextInElement(
-                        settingDiv.querySelector(".setting-name"),
-                        query,
-                    );
-                    markTextInElement(
-                        settingDiv.querySelector(".setting-description"),
-                        query,
-                    );
+                    markTextInElement(settingDiv.querySelector(".setting-name"), query);
+                    markTextInElement(settingDiv.querySelector(".setting-description"), query);
                 });
             } else {
                 patchDiv.style.display = "none";
@@ -174,50 +154,37 @@ function setupSearchbar(patchesSettingsDiv) {
  * @returns {void}
  */
 function addListenersToInputs(patchesSettingsDiv) {
-    patchesSettingsDiv
-        .querySelectorAll(".setting-boolean-toggle")
-        .forEach((toggle) => {
-            toggle
-                .querySelector(".toggle-switch")
-                .addEventListener("click", () => {
-                    toggle.querySelector(".toggle-input").checked =
-                        !toggle.querySelector(".toggle-input").checked;
-                    saveSetting(
-                        toggle.querySelector(".toggle-input").dataset.patch,
-                        toggle.querySelector(".toggle-input").dataset.setting,
-                        toggle.querySelector(".toggle-input").checked,
-                    );
-                });
+    patchesSettingsDiv.querySelectorAll(".setting-boolean-toggle").forEach((toggle) => {
+        toggle.querySelector(".toggle-switch").addEventListener("click", () => {
+            toggle.querySelector(".toggle-input").checked = !toggle.querySelector(".toggle-input").checked;
+            saveSetting(
+                toggle.querySelector(".toggle-input").dataset.patch,
+                toggle.querySelector(".toggle-input").dataset.setting,
+                toggle.querySelector(".toggle-input").checked,
+            );
         });
+    });
 
     patchesSettingsDiv
-        .querySelectorAll(
-            ".setting-select, .setting-text, .setting-color, .setting-number",
-        )
+        .querySelectorAll(".setting-select, .setting-text, .setting-color, .setting-number")
         .forEach((input) => {
             input.addEventListener("change", () => {
-                saveSetting(
-                    input.dataset.patch,
-                    input.dataset.setting,
-                    input.value,
-                );
+                saveSetting(input.dataset.patch, input.dataset.setting, input.value);
             });
         });
 
-    patchesSettingsDiv
-        .querySelectorAll(".setting-multiselect-checkbox")
-        .forEach((checkbox) => {
-            checkbox.addEventListener("change", () => {
-                const patchName = checkbox.dataset.patch;
-                const settingId = checkbox.dataset.setting;
-                const selectedValues = Array.from(
-                    patchesSettingsDiv.querySelectorAll(
-                        `.setting-multiselect-checkbox[data-patch='${patchName}'][data-setting='${settingId}']:checked`,
-                    ),
-                ).map((cb) => cb.value);
-                saveSetting(patchName, settingId, selectedValues);
-            });
+    patchesSettingsDiv.querySelectorAll(".setting-multiselect-checkbox").forEach((checkbox) => {
+        checkbox.addEventListener("change", () => {
+            const patchName = checkbox.dataset.patch;
+            const settingId = checkbox.dataset.setting;
+            const selectedValues = Array.from(
+                patchesSettingsDiv.querySelectorAll(
+                    `.setting-multiselect-checkbox[data-patch='${patchName}'][data-setting='${settingId}']:checked`,
+                ),
+            ).map((cb) => cb.value);
+            saveSetting(patchName, settingId, selectedValues);
         });
+    });
 }
 
 /**
@@ -238,15 +205,13 @@ function addBttmButtons(patchesSettingsDiv, patches) {
     patchesSettingsDiv
         .querySelector(".apply-button")
         .addEventListener("click", () => window.location.reload());
-    patchesSettingsDiv
-        .querySelector(".reset-button")
-        .addEventListener("click", () => {
-            for (const patch of patches) {
-                if (!patch.settings?.length) continue;
-                for (const setting of patch.settings) {
-                    saveSetting(patch.name, setting.id, setting.default);
-                }
+    patchesSettingsDiv.querySelector(".reset-button").addEventListener("click", () => {
+        for (const patch of patches) {
+            if (!patch.settings?.length) continue;
+            for (const setting of patch.settings) {
+                saveSetting(patch.name, setting.id, setting.default);
             }
-            window.location.reload();
-        });
+        }
+        window.location.reload();
+    });
 }

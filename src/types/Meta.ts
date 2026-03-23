@@ -19,8 +19,8 @@ export interface Meta {
     /** The settings associated with the patch. */
     settings?: readonly Setting[];
     /**
-     * The strategy for running the patch. Want to run on every DOM change? Use
-     * `once` here and `DomObservers` from `utils/` in your `init()` function.
+     * The strategy for running the patch. Want to run on every DOM change? Use `once` here and
+     * `DomObservers` from `utils/` in your `init()` function.
      *
      * @default "onUrlChange"
      */

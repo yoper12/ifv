@@ -1,5 +1,4 @@
-const isMessagesPage = () =>
-    window.location.hostname.match(/(dziennik-)?wiadomosci.*/);
+const isMessagesPage = () => window.location.hostname.match(/(dziennik-)?wiadomosci.*/);
 
 function getStudentData() {
     return isMessagesPage() ?
@@ -20,25 +19,15 @@ function displayFullName() {
     studentNameSpan.style = "font-size: 20px;";
     studentNameSpan.innerHTML = `${studentData}`;
 
-    const usernameContainer = document.querySelector(
-        ".user div:nth-of-type(2)",
-    );
-    usernameContainer.style =
-        "display: flex; flex-direction: column; font-size: 16px;";
+    const usernameContainer = document.querySelector(".user div:nth-of-type(2)");
+    usernameContainer.style = "display: flex; flex-direction: column; font-size: 16px;";
 
-    usernameContainer.insertBefore(
-        studentNameSpan,
-        usernameContainer.firstChild,
-    );
+    usernameContainer.insertBefore(studentNameSpan, usernameContainer.firstChild);
 }
 
 window.appendModule({
-    isLoaded: () =>
-        document.querySelector(
-            `.${isMessagesPage() ? "account__name span" : "side_student"}`,
-        ),
+    isLoaded: () => document.querySelector(`.${isMessagesPage() ? "account__name span" : "side_student"}`),
     onlyOnReloads: true,
     run: displayFullName,
-    doesRunHere: () =>
-        !!window.location.hostname.match(/^(dziennik-)?(wiadomosci|uczen).*/),
+    doesRunHere: () => !!window.location.hostname.match(/^(dziennik-)?(wiadomosci|uczen).*/),
 });

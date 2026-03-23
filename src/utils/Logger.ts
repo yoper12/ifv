@@ -2,8 +2,8 @@ const DEV = import.meta.env?.DEV;
 
 export class Logger {
     /**
-     * Used to log debugging messages (lowest priority). This will be disabled
-     * in production builds to avoid performance impact.
+     * Used to log debugging messages (lowest priority). This will be disabled in production builds to avoid
+     * performance impact.
      *
      * @example
      *
@@ -11,8 +11,7 @@ export class Logger {
      * Logger.debug("This is a debugging message.", { some: "data" });
      * ```
      *
-     * @returns A logging function that accepts the same arguments as
-     *   `console.debug`.
+     * @returns A logging function that accepts the same arguments as `console.debug`.
      */
     static get debug() {
         if (!DEV) return () => {};
@@ -26,8 +25,8 @@ export class Logger {
     }
 
     /**
-     * Used to log informational messages (medium-low priority). This will be
-     * disabled in production builds to avoid performance impact.
+     * Used to log informational messages (medium-low priority). This will be disabled in production builds
+     * to avoid performance impact.
      *
      * @example
      *
@@ -35,8 +34,7 @@ export class Logger {
      * Logger.info("This is an informational message.", { some: "data" });
      * ```
      *
-     * @returns A logging function that accepts the same arguments as
-     *   `console.info`.
+     * @returns A logging function that accepts the same arguments as `console.info`.
      */
     static get info() {
         if (!DEV) return () => {};
@@ -50,8 +48,8 @@ export class Logger {
     }
 
     /**
-     * Used to log warning messages (medium-high priority). This will be
-     * disabled in production builds to avoid performance impact.
+     * Used to log warning messages (medium-high priority). This will be disabled in production builds to
+     * avoid performance impact.
      *
      * @example
      *
@@ -59,8 +57,7 @@ export class Logger {
      * Logger.warn("This is a warning message.", { some: "data" });
      * ```
      *
-     * @returns A logging function that accepts the same arguments as
-     *   `console.warn`.
+     * @returns A logging function that accepts the same arguments as `console.warn`.
      */
     static get warn() {
         if (!DEV) return () => {};
@@ -74,8 +71,8 @@ export class Logger {
     }
 
     /**
-     * Used to log error messages (highest priority). This is the only logging
-     * method that is preserved in production.
+     * Used to log error messages (highest priority). This is the only logging method that is preserved in
+     * production.
      *
      * @example
      *
@@ -83,8 +80,7 @@ export class Logger {
      * Logger.error("This is an error message.", { some: "data" });
      * ```
      *
-     * @returns A logging function that accepts the same arguments as
-     *   `console.error`.
+     * @returns A logging function that accepts the same arguments as `console.error`.
      */
     static get error() {
         return console.error.bind(

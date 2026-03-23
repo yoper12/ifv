@@ -3,10 +3,7 @@ import { defineContentScript } from "#imports";
 import { loadPatchesForConfig } from "@/utils/loadPatches";
 import { onUrlChange } from "@/utils/spaRouter";
 
-const patches = import.meta.glob<Patch>("@/patches/**/index.ts", {
-    import: "default",
-    eager: true,
-});
+const patches = import.meta.glob<Patch>("@/patches/**/index.ts", { import: "default", eager: true });
 
 export default defineContentScript({
     matches: [
@@ -21,10 +18,7 @@ export default defineContentScript({
     world: "ISOLATED",
     main() {
         async function loadPatches() {
-            await loadPatchesForConfig(patches, {
-                world: "ISOLATED",
-                runAt: "document_end",
-            });
+            await loadPatchesForConfig(patches, { world: "ISOLATED", runAt: "document_end" });
         }
 
         loadPatches();

@@ -34,11 +34,7 @@ export async function markTextInElement(element, textQueryToHighlight) {
         const lowerNodeText = nodeText.toLowerCase();
 
         if (lowerNodeText.includes(textQueryToHighlight)) {
-            nodesToModify.push({
-                node: currentNode,
-                text: nodeText,
-                query: textQueryToHighlight,
-            });
+            nodesToModify.push({ node: currentNode, text: nodeText, query: textQueryToHighlight });
         }
     }
 
@@ -49,22 +45,15 @@ export async function markTextInElement(element, textQueryToHighlight) {
         let lastIndex = 0;
 
         while (matchIndex !== -1) {
-            fragment.appendChild(
-                document.createTextNode(text.substring(lastIndex, matchIndex)),
-            );
+            fragment.appendChild(document.createTextNode(text.substring(lastIndex, matchIndex)));
             const mark = document.createElement("mark");
-            mark.textContent = text.substring(
-                matchIndex,
-                matchIndex + query.length,
-            );
+            mark.textContent = text.substring(matchIndex, matchIndex + query.length);
             fragment.appendChild(mark);
 
             lastIndex = matchIndex + query.length;
             matchIndex = lowerText.indexOf(query, lastIndex);
         }
-        fragment.appendChild(
-            document.createTextNode(text.substring(lastIndex)),
-        );
+        fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
 
         node.parentNode.replaceChild(fragment, node);
     });

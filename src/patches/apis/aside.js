@@ -8,8 +8,7 @@ const getAsideElement = async () => {
     }
 
     asideReads++;
-    if (!document.querySelector("aside"))
-        document.querySelector(".header__hamburger__icon button").click();
+    if (!document.querySelector("aside")) document.querySelector(".header__hamburger__icon button").click();
     await waitForRender(() => document.querySelector("aside"));
     document.querySelector("aside").classList.add("hideAside");
     return document.querySelector("aside");

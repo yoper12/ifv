@@ -8,10 +8,7 @@
         meta,
         setting,
     }: {
-        currentSettings: Record<
-            string,
-            Extract<Setting, { type: "multiselect" }>["defaultValue"]
-        >;
+        currentSettings: Record<string, Extract<Setting, { type: "multiselect" }>["defaultValue"]>;
         meta: Meta;
         setting: Extract<Setting, { type: "multiselect" }>;
     } = $props();
@@ -25,22 +22,14 @@
                 class="setting-multiselect-checkbox"
                 value={option.value}
                 id={`${meta.name}-${setting.id}-${option.value}`}
-                checked={(
-                    currentSettings[setting.id] as string[] | undefined
-                )?.includes(option.value) ?? false}
+                checked={(currentSettings[setting.id] as string[] | undefined)?.includes(option.value)
+                    ?? false}
                 onchange={(e) => {
                     const checked = (e.target as HTMLInputElement).checked;
-                    const current =
-                        (currentSettings[setting.id] as string[]) ?? [];
+                    const current = (currentSettings[setting.id] as string[]) ?? [];
                     currentSettings[setting.id] =
-                        checked ?
-                            [...current, option.value]
-                        :   current.filter((v) => v !== option.value);
-                    SettingsManager.savePatchSetting(
-                        meta.id,
-                        setting.id,
-                        currentSettings[setting.id],
-                    );
+                        checked ? [...current, option.value] : current.filter((v) => v !== option.value);
+                    SettingsManager.savePatchSetting(meta.id, setting.id, currentSettings[setting.id]);
                 }}
             />
             <label for={`${meta.name}-${setting.id}-${option.value}`}>

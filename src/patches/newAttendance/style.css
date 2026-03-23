@@ -59,11 +59,7 @@
     display: none;
 }
 
-.tabsview.attendance-init:not(.stats)
-    > .tabsview__tabs
-    > div
-    > div
-    > div:last-of-type {
+.tabsview.attendance-init:not(.stats) > .tabsview__tabs > div > div > div:last-of-type {
     display: none;
 }
 
@@ -110,8 +106,7 @@
         top: 1px;
     }
 
-    .attendance-tabs:has(button:first-of-type:not(:disabled))
-        > div:not(:last-of-type) {
+    .attendance-tabs:has(button:first-of-type:not(:disabled)) > div:not(:last-of-type) {
         transform: translateX(50vw);
     }
 
@@ -123,9 +118,7 @@
     }
 
     div#root:has(.attendance-tabs) {
-        height: calc(
-            100svh - 60px - 44px - var(--bottom-navbar-height)
-        ) !important;
+        height: calc(100svh - 60px - 44px - var(--bottom-navbar-height)) !important;
         top: 104px;
     }
 }

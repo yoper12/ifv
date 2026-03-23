@@ -6,9 +6,7 @@ export const setHighlights = () => {
     else if (window.location.pathname.endsWith("frekwencja")) i = 2;
     else if (window.location.pathname.endsWith("planZajec")) i = 3;
 
-    const buttons = Array.from(
-        document.querySelector(".bottom-navigation-bar").children,
-    );
+    const buttons = Array.from(document.querySelector(".bottom-navigation-bar").children);
     for (let j = 0; j < buttons.length; j++) {
         const button = buttons[j];
         const img = button.querySelector("div > img");
@@ -20,7 +18,6 @@ export const setHighlights = () => {
 window.appendModule({
     run: setHighlights,
     onlyOnReloads: false,
-    isLoaded: () =>
-        document.querySelector(".bottom-navigation-bar")?.children?.length,
+    isLoaded: () => document.querySelector(".bottom-navigation-bar")?.children?.length,
     doesRunHere: () => window.location.hostname.match(/^(dziennik-)?(uczen).*/),
 });

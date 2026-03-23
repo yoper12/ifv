@@ -5,8 +5,7 @@ export interface PatchDefWithSettings<S extends readonly Setting[]> {
     /** Metadata information for a patch. */
     meta: Omit<Meta, "settings"> & { settings: S };
     /**
-     * Optional CSS string or an array of CSS strings to be applied when the
-     * patch is active.
+     * Optional CSS string or an array of CSS strings to be applied when the patch is active.
      *
      * @example
      *
@@ -28,13 +27,11 @@ export interface PatchDefWithSettings<S extends readonly Setting[]> {
      */
     init?: (settings: InferSettings<S>) => void | Promise<void>;
     /**
-     * Optional cleanup function. Should remove event listeners, disconnect
-     * observers, and remove injected DOM element if the patch needs to be
-     * unloaded (e.g., on URL change or toggle off).
+     * Optional cleanup function. Should remove event listeners, disconnect observers, and remove injected
+     * DOM element if the patch needs to be unloaded (e.g., on URL change or toggle off).
      *
-     * **This function is never called if you set `runStrategy` to `"once"` in
-     * the patch's metadata, since the patch will never be unloaded in that
-     * case.**
+     * **This function is never called if you set `runStrategy` to `"once"` in the patch's metadata, since
+     * the patch will never be unloaded in that case.**
      */
     cleanup?: () => void | Promise<void>;
 }
@@ -43,8 +40,7 @@ export interface PatchDefWithoutSettings {
     /** Metadata information for a patch. */
     meta: Omit<Meta, "settings">;
     /**
-     * Optional CSS string or an array of CSS strings to be applied when the
-     * patch is active.
+     * Optional CSS string or an array of CSS strings to be applied when the patch is active.
      *
      * @example
      *
@@ -66,33 +62,25 @@ export interface PatchDefWithoutSettings {
      */
     init?: () => void | Promise<void>;
     /**
-     * Optional cleanup function. Should remove event listeners, disconnect
-     * observers, and remove injected DOM element if the patch needs to be
-     * unloaded (e.g., on URL change or toggle off).
+     * Optional cleanup function. Should remove event listeners, disconnect observers, and remove injected
+     * DOM element if the patch needs to be unloaded (e.g., on URL change or toggle off).
      *
-     * **This function is never called if you set `runStrategy` to `"once"` in
-     * the patch's metadata, since the patch will never be unloaded in that
-     * case.**
+     * **This function is never called if you set `runStrategy` to `"once"` in the patch's metadata, since
+     * the patch will never be unloaded in that case.**
      */
     cleanup?: () => void | Promise<void>;
 }
 
-export type PatchDefinition =
-    | PatchDefWithSettings<readonly Setting[]>
-    | PatchDefWithoutSettings;
+export type PatchDefinition = PatchDefWithSettings<readonly Setting[]> | PatchDefWithoutSettings;
 
 export interface Patch {
     meta: Meta;
-    init: (
-        settings?: Record<string, Setting["defaultValue"]>,
-    ) => void | Promise<void>;
+    init: (settings?: Record<string, Setting["defaultValue"]>) => void | Promise<void>;
     cleanup: () => void | Promise<void>;
 }
 
 /** Infers the settings object type from an array of settings definitions. */
-type InferSettings<S extends readonly Setting[]> = {
-    [K in S[number] as K["id"]]: SettingValueType<K>;
-} & {};
+type InferSettings<S extends readonly Setting[]> = { [K in S[number] as K["id"]]: SettingValueType<K> } & {};
 
 /** Maps a setting definition to its object type. */
 type SettingValueType<S extends Setting> =

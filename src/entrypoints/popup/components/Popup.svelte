@@ -5,10 +5,7 @@
     import { onMount } from "svelte";
     import PatchItem from "./PatchItem.svelte";
 
-    const patches = import.meta.glob<Patch>("@/patches/**/index.ts", {
-        eager: true,
-        import: "default",
-    });
+    const patches = import.meta.glob<Patch>("@/patches/**/index.ts", { eager: true, import: "default" });
     const patchesMetas = Object.values(patches).map((p) => p.meta);
 
     let searchQuery = $state("");
@@ -18,30 +15,19 @@
     async function loadPatchStates() {
         const entries = await Promise.all(
             patchesMetas.map(
-                async (patch) =>
-                    [
-                        patch.id,
-                        await SettingsManager.isPatchEnabled(patch.id),
-                    ] as const,
+                async (patch) => [patch.id, await SettingsManager.isPatchEnabled(patch.id)] as const,
             ),
         );
         patchEnabledById = Object.fromEntries(entries);
     }
 
-    let isEverythingEnabled = $derived(
-        patchesMetas.every((p) => patchEnabledById[p.id] ?? true),
-    );
+    let isEverythingEnabled = $derived(patchesMetas.every((p) => patchEnabledById[p.id] ?? true));
 
     onMount(async () => {
-        const savedCategory = (await browser.storage.local.get("category"))
-            .category;
+        const savedCategory = (await browser.storage.local.get("category")).category;
 
         category =
-            (
-                savedCategory === "desktop"
-                || savedCategory === "mobile"
-                || savedCategory === "all"
-            ) ?
+            savedCategory === "desktop" || savedCategory === "mobile" || savedCategory === "all" ?
                 savedCategory
             : document.body.classList.contains("mobile") ? "mobile"
             : "desktop";
@@ -54,15 +40,11 @@
             .filter((patch) => {
                 const matchesSearch =
                     patch.name.toLowerCase().includes(searchQuery.toLowerCase())
-                    || patch.description
-                        .toLowerCase()
-                        .includes(searchQuery.toLowerCase());
+                    || patch.description.toLowerCase().includes(searchQuery.toLowerCase());
                 const matchesCategory =
                     category === "all"
                     || (patch.deviceTypes ?
-                        patch.deviceTypes.includes(
-                            category as "desktop" | "mobile",
-                        )
+                        patch.deviceTypes.includes(category as "desktop" | "mobile")
                     :   true);
 
                 return matchesSearch && matchesCategory;
@@ -78,9 +60,7 @@
         }
         await Promise.all(
             patchesMetas.map((p) =>
-                next ?
-                    SettingsManager.enablePatch(p.id)
-                :   SettingsManager.disablePatch(p.id),
+                next ? SettingsManager.enablePatch(p.id) : SettingsManager.disablePatch(p.id),
             ),
         );
         patchEnabledById = nextStates;
@@ -99,9 +79,8 @@
     <h2>
         Changing any option below will refresh opened pages.<br />
         <span class="disclamer">
-            We are not affiliated, associated, authorized, endorsed by, or in
-            any way officially connected with ██████ ███ █ ████, or any of its
-            subsidiaries or its affiliates.
+            We are not affiliated, associated, authorized, endorsed by, or in any way officially connected
+            with ██████ ███ █ ████, or any of its subsidiaries or its affiliates.
         </span>
     </h2>
 
@@ -109,12 +88,7 @@
         <div>
             <img src="/assets/icons/search.svg" alt="Search" />
             <!-- svelte-ignore a11y_autofocus -->
-            <input
-                placeholder="Search"
-                type="text"
-                autofocus
-                bind:value={searchQuery}
-            />
+            <input placeholder="Search" type="text" autofocus bind:value={searchQuery} />
             <button id="clear" onclick={() => (searchQuery = "")}>
                 <img src="/assets/icons/clear.svg" alt="Clear input" />
             </button>
@@ -137,12 +111,8 @@
                     meta={patch}
                     isEnabled={patchEnabledById[patch.id] ?? true}
                     toggle={async (nextState) => {
-                        patchEnabledById = {
-                            ...patchEnabledById,
-                            [patch.id]: nextState,
-                        };
-                        if (nextState)
-                            await SettingsManager.enablePatch(patch.id);
+                        patchEnabledById = { ...patchEnabledById, [patch.id]: nextState };
+                        if (nextState) await SettingsManager.enablePatch(patch.id);
                         else await SettingsManager.disablePatch(patch.id);
                     }}
                 />
@@ -159,10 +129,7 @@
                         "Are you sure you want to clear all extension data? This action cannot be undone.",
                     )
                 ) {
-                    await Promise.all([
-                        browser.storage.sync.clear(),
-                        browser.storage.local.clear(),
-                    ]);
+                    await Promise.all([browser.storage.sync.clear(), browser.storage.local.clear()]);
                     window.location.reload();
                 }
             }}>Clear extension storage</button
@@ -171,11 +138,7 @@
             <a href="https://github.com/banocean/ifv" target="_blank">
                 <img src="/github.svg" alt="Github" width="25" />
             </a>
-            <a
-                href="https://ifv.banocean.com/discord"
-                style="height: 19px"
-                target="_blank"
-            >
+            <a href="https://ifv.banocean.com/discord" style="height: 19px" target="_blank">
                 <img src="/discord.svg" alt="Discord" width="25" />
             </a>
         </div>

@@ -2,8 +2,7 @@ import { clickOnAside } from "../apis/aside.js";
 
 const isEV = () => !window.location.hostname.startsWith("dziennik");
 
-const getLogoElement = () =>
-    document.querySelector(".header__logo-product")?.firstChild;
+const getLogoElement = () => document.querySelector(".header__logo-product")?.firstChild;
 
 function setUpRedirectToBoard() {
     const logoElement = getLogoElement();
@@ -29,6 +28,5 @@ window.appendModule({
     isLoaded: getLogoElement,
     onlyOnReloads: true,
     run: setUpRedirectToBoard,
-    doesRunHere: () =>
-        !!window.location.hostname.match(/^(dziennik-)?(wiadomosci|uczen).*/),
+    doesRunHere: () => !!window.location.hostname.match(/^(dziennik-)?(wiadomosci|uczen).*/),
 });

@@ -80,9 +80,7 @@
     }
 
     body:has(.dashboard-info-toolbar) .plan-zajec,
-    body:has(.dashboard-info-toolbar)
-        .tile__content:has(.plan-zajec)
-        > .tile__content__title {
+    body:has(.dashboard-info-toolbar) .tile__content:has(.plan-zajec) > .tile__content__title {
         display: none !important;
     }
 
