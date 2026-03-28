@@ -8,9 +8,8 @@ interface PatchSettings {
 }
 
 type StorageValue = boolean | PatchSettings;
-
 export class SettingsManager {
-    private static cache?: Record<string, StorageValue>;
+    static #cache?: Record<string, StorageValue>;
 
     /**
      * Retrieves the current cache of settings, initializing it if necessary.
@@ -18,20 +17,20 @@ export class SettingsManager {
      * @returns A promise that resolves to the current cache of settings.
      */
     private static async getCache(): Promise<Record<string, StorageValue>> {
-        if (!this.cache) {
-            this.cache = await browser.storage.sync.get(null);
-            Logger.debug(`Initialized settings cache:`, this.cache);
+        if (!this.#cache) {
+            this.#cache = await browser.storage.sync.get(null);
+            Logger.debug(`Initialized settings cache:`, this.#cache);
 
             browser.storage.onChanged.addListener((changes, areaName) => {
-                if (areaName === "sync" && this.cache) {
+                if (areaName === "sync" && this.#cache) {
                     for (const [key, { newValue }] of Object.entries(changes)) {
-                        this.cache[key] = newValue as StorageValue;
+                        this.#cache[key] = newValue as StorageValue;
                     }
                 }
             });
         }
 
-        return this.cache;
+        return this.#cache;
     }
 
     /**
@@ -41,8 +40,8 @@ export class SettingsManager {
      * @param value The value to write to storage.
      */
     private static scheduleWrite(key: string, value: StorageValue) {
-        if (this.cache) {
-            this.cache[key] = value;
+        if (this.#cache) {
+            this.#cache[key] = value;
             Logger.debug(`Updated settings cache:`, { [key]: value });
         }
 

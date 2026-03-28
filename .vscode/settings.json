@@ -1,0 +1,8 @@
+{
+    "bun.test.enable": false,
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        "package.json": "bun.lock, tsconfig.json, eslint.config.js, .prettierrc, vitest.config.ts, wxt.config.ts, web-ext.config.ts"
+    },
+    "files.exclude": { "**/.output": true, "**/.wxt": true, "**/node_modules": true }
+}

@@ -1,8 +1,7 @@
 {
     "extends": "./.wxt/tsconfig.json",
-    "compilerOptions": { "useDefineForClassFields": true },
+    "compilerOptions": { "useDefineForClassFields": true, "strict": true, "types": ["vitest/globals"] },
     "allowImportingTsExtensions": true,
-    "alwaysStrict": true,
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

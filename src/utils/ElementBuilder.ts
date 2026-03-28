@@ -1,9 +1,9 @@
-export class ElementBuilder<K extends keyof HTMLElementTagNameMap = "div"> {
+export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
     _element: HTMLElementTagNameMap[K];
-    private lastConditionMet: boolean | undefined = undefined;
+    #lastConditionMet: boolean | undefined = undefined;
 
     constructor(tagName: K) {
-        this._element = document.createElement(tagName) as HTMLElementTagNameMap[K];
+        this._element = document.createElement(tagName);
     }
 
     /**
@@ -16,7 +16,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap = "div"> {
      * ```
      *
      * @param attributes An object where keys are attribute names and values are attribute values. Boolean
-     *   `true` sets the attribute to an empty string (common for boolean attributes), `false` removes it.
+     *   `true` sets the attribute to an empty string (for boolean attributes), `false` removes it.
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
     setAttributes(attributes: Record<string, string | boolean>): this {
@@ -104,20 +104,29 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap = "div"> {
     }
 
     /**
-     * Sets the inner HTML of the element. Remember that this method can lead to XSS if the HTML string
-     * contains untrusted content.
+     * Sets the inner HTML of the element. This method tries to use the new `setHTML` API which prevents XSS
+     * vulnerabilities by sanitizing the HTML string from unsafe elements. It can however fall back to
+     * `innerHTML` if `setHTML` is not supported in the current environment and thus you should ensure that
+     * the HTML string is safe to use and won't cause XSS vulnerabilities.
      *
      * @example
      *
      * ```typescript
-     * createElement("div").setInnerHTML("<strong>Bold text</strong>");
+     * createElement("div").setHTML("<strong>Bold text</strong>");
      * ```
      *
      * @param html The HTML string to be set as the inner HTML of the element.
      * @returns The current instance of `ElementBuilder` for method chaining.
+     * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/setHTML|Check on MDN}
      */
-    setInnerHTML(html: string): this {
-        this._element.innerHTML = html;
+    setHTML(html: string): this {
+        // @ts-expect-error - setHTML is not yet included in lib.dom.d.ts
+        if (this._element.setHTML) {
+            // @ts-expect-error - setHTML is not yet included in lib.dom.d.ts
+            this._element.setHTML(html);
+        } else {
+            this._element.innerHTML = html;
+        }
         return this;
     }
 
@@ -447,12 +456,12 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap = "div"> {
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
     if(condition: boolean, callback: (_element: this) => void): this {
-        this.lastConditionMet = condition;
+        this.#lastConditionMet = condition;
 
         if (condition) {
-            const previousState = this.lastConditionMet;
+            const previousState = this.#lastConditionMet;
             callback(this);
-            this.lastConditionMet = previousState;
+            this.#lastConditionMet = previousState;
         }
 
         return this;
@@ -477,13 +486,13 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap = "div"> {
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
     elseIf(condition: boolean, callback: (_element: this) => void): this {
-        if (this.lastConditionMet === undefined)
+        if (this.#lastConditionMet === undefined)
             throw new Error("elseIf() cannot be used before or without if()");
 
-        if (!this.lastConditionMet && condition) {
+        if (!this.#lastConditionMet && condition) {
             callback(this);
 
-            this.lastConditionMet = true;
+            this.#lastConditionMet = true;
         }
 
         return this;
@@ -507,14 +516,14 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap = "div"> {
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
     else(callback: (_element: this) => void): this {
-        if (this.lastConditionMet === undefined)
+        if (this.#lastConditionMet === undefined)
             throw new Error("else() cannot be used before or without if()");
 
-        if (!this.lastConditionMet) {
+        if (!this.#lastConditionMet) {
             callback(this);
         }
 
-        this.lastConditionMet = undefined;
+        this.#lastConditionMet = undefined;
         return this;
     }
 
@@ -576,8 +585,10 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(tagName: K)
  * @returns An instance of `ElementBuilder` for the specified element, allowing for method chaining to
  *   configure the element.
  */
-export function builderFromElement(element: HTMLElement): ElementBuilder<keyof HTMLElementTagNameMap> {
-    const tagName = element.tagName.toLowerCase() as keyof HTMLElementTagNameMap;
+export function builderFromElement<K extends keyof HTMLElementTagNameMap>(
+    element: HTMLElementTagNameMap[K],
+): ElementBuilder<K> {
+    const tagName = element.tagName.toLowerCase() as K;
     const builder = new ElementBuilder(tagName);
     builder._element = element;
     return builder;
