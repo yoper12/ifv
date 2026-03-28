@@ -239,7 +239,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @param listener The function to be called when the event is triggered. The `this` context of the
      *   listener will be the element itself.
      * @param options Optional options for the event listener (e.g., `{ signal: controller.signal }` to be
-     *   able to remove the signal from `cleanup()` function).
+     *   able to remove the listener from `cleanup()` function).
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
     on<E extends keyof HTMLElementEventMap>(
@@ -307,7 +307,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * const parent = document.getElementById("parent");
+     * const parent = document.querySelector("#parent");
      *
      * createElement("div").setTextContent("Child element").appendTo(parent);
      * ```
@@ -328,7 +328,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * const reference = document.getElementById("reference");
+     * const reference = document.querySelector("#reference");
      *
      * createElement("div").setTextContent("An element before the reference").insertBefore(reference);
      * ```
@@ -350,7 +350,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * const reference = document.getElementById("reference");
+     * const reference = document.querySelector("#reference");
      *
      * createElement("div").setTextContent("An element after the reference").insertAfter(reference);
      * ```
@@ -576,7 +576,7 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(tagName: K)
  * @example
  *
  * ```typescript
- * ElementBuilder.fromElement(document.getElementById("my-element"))
+ * ElementBuilder.fromElement(document.querySelector("#my-element"))
  *     .setStyles({ color: "blue" })
  *     .setTextContent("Updated text content");
  * ```
