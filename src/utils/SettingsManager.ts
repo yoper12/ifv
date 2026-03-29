@@ -138,4 +138,9 @@ export class SettingsManager {
         }
         return newState;
     }
+
+    /** Clears cache. Used for testing purposes. */
+    static async resetCache() {
+        this.#cache = undefined;
+    }
 }
