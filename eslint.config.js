@@ -1,11 +1,13 @@
+import e18e from "@e18e/eslint-plugin";
 import js from "@eslint/js";
-import tseslint from "typescript-eslint";
-import globals from "globals";
-import svelte from "eslint-plugin-svelte";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
+import svelte from "eslint-plugin-svelte";
 import { defineConfig } from "eslint/config";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 
 export default defineConfig([
+    e18e.configs.recommended,
     js.configs.recommended,
     tseslint.configs.recommended,
     svelte.configs.recommended,

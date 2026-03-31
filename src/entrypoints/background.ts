@@ -1,6 +1,6 @@
 import { browser, defineBackground } from "#imports";
-import { Logger } from "@/utils/Logger";
 import type { Setting } from "@/types/Setting.js";
+import { Logger } from "@/utils/Logger";
 
 interface PatchSettings {
     [key: string]: Setting["defaultValue"];

@@ -24,14 +24,20 @@ export interface PatchDefWithSettings<S extends readonly Setting[]> {
      * Opitional initialization function for the patch.
      *
      * @param settings The configuration settings for the patch.
+     * @param signal An AbortSignal instance that will be automatically triggered during patch cleanup. You
+     *   should use this signal to automatically abort any ongoing asynchronous operations in your patch
+     *   during unloading to avoid performing actions after the patch has been unloaded.
      */
-    init?: (settings: InferSettings<S>) => void | Promise<void>;
+    init?: (settings: InferSettings<S>, signal: AbortSignal) => void | Promise<void>;
     /**
-     * Optional cleanup function. Should remove event listeners, disconnect observers, and remove injected
-     * DOM element if the patch needs to be unloaded (e.g., on URL change or toggle off).
+     * Optional cleanup function. Should reverse any changes made by the patch in the `init` function, such
+     * as removing injected DOM elements. You should always check whether the elements you want to modify
+     * still exist in the DOM, as the website could have already removed them. You don't need to worry about
+     * removing event listeners or mutation observers if you used the provided `AbortSignal` in your `init`
+     * function, since they will be automatically aborted in that case.
      *
-     * **This function is never called if you set `runStrategy` to `"once"` in the patch's metadata, since
-     * the patch will never be unloaded in that case.**
+     * This function is called when the patch needs to be unloaded, e.g. the user toggles it off or the patch
+     * is no longer applicable due to a URL change.
      */
     cleanup?: () => void | Promise<void>;
 }
@@ -59,14 +65,20 @@ export interface PatchDefWithoutSettings {
      * Opitional initialization function for the patch.
      *
      * @param settings The configuration settings for the patch.
+     * @param signal An AbortSignal instance that will be automatically triggered during patch cleanup. You
+     *   should use this signal to automatically abort any ongoing asynchronous operations in your patch
+     *   during unloading to avoid performing actions after the patch has been unloaded.
      */
-    init?: () => void | Promise<void>;
+    init?: (settings: Record<PropertyKey, never>, signal: AbortSignal) => void | Promise<void>;
     /**
-     * Optional cleanup function. Should remove event listeners, disconnect observers, and remove injected
-     * DOM element if the patch needs to be unloaded (e.g., on URL change or toggle off).
+     * Optional cleanup function. Should reverse any changes made by the patch in the `init` function, such
+     * as removing injected DOM elements. You should always check whether the elements you want to modify
+     * still exist in the DOM, as the website could have already removed them. You don't need to worry about
+     * removing event listeners or mutation observers if you used the provided `AbortSignal` in your `init`
+     * function, since they will be automatically aborted.
      *
-     * **This function is never called if you set `runStrategy` to `"once"` in the patch's metadata, since
-     * the patch will never be unloaded in that case.**
+     * This function is called when the patch needs to be unloaded, e.g. the user toggles it off or the patch
+     * is no longer applicable due to a URL change.
      */
     cleanup?: () => void | Promise<void>;
 }
@@ -75,7 +87,7 @@ export type PatchDefinition = PatchDefWithSettings<readonly Setting[]> | PatchDe
 
 export interface Patch {
     meta: Meta;
-    init: (settings?: Record<string, Setting["defaultValue"]>) => void | Promise<void>;
+    init: (settings: Record<string, Setting["defaultValue"]>) => void | Promise<void>;
     cleanup: () => void | Promise<void>;
 }
 

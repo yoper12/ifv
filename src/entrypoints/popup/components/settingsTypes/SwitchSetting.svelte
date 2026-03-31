@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { Meta } from "@/types/Meta";
     import type { Setting } from "@/types/Setting.js";
-    import { SettingsManager } from "@/utils/SettingsManager.js";
+    import { savePatchSetting } from "@/utils/SettingsManager.js";
 
     let {
         currentSettings,
@@ -50,7 +50,7 @@
         currentSettings[setting.id] = newCheckedState;
         updateIndicator();
 
-        SettingsManager.savePatchSetting(meta.id, setting.id, newCheckedState);
+        savePatchSetting(meta.id, setting.id, newCheckedState);
     }
 </script>
 

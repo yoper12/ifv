@@ -1,4 +1,5 @@
 export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
+    /** @internal */
     _element: HTMLElementTagNameMap[K];
     #lastConditionMet: boolean | undefined = undefined;
 

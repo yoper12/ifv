@@ -33,4 +33,4 @@ const normalizeLesson = (lesson) => {
     };
 };
 export const mapDay = (element) =>
-    Array.from(element.querySelectorAll(".cell--single, .cell--multi--conflicted")).map(normalizeLesson);
+    Array.from(element.querySelectorAll(".cell--single, .cell--multi--conflicted"), normalizeLesson);

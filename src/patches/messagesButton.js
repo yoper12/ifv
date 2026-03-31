@@ -1,5 +1,5 @@
-import { waitForRender } from "./apis/waitForElement.js";
 import { getFromAside } from "./apis/aside.js";
+import { waitForRender } from "./apis/waitForElement.js";
 
 async function move() {
     const inner = await getFromAside(async () => {

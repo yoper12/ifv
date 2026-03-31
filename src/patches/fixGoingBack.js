@@ -8,7 +8,7 @@ const fixGoingBack = async () => {
 const mutationHandler = async (mutationList) => {
     for (let i = 0; i < mutationList.length; i++) {
         const modals = document.querySelectorAll(".MuiDrawer-modal");
-        const modal = modals[modals.length - 1] || undefined;
+        const modal = modals.at(-1) || undefined;
 
         if (modal && modal.getAttribute("data-has-listener") !== "true") {
             history.pushState({ ...history.state, details: true }, "", `${location.pathname}#`);

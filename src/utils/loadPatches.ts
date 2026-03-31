@@ -1,6 +1,6 @@
-import type { Patch } from "@/types/Patch";
 import { Logger } from "./Logger";
-import { SettingsManager } from "./SettingsManager";
+import { getPatchSettings, isPatchEnabled } from "./SettingsManager";
+import type { Patch } from "@/types/Patch";
 
 interface PatchLoaderConfig {
     world: "MAIN" | "ISOLATED";
@@ -31,7 +31,7 @@ export async function loadPatchesForConfig(patches: Record<string, Patch>, confi
             continue;
         if (!meta.matches.some((pattern) => pattern.test(currentUrl))) continue;
         if (meta.deviceTypes && !meta.deviceTypes.includes(getDeviceType())) continue;
-        if ((await SettingsManager.isPatchEnabled(meta.id)) === false) continue;
+        if ((await isPatchEnabled(meta.id)) === false) continue;
 
         eligiblePatches.set(meta.id, patch);
     }
@@ -72,7 +72,7 @@ export async function loadPatchesForConfig(patches: Record<string, Patch>, confi
             try {
                 if (!activePatches.has(patchId)) return;
                 const t0 = performance.now();
-                await init(await SettingsManager.getPatchSettings(meta));
+                await init(await getPatchSettings(meta));
                 const t1 = performance.now();
                 Logger.debug(`Initialized patch "${meta.name}" (${meta.id}) in ${(t1 - t0).toFixed(2)}ms`);
             } catch (err) {

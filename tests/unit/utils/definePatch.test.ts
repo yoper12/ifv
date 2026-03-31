@@ -10,7 +10,7 @@ it("should inject css and remove it on cleanup", async () => {
         css: "body { background: red; }",
     });
 
-    await patch.init();
+    await patch.init({});
 
     const styleElement = document.querySelector("#patch-css-test-css");
     expect(styleElement).not.toBeNull();
@@ -33,7 +33,7 @@ it("should pass settings to init and cleanup", async () => {
 
     await patch.init({ color: "#ff0000" });
     expect(mockInit).toHaveBeenCalledOnce();
-    expect(mockInit).toHaveBeenCalledWith({ color: "#ff0000" });
+    expect(mockInit).toHaveBeenCalledWith({ color: "#ff0000" }, expect.anything());
 
     await patch.cleanup();
     expect(mockCleanup).toHaveBeenCalledOnce();

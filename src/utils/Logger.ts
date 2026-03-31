@@ -1,6 +1,6 @@
 const DEV = import.meta.env?.DEV;
 
-export class Logger {
+export const Logger = {
     /**
      * Used to log debugging messages (lowest priority). This will be disabled in production builds to avoid
      * performance impact.
@@ -13,7 +13,7 @@ export class Logger {
      *
      * @returns A logging function that accepts the same arguments as `console.debug`.
      */
-    static get debug() {
+    get debug() {
         if (!DEV) return () => {};
 
         return console.debug.bind(
@@ -22,7 +22,7 @@ export class Logger {
             "color: gray;",
             "color: cyan;",
         );
-    }
+    },
 
     /**
      * Used to log informational messages (medium-low priority). This will be disabled in production builds
@@ -36,7 +36,7 @@ export class Logger {
      *
      * @returns A logging function that accepts the same arguments as `console.info`.
      */
-    static get info() {
+    get info() {
         if (!DEV) return () => {};
 
         return console.info.bind(
@@ -45,7 +45,7 @@ export class Logger {
             "color: gray;",
             "color: royalblue;",
         );
-    }
+    },
 
     /**
      * Used to log warning messages (medium-high priority). This will be disabled in production builds to
@@ -59,7 +59,7 @@ export class Logger {
      *
      * @returns A logging function that accepts the same arguments as `console.warn`.
      */
-    static get warn() {
+    get warn() {
         if (!DEV) return () => {};
 
         return console.warn.bind(
@@ -68,7 +68,7 @@ export class Logger {
             "color: gray;",
             "color: orange;",
         );
-    }
+    },
 
     /**
      * Used to log error messages (highest priority). This is the only logging method that is preserved in
@@ -82,12 +82,12 @@ export class Logger {
      *
      * @returns A logging function that accepts the same arguments as `console.error`.
      */
-    static get error() {
+    get error() {
         return console.error.bind(
             console,
             `%c[${new Date().toLocaleTimeString()}] %c[ERROR]`,
             "color: gray;",
             "color: red;",
         );
-    }
-}
+    },
+};

@@ -1,9 +1,9 @@
 <script lang="ts">
     import { browser } from "#imports";
-    import type { Patch } from "@/types/Patch";
-    import { SettingsManager } from "@/utils/SettingsManager.js";
-    import { onMount } from "svelte";
     import PatchItem from "./PatchItem.svelte";
+    import type { Patch } from "@/types/Patch";
+    import { disablePatch, enablePatch, isPatchEnabled } from "@/utils/SettingsManager.js";
+    import { onMount } from "svelte";
 
     const patches = import.meta.glob<Patch>("@/patches/**/index.ts", { eager: true, import: "default" });
     const patchesMetas = Object.values(patches).map((p) => p.meta);
@@ -14,9 +14,7 @@
 
     async function loadPatchStates() {
         const entries = await Promise.all(
-            patchesMetas.map(
-                async (patch) => [patch.id, await SettingsManager.isPatchEnabled(patch.id)] as const,
-            ),
+            patchesMetas.map(async (patch) => [patch.id, await isPatchEnabled(patch.id)] as const),
         );
         patchEnabledById = Object.fromEntries(entries);
     }
@@ -58,11 +56,7 @@
         for (const patch of patchesMetas) {
             nextStates[patch.id] = next;
         }
-        await Promise.all(
-            patchesMetas.map((p) =>
-                next ? SettingsManager.enablePatch(p.id) : SettingsManager.disablePatch(p.id),
-            ),
-        );
+        await Promise.all(patchesMetas.map((p) => (next ? enablePatch(p.id) : disablePatch(p.id))));
         patchEnabledById = nextStates;
     }
 
@@ -112,8 +106,8 @@
                     isEnabled={patchEnabledById[patch.id] ?? true}
                     toggle={async (nextState) => {
                         patchEnabledById = { ...patchEnabledById, [patch.id]: nextState };
-                        if (nextState) await SettingsManager.enablePatch(patch.id);
-                        else await SettingsManager.disablePatch(patch.id);
+                        if (nextState) await enablePatch(patch.id);
+                        else await disablePatch(patch.id);
                     }}
                 />
             {/if}

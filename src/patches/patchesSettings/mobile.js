@@ -1,5 +1,5 @@
-import { generateSettingsList } from "./generateSettingsList.js";
 import { waitForRender } from "../apis/waitForElement.js";
+import { generateSettingsList } from "./generateSettingsList.js";
 
 const backIconUrl =
     "https://raw.githubusercontent.com/banocean/ifv/new-navbar/assets/icons/keyboard_backspace_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg";

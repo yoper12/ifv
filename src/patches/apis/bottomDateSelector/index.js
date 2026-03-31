@@ -57,7 +57,7 @@ export class SelectorRenderer {
     }
 
     #getDaysDropdowns() {
-        return Array.from(document.querySelectorAll(".app__content .MuiPaper-root")).map((element) => ({
+        return Array.from(document.querySelectorAll(".app__content .MuiPaper-root"), (element) => ({
             element,
             note: element.querySelector(".plan-zajec__accordion__wolne")?.innerText,
             day: element.querySelector(".MuiAccordionSummary-content > h2")?.innerText,

@@ -2,6 +2,7 @@
     "objectWrap": "collapse",
     "experimentalTernaries": true,
     "experimentalOperatorPosition": "start",
-    "plugins": ["prettier-plugin-svelte", "prettier-plugin-jsdoc"],
-    "tsdoc": true
+    "plugins": ["prettier-plugin-svelte", "prettier-plugin-jsdoc", "@trivago/prettier-plugin-sort-imports"],
+    "tsdoc": true,
+    "importOrderSortSpecifiers": true
 }

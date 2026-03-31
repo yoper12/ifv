@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { Meta } from "@/types/Meta";
     import type { Setting } from "@/types/Setting.js";
-    import { SettingsManager } from "@/utils/SettingsManager.js";
+    import { savePatchSetting } from "@/utils/SettingsManager.js";
 
     let {
         currentSettings,
@@ -29,7 +29,7 @@
                     const current = (currentSettings[setting.id] as string[]) ?? [];
                     currentSettings[setting.id] =
                         checked ? [...current, option.value] : current.filter((v) => v !== option.value);
-                    SettingsManager.savePatchSetting(meta.id, setting.id, currentSettings[setting.id]);
+                    savePatchSetting(meta.id, setting.id, currentSettings[setting.id]);
                 }}
             />
             <label for={`${meta.name}-${setting.id}-${option.value}`}>

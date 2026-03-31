@@ -1,5 +1,5 @@
-import { waitForRender } from "./waitForElement.js";
 import { getFromAside } from "./aside.js";
+import { waitForRender } from "./waitForElement.js";
 
 export const getUserData = async () => {
     return await getFromAside(async () => {

@@ -1,7 +1,7 @@
 <script lang="ts">
+    import PatchSettings from "./PatchSettings.svelte";
     import type { Meta } from "@/types/Meta";
     import { onMount } from "svelte";
-    import PatchSettings from "./PatchSettings.svelte";
 
     let {
         meta,

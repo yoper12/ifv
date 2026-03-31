@@ -6,7 +6,7 @@ const getLogoElement = () => document.querySelector(".header__logo-product")?.fi
 
 function setUpRedirectToBoard() {
     const logoElement = getLogoElement();
-    if (window.location.hostname.match(/^(dziennik-)?wiadomosci.*/)) {
+    if (/^(dziennik-)?wiadomosci.*/.test(window.location.hostname)) {
         const url = `https://${window.location.hostname.replace(
             "wiadomosci",
             "uczen",

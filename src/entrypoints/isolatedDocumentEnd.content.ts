@@ -1,5 +1,5 @@
-import type { Patch } from "@/types/Patch";
 import { defineContentScript } from "#imports";
+import type { Patch } from "@/types/Patch";
 import { loadPatchesForConfig } from "@/utils/loadPatches";
 import { onUrlChange } from "@/utils/spaRouter";
 

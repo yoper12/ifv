@@ -1,6 +1,6 @@
 import { getSetting, saveSetting } from "../apis/settings.js";
+import { markTextInElement, removeMarks } from "./markers.js";
 import { settingRenderers } from "./settingRenderers.js";
-import { removeMarks, markTextInElement } from "./markers.js";
 
 const searchIconUrl =
     "https://raw.githubusercontent.com/banocean/ifv/refs/heads/main/assets/icons/search.svg";
@@ -177,11 +177,9 @@ function addListenersToInputs(patchesSettingsDiv) {
         checkbox.addEventListener("change", () => {
             const patchName = checkbox.dataset.patch;
             const settingId = checkbox.dataset.setting;
-            const selectedValues = Array.from(
-                patchesSettingsDiv.querySelectorAll(
+            const selectedValues = Array.from(patchesSettingsDiv.querySelectorAll(
                     `.setting-multiselect-checkbox[data-patch='${patchName}'][data-setting='${settingId}']:checked`,
-                ),
-            ).map((cb) => cb.value);
+                ), (cb) => cb.value);
             saveSetting(patchName, settingId, selectedValues);
         });
     });

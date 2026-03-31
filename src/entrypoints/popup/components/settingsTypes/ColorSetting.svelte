@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { Meta } from "@/types/Meta";
     import type { Setting } from "@/types/Setting.js";
-    import { SettingsManager } from "@/utils/SettingsManager.js";
+    import { savePatchSetting } from "@/utils/SettingsManager.js";
 
     let {
         currentSettings,
@@ -23,7 +23,7 @@
         oninput={(e) => {
             const value = (e.target as HTMLInputElement).value;
             currentSettings[setting.id] = value;
-            SettingsManager.savePatchSetting(meta.id, setting.id, value);
+            savePatchSetting(meta.id, setting.id, value);
         }}
     />
     <input
@@ -35,7 +35,7 @@
             const value = (e.target as HTMLInputElement).value;
             if (!hexColor.test(value)) return;
             currentSettings[setting.id] = value;
-            SettingsManager.savePatchSetting(meta.id, setting.id, value);
+            savePatchSetting(meta.id, setting.id, value);
         }}
     />
 </div>

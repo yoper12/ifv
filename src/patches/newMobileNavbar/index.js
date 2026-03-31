@@ -2,11 +2,11 @@ import { getFromAside } from "../apis/aside.js";
 import { waitForRender } from "../apis/waitForElement.js";
 import { setHighlights } from "./highlights.js";
 
-if (window.location.hostname.match(/^(dziennik-)?(uczen).*/)) window.asideMode = "hidden";
+if (/^(dziennik-)?(uczen).*/.test(window.location.hostname)) window.asideMode = "hidden";
 
 const getPages = (selector = "aside > section > .MuiList-root > ul") => {
     if (!document.querySelector("aside")) return [];
-    return Array.from(document.querySelector(selector).children).map((item) => {
+    return Array.from(document.querySelector(selector).children, (item) => {
         const isDirectLink = item.classList.contains("MuiListItem-gutters");
         const icon = getComputedStyle(
             isDirectLink ? item : item.querySelector("div > button"),
@@ -14,7 +14,7 @@ const getPages = (selector = "aside > section > .MuiList-root > ul") => {
         ).getPropertyValue("content");
         const name = item.querySelector(isDirectLink ? "a" : ".accordion__title__content")?.innerText;
 
-        const items = isDirectLink ? undefined : Array.from(item.querySelector(".items").children);
+        const items = isDirectLink ? undefined : [...item.querySelector(".items").children];
 
         return { type: isDirectLink ? 1 : 2, element: item, items, icon, name };
     });
@@ -52,7 +52,7 @@ const run = async () => {
     const navPages = ["tablica", "oceny", "frekwencja", "planZajec"];
     const pages = getPages();
     for (const page of pages) {
-        const itemClass = Array.from(page.element.classList).find(
+        const itemClass = [...page.element.classList].find(
             (c) => !["MuiListItem-root", "MuiListItem-gutters", "selected"].includes(c),
         );
         const item = document.createElement("div");
@@ -97,7 +97,7 @@ const run = async () => {
                 element.addEventListener("click", () => {
                     detailedOptionsPage.style.display = "none";
                     more.style.display = "none";
-                    Array.from(document.querySelectorAll(`.${itemClass} .items a`))[i].click();
+                    [...document.querySelectorAll(`.${itemClass} .items a`)][i].click();
                     document.querySelector(".header__hamburger__icon button").click();
                     document.querySelector("div#root").scroll(0, 0);
                 });

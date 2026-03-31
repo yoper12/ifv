@@ -1,9 +1,9 @@
-import { waitForRender } from "../apis/waitForElement.js";
 import { SelectorRenderer } from "../apis/bottomDateSelector/index.js";
 import { mapDay } from "../apis/mapTimetable.js";
+import { waitForRender } from "../apis/waitForElement.js";
 
 const mapData = () =>
-    Array.from(document.querySelectorAll(".app__content .MuiPaper-root")).map((element) => {
+    Array.from(document.querySelectorAll(".app__content .MuiPaper-root"), (element) => {
         return {
             note: element.querySelector(".plan-zajec__accordion__wolne")?.innerText,
             day: element.querySelector(".MuiAccordionSummary-content > h2")?.innerText,
@@ -25,7 +25,7 @@ const mapStartingHours = (data) => {
     for (const day of data)
         if (day.lessons)
             for (const lesson of day.lessons) if (lesson.startingHour) all.add(lesson.startingHour);
-    const result = [...all].sort();
+    const result = all.toSorted();
     const [firstHour, firstMinutes] = (result[0] || "08:00").split(":");
     return Number(firstHour) <= 7 && Number(firstMinutes) <= 30 ? result : ["7:00", ...result];
 };

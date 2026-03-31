@@ -1,8 +1,7 @@
 // @vitest-environment node
-
 import { fakeBrowser } from "#imports";
 import type { Meta } from "@/types/Meta.js";
-import { SettingsManager } from "@/utils/SettingsManager.js";
+import * as SettingsManager from "@/utils/SettingsManager.js";
 
 beforeEach(() => {
     fakeBrowser.reset();

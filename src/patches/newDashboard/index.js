@@ -1,5 +1,5 @@
-import { waitForRender } from "../apis/waitForElement.js";
 import { mapDay } from "../apis/mapTimetable.js";
+import { waitForRender } from "../apis/waitForElement.js";
 
 const doesHaveClickableParent = (element) => {
     if (["a", "button"].includes(element.tagName.toLowerCase())) return true;
@@ -24,7 +24,7 @@ const applyIcons = () => {
     for (const [tileTitle, fileName] of icons) {
         const icon = document.createElement("img");
         icon.src = `https://raw.githubusercontent.com/banocean/ifv/refs/heads/main/assets/icons/${fileName}`;
-        const container = Array.from(document.querySelectorAll(".content-container .tile.box"))
+        const container = [...document.querySelectorAll(".content-container .tile.box")]
             ?.find((e) => e.querySelector("h2").textContent === tileTitle)
             ?.querySelector(".tile__header.flex__items > .flex__item-auto");
 

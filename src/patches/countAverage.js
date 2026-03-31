@@ -39,7 +39,7 @@ function modifyGradesRequests() {
                                     subject.kolumnyOcenyCzastkowe.forEach((column) => {
                                         if (column.oceny && Array.isArray(column.oceny)) {
                                             column.oceny.forEach((grade) => {
-                                                if (grade.wpis && grade.wpis.match(/^[0-6](\+|-)?$/)) {
+                                                if (grade.wpis && /^[0-6](\+|-)?$/.test(grade.wpis)) {
                                                     let value = parseFloat(grade.wpis);
                                                     if (grade.wpis.includes("+"))
                                                         value += getSetting("Count averages", "plusValue");

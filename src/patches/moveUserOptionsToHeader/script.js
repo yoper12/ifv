@@ -1,6 +1,6 @@
-import { waitForRender } from "../apis/waitForElement.js";
 import { executeActionOnAside, getFromAside } from "../apis/aside.js";
 import { getUserData } from "../apis/getUserData.js";
+import { waitForRender } from "../apis/waitForElement.js";
 
 const toggleModal = () => {
     document.querySelector(".modal-background").classList.toggle("active");

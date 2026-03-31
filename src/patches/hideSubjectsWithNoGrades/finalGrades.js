@@ -6,7 +6,7 @@ const hideEmptyColumns = async () => {
     const headers = document.querySelectorAll(".p-datatable-table th");
 
     headers.forEach((header, idx) => {
-        const cells = Array.from(document.querySelectorAll("tbody tr td:nth-child(" + (idx + 1) + ")"));
+        const cells = [...document.querySelectorAll("tbody tr td:nth-child(" + (idx + 1) + ")")];
         const check = cells.some((cell) => cell.textContent.trim().length > 0);
 
         const columnCells = document.querySelectorAll(

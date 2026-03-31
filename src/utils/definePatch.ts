@@ -1,7 +1,7 @@
-import type { Setting } from "@/types/Setting";
-import type { Patch, PatchDefWithSettings, PatchDefWithoutSettings, PatchDefinition } from "@/types/Patch";
 import type { ElementBuilder } from "./ElementBuilder";
 import { createElement } from "./ElementBuilder";
+import type { Patch, PatchDefWithSettings, PatchDefWithoutSettings, PatchDefinition } from "@/types/Patch";
+import type { Setting } from "@/types/Setting";
 
 /**
  * Defines a patch with the provided configuration.
@@ -31,11 +31,12 @@ export function definePatch<const S extends readonly Setting[]>(patch: PatchDefW
 export function definePatch(patch: PatchDefWithoutSettings): Patch;
 export function definePatch(patch: PatchDefinition): Patch {
     let styleElement: ElementBuilder<"style"> | null = null;
+    let abortController: AbortController | null = null;
 
     return {
         meta: patch.meta,
 
-        async init(settings: Record<string, Setting["defaultValue"]> = {}) {
+        async init(settings: Record<string, Setting["defaultValue"]> | Record<string, never>) {
             if (patch.css && !styleElement) {
                 const css = Array.isArray(patch.css) ? patch.css.join("\n") : patch.css;
                 styleElement = createElement("style")
@@ -45,7 +46,11 @@ export function definePatch(patch: PatchDefinition): Patch {
             }
 
             if (patch.init) {
-                await patch.init(settings);
+                abortController = new AbortController();
+                await (patch.init as (settings: unknown, signal: AbortSignal) => void | Promise<void>)(
+                    settings,
+                    abortController.signal,
+                );
             }
         },
 
@@ -53,6 +58,11 @@ export function definePatch(patch: PatchDefinition): Patch {
             if (styleElement) {
                 styleElement.remove();
                 styleElement = null;
+            }
+
+            if (abortController) {
+                abortController.abort();
+                abortController = null;
             }
 
             if (patch.cleanup) {
