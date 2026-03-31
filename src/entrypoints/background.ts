@@ -27,14 +27,13 @@ export default defineBackground(() => {
     browser.runtime.onMessage.addListener((message, _, sendResponse) => {
         if (message.type === "SCHEDULE_WRITE") {
             const { key, value } = message.payload;
-
             pendingWrites[key] = value;
 
             if (writeTimeout) {
                 clearTimeout(writeTimeout);
             }
 
-            writeTimeout = setTimeout(performWrite, 1000);
+            writeTimeout = setTimeout(performWrite, 250);
 
             sendResponse({ success: true });
         }

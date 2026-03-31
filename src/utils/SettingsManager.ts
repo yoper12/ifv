@@ -8,12 +8,12 @@ interface PatchSettings {
 }
 
 type StorageValue = boolean | PatchSettings;
-type ChangeCallback = () => void;
-
 let cache: Record<string, StorageValue> | undefined = undefined;
+
+type ChangeCallback = (changedPatches: Set<string>) => void;
 const listeners: ChangeCallback[] = [];
 
-export function onChange(callback: ChangeCallback) {
+export function onSettingsChange(callback: ChangeCallback) {
     listeners.push(callback);
 }
 
@@ -24,19 +24,30 @@ export function onChange(callback: ChangeCallback) {
  */
 async function getCache(): Promise<Record<string, StorageValue>> {
     if (!cache) {
-        cache = await browser.storage.sync.get(null);
+        cache = await browser.storage.sync.get(null) ?? {};
         Logger.debug(`Initialized settings cache:`, cache);
 
         browser.storage.onChanged.addListener((changes, areaName) => {
             if (areaName === "sync" && cache) {
+                Logger.debug("Storage changes detected:", changes);
+                const changedPatches = new Set<string>();
+
                 for (const [key, { newValue }] of Object.entries(changes)) {
-                    cache[key] = newValue as StorageValue;
+                    if (newValue === undefined) delete cache[key];
+                    else cache[key] = newValue as StorageValue;
+
+                    if (key.startsWith("patch_enabled_"))
+                        changedPatches.add(key.replace("patch_enabled_", ""));
+                    else if (key.startsWith("patch_settings_"))
+                        changedPatches.add(key.replace("patch_settings_", ""));
                 }
+
+                listeners.forEach((cb) => cb(changedPatches));
             }
         });
     }
 
-    return cache!;
+    return cache;
 }
 
 /**
