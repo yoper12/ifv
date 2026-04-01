@@ -15,9 +15,7 @@ export function onUrlChange(callback: () => void) {
             urlCallbacks.forEach((cb) => cb());
         }
 
-        // @ts-expect-error - navigation api is not yet included in lib.dom.ts
         if (window.navigation) {
-            // @ts-expect-error - navigation api is not yet included in lib.dom.ts
             window.navigation.addEventListener("navigatesuccess", triggerAll);
         } else {
             let lastUrl = location.href;
