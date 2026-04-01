@@ -8,8 +8,11 @@ export interface Meta {
     id: string;
     /** A brief description of what the patch does. */
     description: string;
-    /** The URL pattern where the patch should be applied. */
-    matches: Array<RegExp>;
+    /** An array containing URL patterns where the patch should be applied. You can use route() function from utils/ here to make this a little more straightforward, but it's not required.
+     *
+     * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/URLPattern|Check on MDN}
+     */
+    matches: Array<URLPattern>;
     /**
      * The types of devices the patch is applicable to.
      *

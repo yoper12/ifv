@@ -1,6 +1,6 @@
-import type { Patch } from "@/types/Patch";
 import { Logger } from "./Logger";
 import { getPatchSettings, isPatchEnabled } from "./SettingsManager";
+import type { Patch } from "@/types/Patch";
 
 interface PatchLoaderConfig {
     world: "MAIN" | "ISOLATED";
@@ -38,7 +38,7 @@ export async function syncPatches(
         if (meta.deviceTypes && !meta.deviceTypes.includes(getDeviceType())) continue;
         if (trigger === "SETTINGS_CHANGE" && meta.dynamicReloadReady === false) continue;
 
-        const isUrlMatching = meta.matches.some((regex) => regex.test(currentUrl));
+        const isUrlMatching = meta.matches.some((pattern) => pattern.test(currentUrl));
         const isEnabled = await isPatchEnabled(meta.id);
 
         const isEligible = isUrlMatching && isEnabled;
@@ -53,11 +53,7 @@ export async function syncPatches(
         else if (isEligible && isActive) {
             if (trigger === "URL_CHANGE" && (patch.meta.runStrategy ?? "onUrlChange") === "onUrlChange")
                 action = "RELOAD"; // if patch is active and eligible, but URL just changed and patch should reinitialize on URL change, reload it
-            else if (
-                trigger === "SETTINGS_CHANGE"
-                && changedPatches?.has(meta.id)
-            )
-                action = "RELOAD"; // if patch is active and eligible, but settings just changed and its settings were among the changed ones, reload it
+            else if (trigger === "SETTINGS_CHANGE" && changedPatches?.has(meta.id)) action = "RELOAD"; // if patch is active and eligible, but settings just changed and its settings were among the changed ones, reload it
         }
 
         if (action === "NONE") continue;
