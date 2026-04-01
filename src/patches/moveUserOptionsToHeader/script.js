@@ -30,13 +30,16 @@ const moveUserOptionsToHeader = async () => {
     userDataElement.classList.add("modal-data");
 
     const userAvatar = document.createElement("div");
-    userAvatar.innerHTML = `<span>${userData.fullName[0]}</span>`;
+    userAvatar.innerHTML = `<span></span>`;
+    userAvatar.querySelector("span").textContent = userData.fullName[0];
     userAvatar.classList.add("user-avatar");
     userDataElement.appendChild(userAvatar.cloneNode(true));
 
     const nameElement = document.createElement("div");
     nameElement.classList.add("modal-name");
-    nameElement.innerHTML = `<span style="font-size: 20px">${userData?.fullName}</span><span style="font-size: 1rem;">${userData?.username}</span>`;
+    nameElement.innerHTML = `<span style="font-size: 20px"></span><span style="font-size: 1rem;"></span>`;
+    nameElement.querySelectorAll("span")[0].textContent = userData?.fullName;
+    nameElement.querySelectorAll("span")[1].textContent = userData?.username;
     userDataElement.appendChild(nameElement);
 
     modalElement.appendChild(userDataElement);

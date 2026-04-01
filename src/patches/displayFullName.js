@@ -20,7 +20,7 @@ function displayFullName() {
 
     const studentNameSpan = document.createElement("span");
     studentNameSpan.style = "font-size: 20px;";
-    studentNameSpan.innerHTML = `${studentData}`;
+    studentNameSpan.textContent = `${studentData}`;
 
     const usernameContainer = document.querySelector(".user div:nth-of-type(2)");
     usernameContainer.style = "display: flex; flex-direction: column; font-size: 16px;";
