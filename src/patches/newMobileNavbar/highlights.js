@@ -1,3 +1,5 @@
+const studentRegex = /^(dziennik-)?(uczen).*/
+
 export const setHighlights = () => {
     let i;
     if (document.querySelector(".more-popup").style.display === "block") i = 4;
@@ -19,5 +21,5 @@ window.appendModule({
     run: setHighlights,
     onlyOnReloads: false,
     isLoaded: () => document.querySelector(".bottom-navigation-bar")?.children?.length,
-    doesRunHere: () => window.location.hostname.match(/^(dziennik-)?(uczen).*/),
+    doesRunHere: () => window.location.hostname.match(studentRegex),
 });

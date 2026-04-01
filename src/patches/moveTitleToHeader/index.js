@@ -1,5 +1,8 @@
 import { clickOnAside } from "../apis/aside.js";
 
+const messagesRegex = /^(dziennik-)?wiadomosci.*/;
+const studentOrMessagesRegex = /^(dziennik-)?(uczen|wiadomosci).*/;
+
 function createButton() {
     const button = document.createElement("span");
     button.className = "go_to_dashboard";
@@ -37,7 +40,7 @@ function move() {
 
     button.addEventListener("click", async () => {
         button.classList.toggle("hidden");
-        if (/^(dziennik-)?wiadomosci.*/.test(window.location.hostname)) {
+        if (messagesRegex.test(window.location.hostname)) {
             location.replace(
                 `https://${window.location.hostname.replace(
                     "wiadomosci",
@@ -50,7 +53,7 @@ function move() {
 
 window.appendModule({
     run: move,
-    doesRunHere: () => window.location.hostname.match(/^(dziennik-)?(uczen|wiadomosci).*/),
+    doesRunHere: () => window.location.hostname.match(studentOrMessagesRegex),
     onlyOnReloads: true,
     isLoaded: () =>
         !!document.querySelector(".header_logo_tools-container")

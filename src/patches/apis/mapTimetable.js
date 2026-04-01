@@ -1,3 +1,5 @@
+const groupRegex = / Grupa-| \|/
+
 const normalizeLesson = (lesson) => {
     const hoursText = (
         lesson.querySelector(".position__lesson__hours, .conflicted--details--hours")?.innerText || "  "
@@ -6,7 +8,7 @@ const normalizeLesson = (lesson) => {
     const endingHour = hoursText[2];
 
     const subjectText =
-        lesson.querySelector(".position__lesson__subject")?.innerText?.split(/ Grupa-| \|/) || [];
+        lesson.querySelector(".position__lesson__subject")?.innerText?.split(groupRegex) || [];
 
     const annotationText = lesson.querySelector(".plan-position__adnotation-title")?.innerText;
 

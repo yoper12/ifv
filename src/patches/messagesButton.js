@@ -1,6 +1,8 @@
 import { getFromAside } from "./apis/aside.js";
 import { waitForRender } from "./apis/waitForElement.js";
 
+const studentRegex = /^(dziennik-)?(uczen).*/;
+
 async function move() {
     const inner = await getFromAside(async () => {
         await waitForRender(() => document.querySelector(".messages"));
@@ -19,7 +21,7 @@ async function move() {
 
 window.appendModule({
     run: move,
-    doesRunHere: () => window.location.hostname.match(/^(dziennik-)?(uczen).*/),
+    doesRunHere: () => window.location.hostname.match(studentRegex),
     onlyOnReloads: true,
     isLoaded: () => !!document.querySelector(".header__hamburger__icon"),
 });

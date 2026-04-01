@@ -1,5 +1,7 @@
 import { getSetting } from "./apis/settings.js";
 
+const gradeRegex = /^[0-6](\+|-)?$/;
+
 function modifyGradesRequests() {
     const originalXHROpen = XMLHttpRequest.prototype.open;
     const originalXHRSend = XMLHttpRequest.prototype.send;
@@ -39,7 +41,7 @@ function modifyGradesRequests() {
                                     subject.kolumnyOcenyCzastkowe.forEach((column) => {
                                         if (column.oceny && Array.isArray(column.oceny)) {
                                             column.oceny.forEach((grade) => {
-                                                if (grade.wpis && /^[0-6](\+|-)?$/.test(grade.wpis)) {
+                                                if (grade.wpis && gradeRegex.test(grade.wpis)) {
                                                     let value = parseFloat(grade.wpis);
                                                     if (grade.wpis.includes("+"))
                                                         value += getSetting("Count averages", "plusValue");

@@ -2,6 +2,8 @@ import { executeActionOnAside, getFromAside } from "../apis/aside.js";
 import { getUserData } from "../apis/getUserData.js";
 import { waitForRender } from "../apis/waitForElement.js";
 
+const studentOrMessagesRegex = /^(dziennik-)?(wiadomosci|uczen).*/;
+
 const toggleModal = () => {
     document.querySelector(".modal-background").classList.toggle("active");
     document.querySelector(".modal-user").classList.toggle("active");
@@ -95,5 +97,5 @@ window.appendModule({
         && document.querySelector(".header__hamburger__icon button"),
     onlyOnReloads: true,
     run: moveUserOptionsToHeader,
-    doesRunHere: () => !!window.location.hostname.match(/^(dziennik-)?(wiadomosci|uczen).*/),
+    doesRunHere: () => !!window.location.hostname.match(studentOrMessagesRegex),
 });

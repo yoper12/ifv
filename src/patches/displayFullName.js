@@ -1,4 +1,7 @@
-const isMessagesPage = () => window.location.hostname.match(/(dziennik-)?wiadomosci.*/);
+const messagesRegex = /(dziennik-)?wiadomosci.*/;
+const studentOrMessagesRegex = /^(dziennik-)?(wiadomosci|uczen).*/;
+
+const isMessagesPage = () => window.location.hostname.match(messagesRegex);
 
 function getStudentData() {
     return isMessagesPage() ?
@@ -29,5 +32,5 @@ window.appendModule({
     isLoaded: () => document.querySelector(`.${isMessagesPage() ? "account__name span" : "side_student"}`),
     onlyOnReloads: true,
     run: displayFullName,
-    doesRunHere: () => !!window.location.hostname.match(/^(dziennik-)?(wiadomosci|uczen).*/),
+    doesRunHere: () => !!window.location.hostname.match(studentOrMessagesRegex),
 });
