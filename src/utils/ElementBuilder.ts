@@ -13,14 +13,14 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * createElement("input").setAttributes({ type: "text", disabled: true });
+     * createElement("input").attr({ type: "text", disabled: true });
      * ```
      *
      * @param attributes An object where keys are attribute names and values are attribute values. Boolean
      *   `true` sets the attribute to an empty string (for boolean attributes), `false` removes it.
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
-    setAttributes(attributes: Record<string, string | boolean>): this {
+    attr(attributes: Record<string, string | boolean>): this {
         for (const [key, value] of Object.entries(attributes)) {
             if (value === true) {
                 this._element.setAttribute(key, "");
@@ -39,13 +39,13 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * createElement("a").removeAttributes("href", "target");
+     * createElement("a").rmAttr("href", "target");
      * ```
      *
      * @param attributeNames One or more attribute names to be removed from the element.
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
-    removeAttributes(...attributeNames: string[]): this {
+    rmAttr(...attributeNames: string[]): this {
         for (const name of attributeNames) {
             this._element.removeAttribute(name);
         }
@@ -58,13 +58,13 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * createElement("div").setId("my-div");
+     * createElement("div").id("my-div");
      * ```
      *
      * @param id The ID to be set on the element.
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
-    setId(id: string): this {
+    id(id: string): this {
         this._element.id = id;
         return this;
     }
@@ -75,14 +75,14 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * createElement("div").setStyles({ color: "red", fontSize: "16px" });
+     * createElement("div").style({ color: "red", fontSize: "16px" });
      * ```
      *
      * @param styles An object where keys are CSS property names (in camelCase) and values are the
      *   corresponding CSS values to be set on the element.
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
-    setStyles(styles: Partial<Record<keyof CSSStyleDeclaration, string>>): this {
+    style(styles: Partial<Record<keyof CSSStyleDeclaration, string>>): this {
         Object.assign(this._element.style, styles);
         return this;
     }
@@ -93,13 +93,13 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * createElement("span").setTextContent("Hello world");
+     * createElement("span").text("Hello world");
      * ```
      *
      * @param text The text content to be set on the element.
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
-    setTextContent(text: string): this {
+    text(text: string): this {
         this._element.textContent = text;
         return this;
     }
@@ -113,14 +113,14 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * createElement("div").setHTML("<strong>Bold text</strong>");
+     * createElement("div").html("<strong>Bold text</strong>");
      * ```
      *
      * @param html The HTML string to be set as the inner HTML of the element.
      * @returns The current instance of `ElementBuilder` for method chaining.
      * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/setHTML|Check on MDN}
      */
-    setHTML(html: string): this {
+    html(html: string): this {
         // @ts-expect-error - setHTML is not yet included in lib.dom.d.ts
         if (this._element.setHTML) {
             // @ts-expect-error - setHTML is not yet included in lib.dom.d.ts
@@ -137,13 +137,13 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * createElement("div").addClasses("class1", "class2");
+     * createElement("div").class("class1", "class2");
      * ```
      *
      * @param classNames One or more class names to be added to the element.
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
-    addClasses(...classNames: string[]): this {
+    class(...classNames: string[]): this {
         this._element.classList.add(...classNames);
         return this;
     }
@@ -154,13 +154,13 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * createElement("div").removeClasses("class1", "class2");
+     * createElement("div").rmClass("class1", "class2");
      * ```
      *
      * @param classNames One or more class names to be removed from the element.
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
-    removeClasses(...classNames: string[]): this {
+    rmClass(...classNames: string[]): this {
         this._element.classList.remove(...classNames);
         return this;
     }
@@ -172,13 +172,13 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * createElement("div").toggleClass("active");
+     * createElement("div").tgClass("active");
      * ```
      *
      * @param className The class name to be toggled on the element.
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
-    toggleClass(className: string): this {
+    tgClass(className: string): this {
         this._element.classList.toggle(className);
         return this;
     }
@@ -189,14 +189,14 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * createElement("div").setData({ userId: "12345", sessionId: "abc", role: "admin" });
+     * createElement("div").data({ userId: "12345", sessionId: "abc", role: "admin" });
      * ```
      *
      * @param key The name of the data attribute (without the `data-` prefix).
      * @param value The value to be set for the data attribute.
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
-    setData(data: Record<string, string>): this {
+    data(data: Record<string, string>): this {
         for (const [key, val] of Object.entries(data)) {
             this._element.dataset[key] = val;
         }
@@ -209,14 +209,14 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * createElement("div").removeData("userId", "sessionId", "token");
+     * createElement("div").rmData("userId", "sessionId", "token");
      * ```
      *
      * @param keys One or more names of data attributes (without the `data-` prefix) to be removed from the
      *   element.
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
-    removeData(...keys: string[]): this {
+    rmData(...keys: string[]): this {
         for (const key of keys) {
             delete this._element.dataset[key];
         }
@@ -230,7 +230,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      *
      * ```typescript
      * createElement("button")
-     *     .setTextContent("Click me")
+     *     .text("Click me")
      *     .on("click", () => {
      *         console.log("Button clicked! This is the button element:", this);
      *     });
@@ -258,10 +258,20 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * const firstChild = createElement("span").setTextContent("First child");
-     * const secondChild = createElement("div").setTextContent("Second child");
+     * const firstChild = createElement("span").text("First child");
+     * const secondChild = createElement("span").text("Second child");
      *
      * createElement("div").append(firstChild, secondChild);
+     * ```
+     *
+     * @example
+     *
+     * ```typescript
+     * createElement("div")
+     *   .append(
+     *     createElement("span").text("First child"),
+     *     createElement("span").text("Second child")
+     *   )
      * ```
      *
      * @param children One or more child elements to be appended. Each child can be either an `HTMLElement`
@@ -270,7 +280,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      */
     append(...children: (HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>)[]): this {
         children.forEach((child) => {
-            const _element = child instanceof ElementBuilder ? child.getElement() : child;
+            const _element = child instanceof ElementBuilder ? child.node() : child;
             this._element.appendChild(_element);
         });
         return this;
@@ -283,8 +293,8 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * const firstChild = createElement("span").setTextContent("First child");
-     * const secondChild = createElement("div").setTextContent("Second child");
+     * const firstChild = createElement("span").text("First child");
+     * const secondChild = createElement("span").text("Second child");
      *
      * createElement("div").prepend(firstChild, secondChild);
      * ```
@@ -296,7 +306,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
     prepend(...children: (HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>)[]): this {
         children.reverse();
         children.forEach((child) => {
-            const _element = child instanceof ElementBuilder ? child.getElement() : child;
+            const _element = child instanceof ElementBuilder ? child.node() : child;
             this._element.prepend(_element);
         });
         return this;
@@ -310,7 +320,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * ```typescript
      * const parent = document.querySelector("#parent");
      *
-     * createElement("div").setTextContent("Child element").appendTo(parent);
+     * createElement("div").text("Child element").appendTo(parent);
      * ```
      *
      * @param parent The parent element to which the current element will be appended. Can be either an
@@ -318,7 +328,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
     appendTo(parent: HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>): this {
-        const parentElement = parent instanceof ElementBuilder ? parent.getElement() : parent;
+        const parentElement = parent instanceof ElementBuilder ? parent.node() : parent;
         parentElement.appendChild(this._element);
         return this;
     }
@@ -331,7 +341,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * ```typescript
      * const reference = document.querySelector("#reference");
      *
-     * createElement("div").setTextContent("An element before the reference").insertBefore(reference);
+     * createElement("div").text("An element before the reference").insertBefore(reference);
      * ```
      *
      * @param reference The reference element before which the current element will be inserted. Can be
@@ -340,7 +350,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
     insertBefore(reference: HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>): this {
-        const refElement = reference instanceof ElementBuilder ? reference.getElement() : reference;
+        const refElement = reference instanceof ElementBuilder ? reference.node() : reference;
         refElement.parentNode?.insertBefore(this._element, refElement);
         return this;
     }
@@ -353,7 +363,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * ```typescript
      * const reference = document.querySelector("#reference");
      *
-     * createElement("div").setTextContent("An element after the reference").insertAfter(reference);
+     * createElement("div").text("An element after the reference").insertAfter(reference);
      * ```
      *
      * @param reference The reference element after which the current element will be inserted. Can be either
@@ -362,7 +372,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
     insertAfter(reference: HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>): this {
-        const refElement = reference instanceof ElementBuilder ? reference.getElement() : reference;
+        const refElement = reference instanceof ElementBuilder ? reference.node() : reference;
         refElement.parentNode?.insertBefore(this._element, refElement.nextSibling);
         return this;
     }
@@ -375,7 +385,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * createElement("div").setTextContent("This is a div").show();
+     * createElement("div").text("This is a div").show();
      * ```
      *
      * @returns The current instance of `ElementBuilder` for method chaining.
@@ -391,7 +401,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * createElement("div").setTextContent("This is a hidden div").hide();
+     * createElement("div").text("This is a hidden div").hide();
      * ```
      *
      * @returns The current instance of `ElementBuilder` for method chaining.
@@ -408,7 +418,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * const div = createElement("div").setTextContent("This is a div").toggle();
+     * const div = createElement("div").text("This is a div").toggle();
      * ```
      *
      * @returns The current instance of `ElementBuilder` for method chaining.
@@ -428,7 +438,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * createElement("div").setTextContent("This div will be removed").remove();
+     * createElement("div").text("This div will be removed").remove();
      * ```
      *
      * @returns The current instance of `ElementBuilder` for method chaining.
@@ -447,8 +457,8 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      *
      * ```typescript
      * createElement("div")
-     *     .setTextContent("This is a div")
-     *     .if(condition1, (div) => div.setStyles({ color: "red" }));
+     *     .text("This is a div")
+     *     .if(condition1, (div) => div.style({ color: "red" }));
      * ```
      *
      * @param condition A boolean value that determines whether the callback function should be executed.
@@ -477,8 +487,8 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      *
      * ```typescript
      * createElement("div")
-     *     .if(condition1, (div) => div.setStyles({ color: "red" }))
-     *     .elseIf(condition2, (div) => div.setStyles({ color: "green" }));
+     *     .if(condition1, (div) => div.style({ color: "red" }))
+     *     .elseIf(condition2, (div) => div.style({ color: "green" }));
      * ```
      *
      * @param condition A boolean value that determines whether the callback function should be executed.
@@ -507,9 +517,9 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      *
      * ```typescript
      * createElement("div")
-     *     .if(condition1, (div) => div.setStyles({ color: "red" }))
-     *     .elseIf(condition2, (div) => div.setStyles({ color: "green" }))
-     *     .else((div) => div.setStyles({ color: "blue" }));
+     *     .if(condition1, (div) => div.style({ color: "red" }))
+     *     .elseIf(condition2, (div) => div.style({ color: "green" }))
+     *     .else((div) => div.style({ color: "blue" }));
      * ```
      *
      * @param callback A function that takes the current `ElementBuilder` instance as an argument and applies
@@ -535,12 +545,12 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @example
      *
      * ```typescript
-     * const divElement = createElement("div").setTextContent("This is a div").getElement();
+     * const divElement = createElement("div").text("This is a div").node();
      * ```
      *
      * @returns The DOM element that has been built and configured.
      */
-    getElement(): HTMLElementTagNameMap[K] {
+    node(): HTMLElementTagNameMap[K] {
         return this._element;
     }
 }
@@ -554,12 +564,12 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
  *
  * ```typescript
  * const div = createElement("div")
- *     .setId("my-div")
- *     .setStyles({ color: "red", fontSize: "16px" })
- *     .setTextContent("Hello, World!")
+ *     .id("my-div")
+ *     .style({ color: "red", fontSize: "16px" })
+ *     .text("Hello, World!")
  *     .on("click", () => console.log("Div clicked!"))
  *     .appendTo(document.body)
- *     .getElement();
+ *     .node();
  * ```
  *
  * @param tagName The tag name of the element to create (e.g., "div", "span", "button").
@@ -578,8 +588,8 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(tagName: K)
  *
  * ```typescript
  * ElementBuilder.fromElement(document.querySelector("#my-element"))
- *     .setStyles({ color: "blue" })
- *     .setTextContent("Updated text content");
+ *     .style({ color: "blue" })
+ *     .text("Updated text content");
  * ```
  *
  * @param element The existing DOM element from which to create the `ElementBuilder` instance.

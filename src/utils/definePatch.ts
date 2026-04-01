@@ -40,8 +40,8 @@ export function definePatch(patch: PatchDefinition): Patch {
             if (patch.css && !styleElement) {
                 const css = Array.isArray(patch.css) ? patch.css.join("\n") : patch.css;
                 styleElement = createElement("style")
-                    .setId(`patch-css-${patch.meta.id}`)
-                    .setTextContent(css)
+                    .id(`patch-css-${patch.meta.id}`)
+                    .text(css)
                     .appendTo(document.head || document.documentElement);
             }
 
