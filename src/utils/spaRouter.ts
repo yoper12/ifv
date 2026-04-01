@@ -15,9 +15,11 @@ export function onUrlChange(callback: () => void) {
             urlCallbacks.forEach((cb) => cb());
         }
 
-        // @ts-expect-error - navigation api is not yet included in lib.dom.ts
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         if (window.navigation) {
-            // @ts-expect-error - navigation api is not yet included in lib.dom.ts
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             window.navigation.addEventListener("navigatesuccess", triggerAll);
         } else {
             let lastUrl = location.href;
