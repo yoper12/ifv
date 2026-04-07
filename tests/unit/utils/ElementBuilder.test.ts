@@ -64,9 +64,7 @@ describe("id", () => {
 
 describe("style", () => {
     it("should set multiple CSS styles on the element", () => {
-        const element = createElement("div")
-            .style({ color: "red", backgroundColor: "blue" })
-            .node();
+        const element = createElement("div").style({ color: "red", backgroundColor: "blue" }).node();
 
         expect(element.style.color).toBe("red");
         expect(element.style.backgroundColor).toBe("blue");
@@ -105,9 +103,7 @@ describe("text", () => {
 
 describe("html", () => {
     it("should set the inner HTML of the element", () => {
-        const element = createElement("div")
-            .html("<span>hello</span> <strong>world</strong>")
-            .node();
+        const element = createElement("div").html("<span>hello</span> <strong>world</strong>").node();
 
         expect(element.innerHTML).toBe("<span>hello</span> <strong>world</strong>");
     });

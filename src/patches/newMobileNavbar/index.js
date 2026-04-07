@@ -2,7 +2,7 @@ import { getFromAside } from "../apis/aside.js";
 import { waitForRender } from "../apis/waitForElement.js";
 import { setHighlights } from "./highlights.js";
 
-const studentRegex = /^(dziennik-)?(uczen).*/
+const studentRegex = /^(dziennik-)?(uczen).*/;
 if (/^(dziennik-)?(uczen).*/.test(window.location.hostname)) window.asideMode = "hidden";
 
 const getPages = (selector = "aside > section > .MuiList-root > ul") => {

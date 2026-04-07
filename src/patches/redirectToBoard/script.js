@@ -1,7 +1,7 @@
 import { clickOnAside } from "../apis/aside.js";
 
 const messagesRegex = /^(dziennik-)?wiadomosci.*/;
-const studentOrMessagesRegex = /^(dziennik-)?(wiadomosci|uczen).*/
+const studentOrMessagesRegex = /^(dziennik-)?(wiadomosci|uczen).*/;
 
 const isEV = () => !window.location.hostname.startsWith("dziennik");
 

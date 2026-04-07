@@ -177,9 +177,12 @@ function addListenersToInputs(patchesSettingsDiv) {
         checkbox.addEventListener("change", () => {
             const patchName = checkbox.dataset.patch;
             const settingId = checkbox.dataset.setting;
-            const selectedValues = Array.from(patchesSettingsDiv.querySelectorAll(
+            const selectedValues = Array.from(
+                patchesSettingsDiv.querySelectorAll(
                     `.setting-multiselect-checkbox[data-patch='${patchName}'][data-setting='${settingId}']:checked`,
-                ), (cb) => cb.value);
+                ),
+                (cb) => cb.value,
+            );
             saveSetting(patchName, settingId, selectedValues);
         });
     });

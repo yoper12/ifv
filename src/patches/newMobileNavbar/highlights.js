@@ -1,4 +1,4 @@
-const studentRegex = /^(dziennik-)?(uczen).*/
+const studentRegex = /^(dziennik-)?(uczen).*/;
 
 export const setHighlights = () => {
     let i;

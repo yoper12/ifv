@@ -1,4 +1,4 @@
-const groupRegex = / Grupa-| \|/
+const groupRegex = / Grupa-| \|/;
 
 const normalizeLesson = (lesson) => {
     const hoursText = (

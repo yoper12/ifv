@@ -1,5 +1,7 @@
 /* app download links, eduvulcan banner, maziaj */
-.box-app, .carousel-area, .ribbon-bg {
+.box-app,
+.carousel-area,
+.ribbon-bg {
     display: none !important;
 }
 
@@ -12,12 +14,15 @@
     flex: inherit !important;
 }
 
-.part-constant, .part-business {
+.part-constant,
+.part-business {
     flex: 0 !important;
     padding: 0 !important;
 }
 
-.part-business { display: none; }
+.part-business {
+    display: none;
+}
 
 .header-part-2 {
     min-width: inherit !important;
@@ -46,8 +51,8 @@
     .main-content {
         margin-left: auto !important;
         margin-right: auto !important;
-        padding-left:90px !important;
-        padding-right:90px !important;
+        padding-left: 90px !important;
+        padding-right: 90px !important;
         width: auto !important;
     }
 

@@ -48,7 +48,7 @@ export default defineContentScript({
                     changedPatches,
                 );
             }
-        };
+        }
 
         runSync("INITIAL");
 
@@ -56,10 +56,14 @@ export default defineContentScript({
         onSettingsChange((changedPatches) => runSync("SETTINGS_CHANGE", changedPatches));
 
         if (document.readyState === "loading") {
-            window.addEventListener("DOMContentLoaded", () => {
-                syncPatches(patches, { world: "MAIN", runAt: "document_end" }, "INITIAL");
-                lifecycle.document_end = true;
-            }, { once: true });
+            window.addEventListener(
+                "DOMContentLoaded",
+                () => {
+                    syncPatches(patches, { world: "MAIN", runAt: "document_end" }, "INITIAL");
+                    lifecycle.document_end = true;
+                },
+                { once: true },
+            );
         } else {
             syncPatches(patches, { world: "MAIN", runAt: "document_end" }, "INITIAL");
             lifecycle.document_end = true;
@@ -69,10 +73,14 @@ export default defineContentScript({
             syncPatches(patches, { world: "MAIN", runAt: "document_idle" }, "INITIAL");
             lifecycle.document_idle = true;
         } else {
-        window.addEventListener("load", () => {
-            syncPatches(patches, { world: "MAIN", runAt: "document_idle" }, "INITIAL");
-            lifecycle.document_idle = true;
-        }, { once: true });
-    }
+            window.addEventListener(
+                "load",
+                () => {
+                    syncPatches(patches, { world: "MAIN", runAt: "document_idle" }, "INITIAL");
+                    lifecycle.document_idle = true;
+                },
+                { once: true },
+            );
+        }
     },
 });

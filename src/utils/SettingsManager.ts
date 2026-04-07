@@ -24,7 +24,7 @@ export function onSettingsChange(callback: ChangeCallback) {
  */
 async function getCache(): Promise<Record<string, StorageValue>> {
     if (!cache) {
-        cache = await browser.storage.sync.get(null) ?? {};
+        cache = (await browser.storage.sync.get(null)) ?? {};
         Logger.debug(`Initialized settings cache:`, cache);
 
         browser.storage.onChanged.addListener((changes, areaName) => {

@@ -2,9 +2,9 @@ import { getSetting } from "../apis/settings.js";
 
 function applyDarkTheme() {
     if (
-        (getSetting("Dark theme", "darkThemeEnabled") === "auto" &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches) ||
-        getSetting("Dark theme", "darkThemeEnabled") === "enabled"
+        (getSetting("Dark theme", "darkThemeEnabled") === "auto"
+            && window.matchMedia("(prefers-color-scheme: dark)").matches)
+        || getSetting("Dark theme", "darkThemeEnabled") === "enabled"
     ) {
         if (window.location.hostname === "eduvulcan.pl") {
             document.documentElement.classList.add("evHome-dark");
@@ -14,6 +14,4 @@ function applyDarkTheme() {
     }
 }
 
-window.appendModule({
-    run: applyDarkTheme
-});
+window.appendModule({ run: applyDarkTheme });
