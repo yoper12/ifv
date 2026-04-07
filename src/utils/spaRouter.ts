@@ -12,7 +12,9 @@ export function onUrlChange(callback: () => void) {
         isObserverInitialized = true;
 
         function triggerAll() {
-            urlCallbacks.forEach((cb) => cb());
+            for (const callback of urlCallbacks) {
+                callback();
+            }
         }
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment

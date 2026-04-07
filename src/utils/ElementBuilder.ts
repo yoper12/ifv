@@ -279,10 +279,11 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
     append(...children: (HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>)[]): this {
-        children.forEach((child) => {
+        for (const child of children) {
             const _element = child instanceof ElementBuilder ? child.node() : child;
             this._element.appendChild(_element);
-        });
+        }
+
         return this;
     }
 
@@ -305,10 +306,11 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      */
     prepend(...children: (HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>)[]): this {
         children.reverse();
-        children.forEach((child) => {
+        for (const child of children) {
             const _element = child instanceof ElementBuilder ? child.node() : child;
             this._element.prepend(_element);
-        });
+        }
+
         return this;
     }
 

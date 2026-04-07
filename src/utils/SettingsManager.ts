@@ -42,7 +42,10 @@ async function getCache(): Promise<Record<string, StorageValue>> {
                         changedPatches.add(key.replace("patch_settings_", ""));
                 }
 
-                if (changedPatches.size > 0) listeners.forEach((cb) => cb(changedPatches));
+                if (changedPatches.size > 0)
+                    for (const callback of listeners) {
+                        callback(changedPatches);
+                    }
             }
         });
     }
