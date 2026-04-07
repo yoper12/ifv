@@ -9,6 +9,7 @@
  *
  * // Matches all URLs
  * route("*");
+ * ```
  *
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/URLPattern/pathname|Check on MDN}
  */
