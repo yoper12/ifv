@@ -382,4 +382,29 @@ describe("if, elseIf, else", () => {
 
         expect(element.textContent).toBe("second nested condition met");
     });
+
+    it("should throw when elseIf is called before if", () => {
+        expect(() => {
+            createElement("div").elseIf(true, (el) => {
+                el.appendTo(document.body);
+            });
+        }).toThrow("elseIf() cannot be used before or without if()");
+    });
+
+    it("should throw when else is called before if", () => {
+        expect(() => {
+            createElement("div").else((el) => {
+                el.appendTo(document.body);
+            });
+        }).toThrow("else() cannot be used before or without if()");
+    });
+
+    it("should throw when two subsequent else are called", () => {
+        expect(() => {
+            createElement("div")
+                .if(false, (el) => el.appendTo(document.body))
+                .else((el) => el.appendTo(document.body))
+                .else((el) => el.appendTo(document.body));
+        }).toThrow("else() cannot be used before or without if()");
+    });
 });

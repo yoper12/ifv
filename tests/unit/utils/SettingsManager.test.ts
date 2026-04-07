@@ -8,6 +8,24 @@ beforeEach(() => {
     SettingsManager.resetCache();
 });
 
+describe("onSettingsChange", () => {
+    it("should register a listener and call it on relevant storage changes", async () => {
+        const callback = vi.fn();
+        SettingsManager.onSettingsChange(callback);
+
+        await SettingsManager.isPatchEnabled("init-cache"); // just to initialise the cache and set up the listener
+
+        await fakeBrowser.storage.sync.set({ "patch_enabled_test-patch": true });
+        expect(callback).toHaveBeenCalledWith(new Set(["test-patch"]));
+
+        await fakeBrowser.storage.sync.set({ "patch_settings_test-patch": { color: "#ff0000" } });
+        expect(callback).toHaveBeenCalledWith(new Set(["test-patch"]));
+
+        await fakeBrowser.storage.sync.set({ unrelated_key: 123 });
+        expect(callback).toHaveBeenLastCalledWith(new Set(["test-patch"]));
+    });
+});
+
 describe("isPatchEnabled", () => {
     it("should be enabled by default", async () => {
         const isEnabled = await SettingsManager.isPatchEnabled("test-patch");
