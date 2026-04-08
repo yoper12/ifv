@@ -198,9 +198,9 @@ export async function watchElement(
         signal.addEventListener("abort", () => observer.disconnect());
     }
 
-    await callback(() => observer.disconnect());
-
     observer.observe(el, observerOptions);
+
+    await callback(() => observer.disconnect());
 }
 
 /**
@@ -265,9 +265,9 @@ export async function watchElementReplacement(
         signal.addEventListener("abort", () => observer.disconnect());
     }
 
+    observer.observe(parent, { subtree: true, childList: true });
+
     if (currentElement) {
         await callback(() => observer.disconnect());
     }
-
-    observer.observe(parent, { subtree: true, childList: true });
 }
