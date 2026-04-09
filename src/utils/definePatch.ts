@@ -1,4 +1,9 @@
-import type { Patch, PatchDefWithSettings, PatchDefWithoutSettings, PatchDefinition } from "@/types/Patch";
+import type {
+    Patch,
+    PatchDefWithSettings,
+    PatchDefWithoutSettings,
+    PatchDefinition,
+} from "@/types/Patch";
 import type { Setting } from "@/types/Setting";
 
 /**
@@ -25,7 +30,9 @@ import type { Setting } from "@/types/Setting";
  * @param patch The patch configuration object.
  * @returns The same patch configuration object, used for type inference.
  */
-export function definePatch<const S extends readonly Setting[]>(patch: PatchDefWithSettings<S>): Patch;
+export function definePatch<const S extends readonly Setting[]>(
+    patch: PatchDefWithSettings<S>,
+): Patch;
 export function definePatch(patch: PatchDefWithoutSettings): Patch;
 export function definePatch(patch: PatchDefinition): Patch {
     const injectedStylesheets: CSSStyleSheet[] = [];
@@ -34,9 +41,14 @@ export function definePatch(patch: PatchDefinition): Patch {
     return {
         meta: patch.meta,
 
-        async init(settings: Record<string, Setting["defaultValue"]> | Record<string, never>) {
+        async init(
+            settings:
+                | Record<string, Setting["defaultValue"]>
+                | Record<string, never>,
+        ) {
             if (patch.css && injectedStylesheets.length === 0) {
-                const cssStrings = Array.isArray(patch.css) ? patch.css : [patch.css];
+                const cssStrings =
+                    Array.isArray(patch.css) ? patch.css : [patch.css];
 
                 for (const cssString of cssStrings) {
                     const css = new CSSStyleSheet();
@@ -48,18 +60,21 @@ export function definePatch(patch: PatchDefinition): Patch {
 
             if (patch.init) {
                 abortController = new AbortController();
-                await (patch.init as (settings: unknown, signal: AbortSignal) => void | Promise<void>)(
-                    settings,
-                    abortController.signal,
-                );
+                await (
+                    patch.init as (
+                        settings: unknown,
+                        signal: AbortSignal,
+                    ) => void | Promise<void>
+                )(settings, abortController.signal);
             }
         },
 
         async cleanup() {
             if (injectedStylesheets.length > 0) {
-                document.adoptedStyleSheets = document.adoptedStyleSheets.filter(
-                    (sheet) => !injectedStylesheets.includes(sheet),
-                );
+                document.adoptedStyleSheets =
+                    document.adoptedStyleSheets.filter(
+                        (sheet) => !injectedStylesheets.includes(sheet),
+                    );
                 injectedStylesheets.length = 0;
             }
 

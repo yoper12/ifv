@@ -14,9 +14,13 @@ async function move() {
     messages.style.float = "right";
     messages.style.padding = "20px";
     messages.style.marginLeft = "auto";
-    messages.querySelector(".MuiBadge-anchorOriginTopRightRectangle").style.transitionDuration = "0ms";
+    messages.querySelector(
+        ".MuiBadge-anchorOriginTopRightRectangle",
+    ).style.transitionDuration = "0ms";
 
-    document.querySelector(".header_logo_tools-container").appendChild(messages);
+    document
+        .querySelector(".header_logo_tools-container")
+        .appendChild(messages);
 }
 
 window.appendModule({

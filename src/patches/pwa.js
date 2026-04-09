@@ -23,7 +23,9 @@ window.appendModule({
     onlyOnReloads: true,
     run: injectWebManifest,
     doesRunHere: () =>
-        ["eduvulcan.pl", "uczen.eduvulcan.pl", "dziennik-uczen.vulcan.net.pl"].includes(
-            window.location.hostname,
-        ),
+        [
+            "eduvulcan.pl",
+            "uczen.eduvulcan.pl",
+            "dziennik-uczen.vulcan.net.pl",
+        ].includes(window.location.hostname),
 });

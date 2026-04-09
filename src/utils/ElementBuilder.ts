@@ -245,10 +245,17 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      */
     on<E extends keyof HTMLElementEventMap>(
         event: E,
-        listener: (this: HTMLElementTagNameMap[K], ev: HTMLElementEventMap[E]) => void,
+        listener: (
+            this: HTMLElementTagNameMap[K],
+            ev: HTMLElementEventMap[E],
+        ) => void,
         options?: AddEventListenerOptions,
     ): this {
-        this._element.addEventListener(event, listener as EventListener, options);
+        this._element.addEventListener(
+            event,
+            listener as EventListener,
+            options,
+        );
         return this;
     }
 
@@ -278,8 +285,15 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      *   or another `ElementBuilder` instance.
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
-    append(...children: (HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>)[]): this {
-        const nodes = children.map((child) => (child instanceof ElementBuilder ? child.node() : child));
+    append(
+        ...children: (
+            | HTMLElement
+            | ElementBuilder<keyof HTMLElementTagNameMap>
+        )[]
+    ): this {
+        const nodes = children.map((child) =>
+            child instanceof ElementBuilder ? child.node() : child,
+        );
         this._element.append(...nodes);
 
         return this;
@@ -302,8 +316,15 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      *   or another `ElementBuilder` instance.
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
-    prepend(...children: (HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>)[]): this {
-        const nodes = children.map((child) => (child instanceof ElementBuilder ? child.node() : child));
+    prepend(
+        ...children: (
+            | HTMLElement
+            | ElementBuilder<keyof HTMLElementTagNameMap>
+        )[]
+    ): this {
+        const nodes = children.map((child) =>
+            child instanceof ElementBuilder ? child.node() : child,
+        );
         this._element.prepend(...nodes);
 
         return this;
@@ -324,8 +345,11 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      *   `HTMLElement` or another `ElementBuilder` instance.
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
-    appendTo(parent: HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>): this {
-        const parentElement = parent instanceof ElementBuilder ? parent.node() : parent;
+    appendTo(
+        parent: HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>,
+    ): this {
+        const parentElement =
+            parent instanceof ElementBuilder ? parent.node() : parent;
         parentElement.appendChild(this._element);
         return this;
     }
@@ -346,8 +370,11 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      *   parent node.
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
-    insertBefore(reference: HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>): this {
-        const refElement = reference instanceof ElementBuilder ? reference.node() : reference;
+    insertBefore(
+        reference: HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>,
+    ): this {
+        const refElement =
+            reference instanceof ElementBuilder ? reference.node() : reference;
         refElement.before(this._element);
         return this;
     }
@@ -368,8 +395,11 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      *   node.
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
-    insertAfter(reference: HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>): this {
-        const refElement = reference instanceof ElementBuilder ? reference.node() : reference;
+    insertAfter(
+        reference: HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>,
+    ): this {
+        const refElement =
+            reference instanceof ElementBuilder ? reference.node() : reference;
         refElement.after(this._element);
         return this;
     }
@@ -573,7 +603,9 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
  * @returns An instance of `ElementBuilder` for the specified tag name, allowing for method chaining to
  *   configure the element.
  */
-export function createElement<K extends keyof HTMLElementTagNameMap>(tagName: K): ElementBuilder<K> {
+export function createElement<K extends keyof HTMLElementTagNameMap>(
+    tagName: K,
+): ElementBuilder<K> {
     return new ElementBuilder(tagName);
 }
 

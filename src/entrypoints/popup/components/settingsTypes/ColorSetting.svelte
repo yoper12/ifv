@@ -8,7 +8,10 @@
         meta,
         setting,
     }: {
-        currentSettings: Record<string, Extract<Setting, { type: "color" }>["defaultValue"]>;
+        currentSettings: Record<
+            string,
+            Extract<Setting, { type: "color" }>["defaultValue"]
+        >;
         meta: Meta;
         setting: Extract<Setting, { type: "color" }>;
     } = $props();

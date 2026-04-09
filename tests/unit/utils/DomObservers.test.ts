@@ -11,7 +11,9 @@ describe("waitForRender", () => {
         document.body.appendChild(div);
 
         await expect(
-            DomObservers.waitForRender(() => document.querySelector("#test-element") as HTMLElement),
+            DomObservers.waitForRender(
+                () => document.querySelector("#test-element") as HTMLElement,
+            ),
         ).resolves.toBeUndefined();
     });
 
@@ -54,8 +56,13 @@ describe("waitForRender", () => {
         document.body.appendChild(parent);
 
         const promise = expect(
-            DomObservers.waitForRender(() => document.querySelector("#test-element") as HTMLElement, parent),
-        ).rejects.toThrow("Parent element disconnected while waiting for render.");
+            DomObservers.waitForRender(
+                () => document.querySelector("#test-element") as HTMLElement,
+                parent,
+            ),
+        ).rejects.toThrow(
+            "Parent element disconnected while waiting for render.",
+        );
 
         parent.remove();
         parent.appendChild(document.createElement("div")); // Trigger mutation observer to detect disconnection
@@ -130,7 +137,9 @@ describe("waitForReplacement", () => {
                 () => document.querySelector("#test-element") as HTMLElement,
                 parent,
             ),
-        ).rejects.toThrow("Parent element disconnected while waiting for render.");
+        ).rejects.toThrow(
+            "Parent element disconnected while waiting for render.",
+        );
 
         parent.remove();
         parent.appendChild(document.createElement("div")); // Trigger mutation observer to detect disconnection

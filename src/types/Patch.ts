@@ -28,7 +28,10 @@ export interface PatchDefWithSettings<S extends readonly Setting[]> {
      *   should use this signal to automatically abort any ongoing asynchronous operations in your patch
      *   during unloading to avoid performing actions after the patch has been unloaded.
      */
-    init?: (settings: InferSettings<S>, signal: AbortSignal) => void | Promise<void>;
+    init?: (
+        settings: InferSettings<S>,
+        signal: AbortSignal,
+    ) => void | Promise<void>;
     /**
      * Optional cleanup function. Should reverse any changes made by the patch in the `init` function, such
      * as removing injected DOM elements. You should always check whether the elements you want to modify
@@ -69,7 +72,10 @@ export interface PatchDefWithoutSettings {
      *   should use this signal to automatically abort any ongoing asynchronous operations in your patch
      *   during unloading to avoid performing actions after the patch has been unloaded.
      */
-    init?: (settings: Record<PropertyKey, never>, signal: AbortSignal) => void | Promise<void>;
+    init?: (
+        settings: Record<PropertyKey, never>,
+        signal: AbortSignal,
+    ) => void | Promise<void>;
     /**
      * Optional cleanup function. Should reverse any changes made by the patch in the `init` function, such
      * as removing injected DOM elements. You should always check whether the elements you want to modify
@@ -83,16 +89,22 @@ export interface PatchDefWithoutSettings {
     cleanup?: () => void | Promise<void>;
 }
 
-export type PatchDefinition = PatchDefWithSettings<readonly Setting[]> | PatchDefWithoutSettings;
+export type PatchDefinition =
+    | PatchDefWithSettings<readonly Setting[]>
+    | PatchDefWithoutSettings;
 
 export interface Patch {
     meta: Meta;
-    init: (settings: Record<string, Setting["defaultValue"]>) => void | Promise<void>;
+    init: (
+        settings: Record<string, Setting["defaultValue"]>,
+    ) => void | Promise<void>;
     cleanup: () => void | Promise<void>;
 }
 
 /** Infers the settings object type from an array of settings definitions. */
-type InferSettings<S extends readonly Setting[]> = { [K in S[number] as K["id"]]: SettingValueType<K> } & {};
+type InferSettings<S extends readonly Setting[]> = {
+    [K in S[number] as K["id"]]: SettingValueType<K>;
+} & {};
 
 /** Maps a setting definition to its object type. */
 type SettingValueType<S extends Setting> =

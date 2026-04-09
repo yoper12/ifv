@@ -15,9 +15,13 @@ export function getSetting(patchName, settingId) {
     if (!patch) throw new Error(`Patch with name ${patchName} not found.`);
 
     const setting = patch.settings?.find((s) => s.id === settingId);
-    if (!setting) throw new Error(`Setting with id ${settingId} not found in patch ${patchName}.`);
+    if (!setting)
+        throw new Error(
+            `Setting with id ${settingId} not found in patch ${patchName}.`,
+        );
 
-    const patchesSettings = JSON.parse(sessionStorage.getItem("ifv_patches_settings")) || {};
+    const patchesSettings =
+        JSON.parse(sessionStorage.getItem("ifv_patches_settings")) || {};
     const savedValue = patchesSettings[patchName]?.[settingId];
 
     if (setting.type === "boolean") {
@@ -39,7 +43,8 @@ export function getSetting(patchName, settingId) {
 
     if (setting.type === "multiselect") {
         if (Array.isArray(setting.default)) return setting.default;
-        if (typeof setting.default === "string") return setting.default.split(",");
+        if (typeof setting.default === "string")
+            return setting.default.split(",");
         return [];
     }
 
@@ -63,7 +68,10 @@ export function saveSetting(patchName, settingId, value) {
     if (!patch) throw new Error(`Patch with name ${patchName} not found.`);
 
     const setting = patch.settings?.find((s) => s.id === settingId);
-    if (!setting) throw new Error(`Setting with id ${settingId} not found in patch ${patchName}.`);
+    if (!setting)
+        throw new Error(
+            `Setting with id ${settingId} not found in patch ${patchName}.`,
+        );
 
     let rawPatchesSettings = sessionStorage.getItem("ifv_patches_settings");
     let patchesSettings;
@@ -80,7 +88,10 @@ export function saveSetting(patchName, settingId, value) {
             }
         } catch (e) {
             patchesSettings = {};
-            console.debug("Error parsing ifv_patches_settings from sessionStorage. Initializing to {}.", e);
+            console.debug(
+                "Error parsing ifv_patches_settings from sessionStorage. Initializing to {}.",
+                e,
+            );
         }
     } else {
         patchesSettings = {};
@@ -91,7 +102,10 @@ export function saveSetting(patchName, settingId, value) {
     }
 
     patchesSettings[patchName][settingId] = value;
-    sessionStorage.setItem("ifv_patches_settings", JSON.stringify(patchesSettings));
+    sessionStorage.setItem(
+        "ifv_patches_settings",
+        JSON.stringify(patchesSettings),
+    );
 
     window.dispatchEvent(new CustomEvent("ifv-settings-changed"));
 }

@@ -11,7 +11,11 @@ const mutationHandler = async (mutationList) => {
         const modal = modals.at(-1) || undefined;
 
         if (modal && modal.getAttribute("data-has-listener") !== "true") {
-            history.pushState({ ...history.state, details: true }, "", `${location.pathname}#`);
+            history.pushState(
+                { ...history.state, details: true },
+                "",
+                `${location.pathname}#`,
+            );
             modal.setAttribute("data-has-listener", "true");
 
             for (const e of modals) {
@@ -19,10 +23,14 @@ const mutationHandler = async (mutationList) => {
                 e.removeAttribute("data-has-listener");
             }
 
-            await waitForRender(() => modal.querySelector(".modal-button--close"));
+            await waitForRender(() =>
+                modal.querySelector(".modal-button--close"),
+            );
             const closeButton = modal.querySelector(".modal-button--close");
 
-            addEventListener("popstate", popstateHandler(closeButton), { once: true });
+            addEventListener("popstate", popstateHandler(closeButton), {
+                once: true,
+            });
 
             closeButton?.addEventListener("click", () => {
                 if (history.state?.details) {
@@ -34,7 +42,11 @@ const mutationHandler = async (mutationList) => {
 };
 
 const popstateHandler = (e) => () => {
-    if (e?.closest("div[role=presentation].MuiDrawer-modal")?.getAttribute("data-has-listener") !== "true")
+    if (
+        e
+            ?.closest("div[role=presentation].MuiDrawer-modal")
+            ?.getAttribute("data-has-listener") !== "true"
+    )
         return;
     e?.click();
 };
@@ -50,5 +62,6 @@ window.appendModule({
             "wiadomosci.eduvulcan.pl",
             "dziennik-uczen.vulcan.net.pl",
             "dziennik-wiadomosci.vulcan.net.pl",
-        ].includes(window.location.hostname) && typeof InstallTrigger !== "undefined",
+        ].includes(window.location.hostname)
+        && typeof InstallTrigger !== "undefined",
 });

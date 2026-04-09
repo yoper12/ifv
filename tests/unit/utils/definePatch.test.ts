@@ -23,7 +23,11 @@ it("should inject css string and remove it on cleanup", async () => {
 
     expect(document.adoptedStyleSheets.length).toBe(1);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect((document.adoptedStyleSheets[0] as any).cssRules.has("body { background: red; }")).toBe(true);
+    expect(
+        (document.adoptedStyleSheets[0] as any).cssRules.has(
+            "body { background: red; }",
+        ),
+    ).toBe(true);
 
     await patch.cleanup();
 
@@ -40,9 +44,17 @@ it("should inject css strings array and remove it on cleanup", async () => {
 
     expect(document.adoptedStyleSheets.length).toBe(2);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect((document.adoptedStyleSheets[0] as any).cssRules.has("body { background: red; }")).toBe(true);
+    expect(
+        (document.adoptedStyleSheets[0] as any).cssRules.has(
+            "body { background: red; }",
+        ),
+    ).toBe(true);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect((document.adoptedStyleSheets[1] as any).cssRules.has("p { color: green; }")).toBe(true);
+    expect(
+        (document.adoptedStyleSheets[1] as any).cssRules.has(
+            "p { color: green; }",
+        ),
+    ).toBe(true);
 
     await patch.cleanup();
 
@@ -61,7 +73,10 @@ it("should pass settings to init and cleanup", async () => {
 
     await patch.init({ color: "#ff0000" });
     expect(mockInit).toHaveBeenCalledOnce();
-    expect(mockInit).toHaveBeenCalledWith({ color: "#ff0000" }, expect.any(AbortSignal));
+    expect(mockInit).toHaveBeenCalledWith(
+        { color: "#ff0000" },
+        expect.any(AbortSignal),
+    );
 
     const passedSignal = mockInit.mock.calls[0][1];
 

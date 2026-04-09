@@ -65,9 +65,11 @@ function scheduleWrite(key: string, value: StorageValue) {
         Logger.debug(`Updated settings cache:`, { [key]: value });
     }
 
-    browser.runtime.sendMessage({ type: "SCHEDULE_WRITE", payload: { key, value } }).catch((err) => {
-        Logger.error("Error sending save request to service worker:", err);
-    });
+    browser.runtime
+        .sendMessage({ type: "SCHEDULE_WRITE", payload: { key, value } })
+        .catch((err) => {
+            Logger.error("Error sending save request to service worker:", err);
+        });
 }
 
 /**
@@ -76,7 +78,9 @@ function scheduleWrite(key: string, value: StorageValue) {
  * @param patchMeta Metadata defined in patch definition.
  * @returns A promise that resolves to the configuration object for the patch.
  */
-export async function getPatchSettings(patchMeta: Meta): Promise<PatchSettings> {
+export async function getPatchSettings(
+    patchMeta: Meta,
+): Promise<PatchSettings> {
     const cache = await getCache();
     const storageKey = `patch_settings_${patchMeta.id}`;
     const storedData = (cache[storageKey] as PatchSettings | undefined) ?? {};
@@ -85,7 +89,8 @@ export async function getPatchSettings(patchMeta: Meta): Promise<PatchSettings> 
 
     if (patchMeta.settings) {
         for (const setting of patchMeta.settings) {
-            settings[setting.id] = storedData[setting.id] ?? setting.defaultValue;
+            settings[setting.id] =
+                storedData[setting.id] ?? setting.defaultValue;
         }
     }
 
@@ -107,7 +112,8 @@ export async function savePatchSetting(
 ) {
     const cache = await getCache();
     const storageKey = `patch_settings_${patchId}`;
-    const existingSettings = (cache[storageKey] as PatchSettings | undefined) ?? {};
+    const existingSettings =
+        (cache[storageKey] as PatchSettings | undefined) ?? {};
 
     scheduleWrite(storageKey, { ...existingSettings, [settingId]: newValue });
 }

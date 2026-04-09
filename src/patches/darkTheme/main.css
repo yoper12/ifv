@@ -110,7 +110,9 @@
     .timetable__grid .column.wolne.current,
     .timetable__grid .column.wolne,
     .plan-scheduler .plan-scheduler__body-row .plan-scheduler-cell__free-day,
-    .plan-scheduler .plan-scheduler__body-row .plan-scheduler-cell__free-day.plan-scheduler-cell__current,
+    .plan-scheduler
+        .plan-scheduler__body-row
+        .plan-scheduler-cell__free-day.plan-scheduler-cell__current,
     .modal__free-day {
         background: repeating-linear-gradient(
             45deg,
@@ -126,7 +128,10 @@
         border-color: var(--borders);
     }
 
-    .plan-scheduler .plan-scheduler__body-row .plan-scheduler__body-cell .plan-scheduler-cell__footer {
+    .plan-scheduler
+        .plan-scheduler__body-row
+        .plan-scheduler__body-cell
+        .plan-scheduler-cell__footer {
         color: var(--primary-text);
     }
 
@@ -182,7 +187,11 @@
     }
 
     .tile__list__rectangle__ribbon {
-        background-color: color-mix(in srgb, var(--tertiary-text) 80%, #000 20%);
+        background-color: color-mix(
+            in srgb,
+            var(--tertiary-text) 80%,
+            #000 20%
+        );
     }
 
     .tile__header {
@@ -215,7 +224,11 @@
         color: var(--evBlue) !important;
     }
 
-    .table-component--decorated .p-datatable-wrapper table .p-datatable-tbody td {
+    .table-component--decorated
+        .p-datatable-wrapper
+        table
+        .p-datatable-tbody
+        td {
         color: var(--secondary-text);
     }
 
@@ -235,7 +248,11 @@
         border-color: var(--borders);
     }
 
-    .table-component--decorated .p-datatable-wrapper table .p-datatable-tbody tr {
+    .table-component--decorated
+        .p-datatable-wrapper
+        table
+        .p-datatable-tbody
+        tr {
         border-color: var(--borders);
     }
 
@@ -307,7 +324,9 @@
         border-color: var(--borders);
     }
 
-    .frequency-scheduler .frequency-scheduler__body-row .frequency-scheduler__body-cell {
+    .frequency-scheduler
+        .frequency-scheduler__body-row
+        .frequency-scheduler__body-cell {
         border-color: var(--borders);
     }
 
@@ -388,7 +407,8 @@
         color: var(--tertiary-text);
     }
 
-    .p-datatable .p-sortable-column:not(.p-highlight):not(.p-sortable-disabled):hover,
+    .p-datatable
+        .p-sortable-column:not(.p-highlight):not(.p-sortable-disabled):hover,
     .p-datatable .p-sortable-column.p-highlight {
         color: var(--secondary-text);
     }
@@ -405,7 +425,9 @@
     }
 
     .p-datatable .p-sortable-column.p-highlight:not(.p-sortable-disabled):hover,
-    .p-datatable .p-sortable-column.p-highlight:not(.p-sortable-disabled):hover .p-sortable-column-icon {
+    .p-datatable
+        .p-sortable-column.p-highlight:not(.p-sortable-disabled):hover
+        .p-sortable-column-icon {
         color: var(--primary-text);
     }
 
@@ -445,7 +467,10 @@
         color: var(--tertiary-text);
     }
 
-    .scheduler .scheduler__body-row .scheduler__body-cell .scheduler-cell__number {
+    .scheduler
+        .scheduler__body-row
+        .scheduler__body-cell
+        .scheduler-cell__number {
         color: var(--primary-text);
     }
 
@@ -512,25 +537,43 @@
 
     .app .combobox label.MuiInputLabel-shrink:not(.Mui-error),
     .app .combobox .editor__form label.MuiInputLabel-shrink:not(.Mui-error),
-    .app .combobox .combo-row .MuiInputLabel-root.MuiInputLabel-shrink:not(.Mui-error),
+    .app
+        .combobox
+        .combo-row
+        .MuiInputLabel-root.MuiInputLabel-shrink:not(.Mui-error),
     .modal .combobox label.MuiInputLabel-shrink:not(.Mui-error),
     .modal .combobox .editor__form label.MuiInputLabel-shrink:not(.Mui-error),
-    .modal .combobox .combo-row .MuiInputLabel-root.MuiInputLabel-shrink:not(.Mui-error),
+    .modal
+        .combobox
+        .combo-row
+        .MuiInputLabel-root.MuiInputLabel-shrink:not(.Mui-error),
     div .combobox label.MuiInputLabel-shrink:not(.Mui-error),
     div .combobox .editor__form label.MuiInputLabel-shrink:not(.Mui-error),
-    div .combobox .combo-row .MuiInputLabel-root.MuiInputLabel-shrink:not(.Mui-error) {
+    div
+        .combobox
+        .combo-row
+        .MuiInputLabel-root.MuiInputLabel-shrink:not(.Mui-error) {
         background-color: var(--tertiary-component-background);
     }
 
     .app .combobox label.MuiInputLabel-shrink:not(.Mui-error),
     .app .combobox .editor__form label.MuiInputLabel-shrink:not(.Mui-error),
-    .app .combobox .combo-row .MuiInputLabel-root.MuiInputLabel-shrink:not(.Mui-error),
+    .app
+        .combobox
+        .combo-row
+        .MuiInputLabel-root.MuiInputLabel-shrink:not(.Mui-error),
     .modal .combobox label.MuiInputLabel-shrink:not(.Mui-error),
     .modal .combobox .editor__form label.MuiInputLabel-shrink:not(.Mui-error),
-    .modal .combobox .combo-row .MuiInputLabel-root.MuiInputLabel-shrink:not(.Mui-error),
+    .modal
+        .combobox
+        .combo-row
+        .MuiInputLabel-root.MuiInputLabel-shrink:not(.Mui-error),
     div .combobox label.MuiInputLabel-shrink:not(.Mui-error),
     div .combobox .editor__form label.MuiInputLabel-shrink:not(.Mui-error),
-    div .combobox .combo-row .MuiInputLabel-root.MuiInputLabel-shrink:not(.Mui-error) {
+    div
+        .combobox
+        .combo-row
+        .MuiInputLabel-root.MuiInputLabel-shrink:not(.Mui-error) {
         color: var(--primary-text);
     }
 
@@ -1028,16 +1071,32 @@
         background-color: var(--component-background) !important;
     }
     div.lesson.canceled > article {
-        background-color: color-mix(in srgb, var(--component-background) 80%, #f00 20%) !important;
+        background-color: color-mix(
+            in srgb,
+            var(--component-background) 80%,
+            #f00 20%
+        ) !important;
     }
     ol.lessons-container > li.canceled {
-        color: color-mix(in srgb, var(--component-background) 20%, #f00 80%) !important;
+        color: color-mix(
+            in srgb,
+            var(--component-background) 20%,
+            #f00 80%
+        ) !important;
     }
     div.lesson.substitute > article {
-        background-color: color-mix(in srgb, var(--component-background) 60%, #ff0 20%) !important;
+        background-color: color-mix(
+            in srgb,
+            var(--component-background) 60%,
+            #ff0 20%
+        ) !important;
     }
     ol.lessons-container > li.substitute {
-        color: color-mix(in srgb, var(--component-background) 20%, #ff0 60%) !important;
+        color: color-mix(
+            in srgb,
+            var(--component-background) 20%,
+            #ff0 60%
+        ) !important;
     }
     div.lesson.normal > div,
     div.lesson.conflicted > div {
@@ -1095,10 +1154,18 @@
         border: 1px solid var(--borders);
     }
     .patch-name {
-        color: color-mix(in srgb, var(--secondary-text), var(--tertiary-text) 80%);
+        color: color-mix(
+            in srgb,
+            var(--secondary-text),
+            var(--tertiary-text) 80%
+        );
     }
     .setting-name {
-        color: color-mix(in srgb, var(--secondary-text), var(--tertiary-text) 60%);
+        color: color-mix(
+            in srgb,
+            var(--secondary-text),
+            var(--tertiary-text) 60%
+        );
     }
     .setting-input input[type="text"],
     .setting-input input[type="number"],
@@ -1124,7 +1191,11 @@
         border: 1px solid var(--borders);
     }
     .checkbox-item input[type="checkbox"]:checked {
-        background-color: color-mix(in srgb, var(--evBlue), var(--secondary-background) 70%);
+        background-color: color-mix(
+            in srgb,
+            var(--evBlue),
+            var(--secondary-background) 70%
+        );
         border: 1px solid #007bff;
     }
     .checkbox-item label {

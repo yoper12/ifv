@@ -33,12 +33,19 @@ export async function syncPatches(
         const patch = patches[path];
         const { meta } = patch;
 
-        if ((meta.world ?? "ISOLATED") !== config.world || (meta.runAt ?? "document_idle") !== config.runAt)
+        if (
+            (meta.world ?? "ISOLATED") !== config.world
+            || (meta.runAt ?? "document_idle") !== config.runAt
+        )
             continue;
-        if (meta.deviceTypes && !meta.deviceTypes.includes(getDeviceType())) continue;
-        if (trigger === "SETTINGS_CHANGE" && meta.dynamicReloadReady === false) continue;
+        if (meta.deviceTypes && !meta.deviceTypes.includes(getDeviceType()))
+            continue;
+        if (trigger === "SETTINGS_CHANGE" && meta.dynamicReloadReady === false)
+            continue;
 
-        const isUrlMatching = meta.matches.some((pattern) => pattern.test(currentUrl));
+        const isUrlMatching = meta.matches.some((pattern) =>
+            pattern.test(currentUrl),
+        );
         const isEnabled = await isPatchEnabled(meta.id);
 
         const isEligible = isUrlMatching && isEnabled;
@@ -51,17 +58,28 @@ export async function syncPatches(
         else if (!isEligible && isActive)
             action = "CLEANUP"; // if patch should not be active, but is, clean it up
         else if (isEligible && isActive) {
-            if (trigger === "URL_CHANGE" && (patch.meta.runStrategy ?? "onUrlChange") === "onUrlChange")
+            if (
+                trigger === "URL_CHANGE"
+                && (patch.meta.runStrategy ?? "onUrlChange") === "onUrlChange"
+            )
                 action = "RELOAD"; // if patch is active and eligible, but URL just changed and patch should reinitialize on URL change, reload it
-            else if (trigger === "SETTINGS_CHANGE" && changedPatches?.has(meta.id)) action = "RELOAD"; // if patch is active and eligible, but settings just changed and its settings were among the changed ones, reload it
+            else if (
+                trigger === "SETTINGS_CHANGE"
+                && changedPatches?.has(meta.id)
+            )
+                action = "RELOAD"; // if patch is active and eligible, but settings just changed and its settings were among the changed ones, reload it
         }
 
         if (action === "NONE") continue;
 
-        const previousTask = patchLifecyclePromises.get(meta.id) || Promise.resolve();
+        const previousTask =
+            patchLifecyclePromises.get(meta.id) || Promise.resolve();
         const currentTask = previousTask.then(async () => {
             try {
-                if ((action === "CLEANUP" || action === "RELOAD") && activePatches.has(meta.id)) {
+                if (
+                    (action === "CLEANUP" || action === "RELOAD")
+                    && activePatches.has(meta.id)
+                ) {
                     activePatches.delete(meta.id);
                     const t0 = performance.now();
                     await patch.cleanup();
@@ -71,11 +89,17 @@ export async function syncPatches(
                 }
             } catch (err) {
                 if (err instanceof Error && err.name === "AbortError") return;
-                Logger.error(`Error cleaning up patch "${patch.meta.name}" (${patch.meta.id}):`, err);
+                Logger.error(
+                    `Error cleaning up patch "${patch.meta.name}" (${patch.meta.id}):`,
+                    err,
+                );
             }
 
             try {
-                if ((action === "INIT" || action === "RELOAD") && !activePatches.has(meta.id)) {
+                if (
+                    (action === "INIT" || action === "RELOAD")
+                    && !activePatches.has(meta.id)
+                ) {
                     activePatches.set(meta.id, patch);
                     const t0 = performance.now();
                     await patch.init(await getPatchSettings(meta));
@@ -86,7 +110,10 @@ export async function syncPatches(
             } catch (err) {
                 activePatches.delete(meta.id);
                 if (err instanceof Error && err.name === "AbortError") return;
-                Logger.error(`Error initializing patch "${meta.name}" (${meta.id}):`, err);
+                Logger.error(
+                    `Error initializing patch "${meta.name}" (${meta.id}):`,
+                    err,
+                );
             }
         });
 
@@ -95,5 +122,7 @@ export async function syncPatches(
 }
 
 function getDeviceType() {
-    return window.matchMedia("(max-width: 1023px)").matches ? "mobile" : "desktop";
+    return window.matchMedia("(max-width: 1023px)").matches ?
+            "mobile"
+        :   "desktop";
 }

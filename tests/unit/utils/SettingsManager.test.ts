@@ -15,10 +15,14 @@ describe("onSettingsChange", () => {
 
         await SettingsManager.isPatchEnabled("init-cache"); // just to initialise the cache and set up the listener
 
-        await fakeBrowser.storage.sync.set({ "patch_enabled_test-patch": true });
+        await fakeBrowser.storage.sync.set({
+            "patch_enabled_test-patch": true,
+        });
         expect(callback).toHaveBeenCalledWith(new Set(["test-patch"]));
 
-        await fakeBrowser.storage.sync.set({ "patch_settings_test-patch": { color: "#ff0000" } });
+        await fakeBrowser.storage.sync.set({
+            "patch_settings_test-patch": { color: "#ff0000" },
+        });
         expect(callback).toHaveBeenCalledWith(new Set(["test-patch"]));
 
         await fakeBrowser.storage.sync.set({ unrelated_key: 123 });
@@ -33,7 +37,9 @@ describe("isPatchEnabled", () => {
     });
 
     it("should correctly return saved state", async () => {
-        await fakeBrowser.storage.sync.set({ "patch_enabled_test-patch": false });
+        await fakeBrowser.storage.sync.set({
+            "patch_enabled_test-patch": false,
+        });
 
         const isEnabled = await SettingsManager.isPatchEnabled("test-patch");
         expect(isEnabled).toBe(false);
@@ -49,7 +55,10 @@ describe("enablePatch", () => {
         expect(sendMessageSpy).toHaveBeenCalledWith(
             expect.objectContaining({
                 type: "SCHEDULE_WRITE",
-                payload: expect.objectContaining({ key: "patch_enabled_test-patch", value: true }),
+                payload: expect.objectContaining({
+                    key: "patch_enabled_test-patch",
+                    value: true,
+                }),
             }),
         );
     });
@@ -64,7 +73,10 @@ describe("disablePatch", () => {
         expect(sendMessageSpy).toHaveBeenCalledWith(
             expect.objectContaining({
                 type: "SCHEDULE_WRITE",
-                payload: expect.objectContaining({ key: "patch_enabled_test-patch", value: false }),
+                payload: expect.objectContaining({
+                    key: "patch_enabled_test-patch",
+                    value: false,
+                }),
             }),
         );
     });
@@ -74,14 +86,19 @@ describe("togglePatch", () => {
     it("should toggle to enabled state", async () => {
         const sendMessageSpy = vi.spyOn(fakeBrowser.runtime, "sendMessage");
 
-        await fakeBrowser.storage.sync.set({ "patch_enabled_test-patch": false });
+        await fakeBrowser.storage.sync.set({
+            "patch_enabled_test-patch": false,
+        });
 
         await SettingsManager.togglePatch("test-patch");
 
         expect(sendMessageSpy).toHaveBeenCalledWith(
             expect.objectContaining({
                 type: "SCHEDULE_WRITE",
-                payload: expect.objectContaining({ key: "patch_enabled_test-patch", value: true }),
+                payload: expect.objectContaining({
+                    key: "patch_enabled_test-patch",
+                    value: true,
+                }),
             }),
         );
     });
@@ -94,7 +111,10 @@ describe("togglePatch", () => {
         expect(sendMessageSpy).toHaveBeenLastCalledWith(
             expect.objectContaining({
                 type: "SCHEDULE_WRITE",
-                payload: expect.objectContaining({ key: "patch_enabled_test-patch", value: false }),
+                payload: expect.objectContaining({
+                    key: "patch_enabled_test-patch",
+                    value: false,
+                }),
             }),
         );
     });
@@ -108,12 +128,26 @@ describe("getPatchSettings", () => {
             description: "",
             matches: [],
             settings: [
-                { name: "", id: "color", description: "", type: "color", defaultValue: "#ff0000" },
-                { name: "", id: "size", description: "", type: "number", defaultValue: 10 },
+                {
+                    name: "",
+                    id: "color",
+                    description: "",
+                    type: "color",
+                    defaultValue: "#ff0000",
+                },
+                {
+                    name: "",
+                    id: "size",
+                    description: "",
+                    type: "number",
+                    defaultValue: 10,
+                },
             ],
         };
 
-        await fakeBrowser.storage.sync.set({ "patch_settings_test-patch": { size: 20 } });
+        await fakeBrowser.storage.sync.set({
+            "patch_settings_test-patch": { size: 20 },
+        });
 
         const settings = await SettingsManager.getPatchSettings(patchMeta);
         expect(settings.color).toBe("#ff0000");
@@ -121,7 +155,12 @@ describe("getPatchSettings", () => {
     });
 
     it("should return empty object when patch has no settings defined", async () => {
-        const patchMeta: Meta = { id: "test-patch", name: "", description: "", matches: [] };
+        const patchMeta: Meta = {
+            id: "test-patch",
+            name: "",
+            description: "",
+            matches: [],
+        };
 
         const settings = await SettingsManager.getPatchSettings(patchMeta);
         expect(settings).toEqual({});
@@ -131,13 +170,17 @@ describe("getPatchSettings", () => {
 describe("savePatchSetting", () => {
     it("should merge with existing settings", async () => {
         const sendMessageSpy = vi.spyOn(fakeBrowser.runtime, "sendMessage");
-        await fakeBrowser.storage.sync.set({ "patch_settings_test-patch": { color: "#ff0000", size: 10 } });
+        await fakeBrowser.storage.sync.set({
+            "patch_settings_test-patch": { color: "#ff0000", size: 10 },
+        });
 
         await SettingsManager.savePatchSetting("test-patch", "size", 20);
 
         expect(sendMessageSpy).toHaveBeenCalledWith(
             expect.objectContaining({
-                payload: expect.objectContaining({ value: { color: "#ff0000", size: 20 } }),
+                payload: expect.objectContaining({
+                    value: { color: "#ff0000", size: 20 },
+                }),
             }),
         );
     });

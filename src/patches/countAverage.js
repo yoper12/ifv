@@ -22,7 +22,10 @@ function modifyGradesRequests() {
                         let data = JSON.parse(this.responseText);
                         const originalResponse = JSON.parse(this.responseText);
 
-                        console.debug("Oryginalna odpowiedź:", originalResponse);
+                        console.debug(
+                            "Oryginalna odpowiedź:",
+                            originalResponse,
+                        );
 
                         if (
                             data
@@ -36,28 +39,66 @@ function modifyGradesRequests() {
 
                                 if (
                                     subject.kolumnyOcenyCzastkowe
-                                    && Array.isArray(subject.kolumnyOcenyCzastkowe)
+                                    && Array.isArray(
+                                        subject.kolumnyOcenyCzastkowe,
+                                    )
                                 ) {
-                                    subject.kolumnyOcenyCzastkowe.forEach((column) => {
-                                        if (column.oceny && Array.isArray(column.oceny)) {
-                                            column.oceny.forEach((grade) => {
-                                                if (grade.wpis && gradeRegex.test(grade.wpis)) {
-                                                    let value = parseFloat(grade.wpis);
-                                                    if (grade.wpis.includes("+"))
-                                                        value += getSetting("Count averages", "plusValue");
-                                                    else if (grade.wpis.includes("-"))
-                                                        value -= getSetting("Count averages", "minusValue");
+                                    subject.kolumnyOcenyCzastkowe.forEach(
+                                        (column) => {
+                                            if (
+                                                column.oceny
+                                                && Array.isArray(column.oceny)
+                                            ) {
+                                                column.oceny.forEach(
+                                                    (grade) => {
+                                                        if (
+                                                            grade.wpis
+                                                            && gradeRegex.test(
+                                                                grade.wpis,
+                                                            )
+                                                        ) {
+                                                            let value =
+                                                                parseFloat(
+                                                                    grade.wpis,
+                                                                );
+                                                            if (
+                                                                grade.wpis.includes(
+                                                                    "+",
+                                                                )
+                                                            )
+                                                                value +=
+                                                                    getSetting(
+                                                                        "Count averages",
+                                                                        "plusValue",
+                                                                    );
+                                                            else if (
+                                                                grade.wpis.includes(
+                                                                    "-",
+                                                                )
+                                                            )
+                                                                value -=
+                                                                    getSetting(
+                                                                        "Count averages",
+                                                                        "minusValue",
+                                                                    );
 
-                                                    sum += value * grade.waga;
-                                                    totalWeight += grade.waga;
-                                                }
-                                            });
-                                        }
-                                    });
+                                                            sum +=
+                                                                value
+                                                                * grade.waga;
+                                                            totalWeight +=
+                                                                grade.waga;
+                                                        }
+                                                    },
+                                                );
+                                            }
+                                        },
+                                    );
                                 }
 
                                 if (totalWeight > 0) {
-                                    subject.srednia = (sum / totalWeight).toFixed(2);
+                                    subject.srednia = (
+                                        sum / totalWeight
+                                    ).toFixed(2);
                                 }
                             });
 

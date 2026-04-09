@@ -33,17 +33,27 @@ export function route(path: string): URLPattern;
  *
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/URLPattern|Check on MDN}
  */
-export function route(options: { host?: string; path?: string; hash?: string }): URLPattern;
+export function route(options: {
+    host?: string;
+    path?: string;
+    hash?: string;
+}): URLPattern;
 /**
  * A helper function to create URLPattern objects.
  *
  * @param arg Either a string representing the pathname pattern or an object containing any of the following optional properties: `host`, `path` and `hash`. Each property corresponds to the respective component of a URL and accepts the same patterns as the URLPattern API.
  * @returns A URLPattern object created based on the provided argument.
  */
-export function route(arg: string | { host?: string; path?: string; hash?: string }) {
+export function route(
+    arg: string | { host?: string; path?: string; hash?: string },
+) {
     if (typeof arg === "string") {
         return new URLPattern({ pathname: arg });
     }
 
-    return new URLPattern({ hostname: arg.host, pathname: arg.path, hash: arg.hash });
+    return new URLPattern({
+        hostname: arg.host,
+        pathname: arg.path,
+        hash: arg.hash,
+    });
 }

@@ -22,7 +22,11 @@ describe("attr", () => {
         element.setAttribute("disabled", "");
 
         const builder = builderFromElement(element)
-            .attr({ type: "password", placeholder: "enter password", disabled: false })
+            .attr({
+                type: "password",
+                placeholder: "enter password",
+                disabled: false,
+            })
             .node();
 
         expect(builder.getAttribute("type")).toBe("password");
@@ -37,7 +41,9 @@ describe("rmAttr", () => {
         element.setAttribute("type", "text");
         element.setAttribute("disabled", "");
 
-        const builder = builderFromElement(element).rmAttr("placeholder", "disabled").node();
+        const builder = builderFromElement(element)
+            .rmAttr("placeholder", "disabled")
+            .node();
 
         expect(builder.getAttribute("type")).toBe("text");
         expect(builder.hasAttribute("placeholder")).toBe(false);
@@ -64,7 +70,9 @@ describe("id", () => {
 
 describe("style", () => {
     it("should set multiple CSS styles on the element", () => {
-        const element = createElement("div").style({ color: "red", backgroundColor: "blue" }).node();
+        const element = createElement("div")
+            .style({ color: "red", backgroundColor: "blue" })
+            .node();
 
         expect(element.style.color).toBe("red");
         expect(element.style.backgroundColor).toBe("blue");
@@ -103,16 +111,22 @@ describe("text", () => {
 
 describe("html", () => {
     it("should set the inner HTML of the element", () => {
-        const element = createElement("div").html("<span>hello</span> <strong>world</strong>").node();
+        const element = createElement("div")
+            .html("<span>hello</span> <strong>world</strong>")
+            .node();
 
-        expect(element.innerHTML).toBe("<span>hello</span> <strong>world</strong>");
+        expect(element.innerHTML).toBe(
+            "<span>hello</span> <strong>world</strong>",
+        );
     });
 
     it("should replace existing inner HTML", () => {
         const element = document.createElement("div");
         element.innerHTML = "<p>old HTML</p>";
 
-        const builder = builderFromElement(element).html("<h1>new HTML</h1>").node();
+        const builder = builderFromElement(element)
+            .html("<h1>new HTML</h1>")
+            .node();
 
         expect(builder.innerHTML).toBe("<h1>new HTML</h1>");
     });
@@ -132,7 +146,9 @@ describe("rmClass", () => {
         const element = document.createElement("div");
         element.classList.add("class1", "class2", "class3");
 
-        const builder = builderFromElement(element).rmClass("class2", "class3").node();
+        const builder = builderFromElement(element)
+            .rmClass("class2", "class3")
+            .node();
 
         expect(builder.classList.contains("class1")).toBe(true);
         expect(builder.classList.contains("class2")).toBe(false);
@@ -154,7 +170,9 @@ describe("tgClass", () => {
 
 describe("data", () => {
     it("should set multiple data attributes on the element", () => {
-        const element = createElement("div").data({ userId: "123", role: "admin" }).node();
+        const element = createElement("div")
+            .data({ userId: "123", role: "admin" })
+            .node();
 
         expect(element.dataset.userId).toBe("123");
         expect(element.dataset.role).toBe("admin");
@@ -165,7 +183,9 @@ describe("data", () => {
         element.dataset.userId = "123";
         element.dataset.role = "admin";
 
-        const builder = builderFromElement(element).data({ userId: "456", role: "user" }).node();
+        const builder = builderFromElement(element)
+            .data({ userId: "456", role: "user" })
+            .node();
 
         expect(builder.dataset.userId).toBe("456");
         expect(builder.dataset.role).toBe("user");
@@ -188,7 +208,9 @@ describe("rmData", () => {
 describe("on", () => {
     it("should add an event listener to the element", () => {
         const mockListener = vi.fn();
-        const element = createElement("button").on("click", mockListener).node();
+        const element = createElement("button")
+            .on("click", mockListener)
+            .node();
 
         element.click();
 
@@ -197,7 +219,9 @@ describe("on", () => {
 
     it("should add an event listener with options", () => {
         const mockListener = vi.fn();
-        const element = createElement("button").on("click", mockListener, { once: true }).node();
+        const element = createElement("button")
+            .on("click", mockListener, { once: true })
+            .node();
 
         element.click();
         element.click();
@@ -347,8 +371,12 @@ describe("if, elseIf, else", () => {
         const element = createElement("div")
             .if(true, (el) =>
                 el
-                    .if(false, (nestedEl) => nestedEl.text("nested condition met"))
-                    .else((nestedEl) => nestedEl.text("nested condition not met")),
+                    .if(false, (nestedEl) =>
+                        nestedEl.text("nested condition met"),
+                    )
+                    .else((nestedEl) =>
+                        nestedEl.text("nested condition not met"),
+                    ),
             )
             .else((el) => el.text("outer condition not met"))
             .node();
@@ -358,8 +386,12 @@ describe("if, elseIf, else", () => {
         builderFromElement(element)
             .if(false, (el) =>
                 el
-                    .if(true, (nestedEl) => nestedEl.text("nested condition met"))
-                    .else((nestedEl) => nestedEl.text("nested condition not met")),
+                    .if(true, (nestedEl) =>
+                        nestedEl.text("nested condition met"),
+                    )
+                    .else((nestedEl) =>
+                        nestedEl.text("nested condition not met"),
+                    ),
             )
             .else((el) => el.text("outer condition not met"))
             .node();
@@ -369,13 +401,21 @@ describe("if, elseIf, else", () => {
         builderFromElement(element)
             .if(false, (el) =>
                 el
-                    .if(true, (nestedEl) => nestedEl.text("nested condition met"))
-                    .else((nestedEl) => nestedEl.text("nested condition not met")),
+                    .if(true, (nestedEl) =>
+                        nestedEl.text("nested condition met"),
+                    )
+                    .else((nestedEl) =>
+                        nestedEl.text("nested condition not met"),
+                    ),
             )
             .elseIf(true, (el) =>
                 el
-                    .if(true, (nestedEl) => nestedEl.text("second nested condition met"))
-                    .else((nestedEl) => nestedEl.text("second nested condition not met")),
+                    .if(true, (nestedEl) =>
+                        nestedEl.text("second nested condition met"),
+                    )
+                    .else((nestedEl) =>
+                        nestedEl.text("second nested condition not met"),
+                    ),
             )
             .else((el) => el.text("outer condition not met"))
             .node();

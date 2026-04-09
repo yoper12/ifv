@@ -5,7 +5,8 @@ const studentOrMessagesRegex = /^(dziennik-)?(wiadomosci|uczen).*/;
 
 const isEV = () => !window.location.hostname.startsWith("dziennik");
 
-const getLogoElement = () => document.querySelector(".header__logo-product")?.firstChild;
+const getLogoElement = () =>
+    document.querySelector(".header__logo-product")?.firstChild;
 
 function setUpRedirectToBoard() {
     const logoElement = getLogoElement();

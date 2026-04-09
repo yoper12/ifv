@@ -50,7 +50,11 @@ export async function waitForRender(
         const observer = new MutationObserver(() => {
             if (!parent.isConnected) {
                 cleanup();
-                reject(new Error("Parent element disconnected while waiting for render."));
+                reject(
+                    new Error(
+                        "Parent element disconnected while waiting for render.",
+                    ),
+                );
                 return;
             }
 
@@ -124,7 +128,11 @@ export async function waitForReplacement(
         const observer = new MutationObserver(() => {
             if (!parent.isConnected) {
                 cleanup();
-                reject(new Error("Parent element disconnected while waiting for replacement."));
+                reject(
+                    new Error(
+                        "Parent element disconnected while waiting for replacement.",
+                    ),
+                );
                 return;
             }
 

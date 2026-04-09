@@ -11,7 +11,9 @@ function createButton() {
 
 function updateTitle() {
     const header = document.querySelector(".header__logo-product > span");
-    const title = document.querySelector(".app__content__header__h1_subtitle > h1");
+    const title = document.querySelector(
+        ".app__content__header__h1_subtitle > h1",
+    );
     if (header && title?.innerText && header.innerText !== title.innerText)
         header.innerText = title.innerText;
 }

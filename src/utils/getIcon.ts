@@ -2,7 +2,8 @@ import { browser } from "#imports";
 import type { PublicPath } from "wxt/browser";
 
 type IconPath = Extract<PublicPath, `/assets/icons/${string}.svg`>;
-type IconName = IconPath extends `/assets/icons/${infer Name}.svg` ? Name : never;
+type IconName =
+    IconPath extends `/assets/icons/${infer Name}.svg` ? Name : never;
 
 /**
  * Gets the URL of an icon in the extension's assets folder.

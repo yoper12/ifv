@@ -9,13 +9,19 @@ selector.classList.add("attendance-tabs");
 
 const createSelector = () => {
     const container =
-        window.innerWidth < 1024 ? ".app__content > .mobile__frame" : ".app__content > .desktop__frame";
-    document.querySelector(container).insertBefore(selector, document.querySelector(container + "> *"));
+        window.innerWidth < 1024 ?
+            ".app__content > .mobile__frame"
+        :   ".app__content > .desktop__frame";
+    document
+        .querySelector(container)
+        .insertBefore(selector, document.querySelector(container + "> *"));
     changeStatsVisibility(false);
 };
 
 const changeStatsVisibility = (isStatsVisible) => {
-    const mainStats = document.querySelector(".content-container:has(.statistics)");
+    const mainStats = document.querySelector(
+        ".content-container:has(.statistics)",
+    );
     mainStats.style.display = isStatsVisible ? "block" : "none";
     const element = document.querySelector(".tabsview");
     element.classList.add("attendance-init");
@@ -40,7 +46,8 @@ selector.querySelector("button:last-of-type").addEventListener("click", () => {
 const isAttendancePage = () => window.location.pathname.endsWith("frekwencja");
 
 const isRendered = () =>
-    !!document.querySelector(".content-container:has(.statistics)") && !!document.querySelector(".tabsview");
+    !!document.querySelector(".content-container:has(.statistics)")
+    && !!document.querySelector(".tabsview");
 
 window.appendModule({
     isLoaded: isRendered,

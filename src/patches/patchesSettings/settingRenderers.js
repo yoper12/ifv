@@ -84,8 +84,9 @@ export const settingRenderers = {
     multiselect: (setting, patchName, currentValue) => {
         const selectedValues =
             Array.isArray(currentValue) ? currentValue
-            : typeof currentValue === "string" && currentValue.length > 0 ? currentValue.split(",")
-            : [];
+            : typeof currentValue === "string" && currentValue.length > 0 ?
+                currentValue.split(",")
+            :   [];
         return `
             <div class="setting-multiselect">
                 ${setting.options

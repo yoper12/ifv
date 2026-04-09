@@ -3,7 +3,8 @@ import { waitForRender } from "../apis/waitForElement.js";
 import { setHighlights } from "./highlights.js";
 
 const studentRegex = /^(dziennik-)?(uczen).*/;
-if (/^(dziennik-)?(uczen).*/.test(window.location.hostname)) window.asideMode = "hidden";
+if (/^(dziennik-)?(uczen).*/.test(window.location.hostname))
+    window.asideMode = "hidden";
 
 const getPages = (selector = "aside > section > .MuiList-root > ul") => {
     if (!document.querySelector("aside")) return [];
@@ -13,9 +14,14 @@ const getPages = (selector = "aside > section > .MuiList-root > ul") => {
             isDirectLink ? item : item.querySelector("div > button"),
             ":before",
         ).getPropertyValue("content");
-        const name = item.querySelector(isDirectLink ? "a" : ".accordion__title__content")?.innerText;
+        const name = item.querySelector(
+            isDirectLink ? "a" : ".accordion__title__content",
+        )?.innerText;
 
-        const items = isDirectLink ? undefined : [...item.querySelector(".items").children];
+        const items =
+            isDirectLink ? undefined : (
+                [...item.querySelector(".items").children]
+            );
 
         return { type: isDirectLink ? 1 : 2, element: item, items, icon, name };
     });
@@ -54,12 +60,18 @@ const run = async () => {
     const pages = getPages();
     for (const page of pages) {
         const itemClass = [...page.element.classList].find(
-            (c) => !["MuiListItem-root", "MuiListItem-gutters", "selected"].includes(c),
+            (c) =>
+                ![
+                    "MuiListItem-root",
+                    "MuiListItem-gutters",
+                    "selected",
+                ].includes(c),
         );
         const item = document.createElement("div");
 
         if (!navPages.includes(itemClass)) {
-            item.innerHTML = "<div class='icon'></div><span class='name'></span>";
+            item.innerHTML =
+                "<div class='icon'></div><span class='name'></span>";
             item.querySelector(".icon").style.content = page.icon;
             item.querySelector(".name").innerText = page.name;
             more.querySelector("div:last-of-type").appendChild(item);
@@ -73,7 +85,9 @@ const run = async () => {
             item.addEventListener("click", () => {
                 document.querySelector(`.${itemClass} a`).click();
                 more.style.display = "none";
-                document.querySelector(".header__hamburger__icon button").click();
+                document
+                    .querySelector(".header__hamburger__icon button")
+                    .click();
                 document.querySelector("div#root").scroll(0, 0);
                 setHighlights();
             });
@@ -85,21 +99,29 @@ const run = async () => {
             detailedOptionsPage.classList.add("list-modal");
 
             detailedOptionsPage.querySelector("h1").innerText = page.name;
-            detailedOptionsPage.querySelector("img").addEventListener("click", () => {
-                history.back();
-            });
+            detailedOptionsPage
+                .querySelector("img")
+                .addEventListener("click", () => {
+                    history.back();
+                });
 
             for (let i = 0; i < page.items.length; i++) {
                 const option = page.items[i];
                 const element = document.createElement("div");
-                element.innerHTML = "<div class='icon'></div><span class='name'></span>";
+                element.innerHTML =
+                    "<div class='icon'></div><span class='name'></span>";
                 element.querySelector(".icon").style.content = page.icon;
-                element.querySelector(".name").innerText = option.firstChild.innerText;
+                element.querySelector(".name").innerText =
+                    option.firstChild.innerText;
                 element.addEventListener("click", () => {
                     detailedOptionsPage.style.display = "none";
                     more.style.display = "none";
-                    [...document.querySelectorAll(`.${itemClass} .items a`)][i].click();
-                    document.querySelector(".header__hamburger__icon button").click();
+                    [...document.querySelectorAll(`.${itemClass} .items a`)][
+                        i
+                    ].click();
+                    document
+                        .querySelector(".header__hamburger__icon button")
+                        .click();
                     document.querySelector("div#root").scroll(0, 0);
                 });
                 detailedOptionsPage.lastElementChild.appendChild(element);
@@ -136,7 +158,11 @@ const run = async () => {
 
     moreButton.addEventListener("click", () => {
         more.style.display = "block";
-        history.pushState({ ...history.state, more: true }, "", `${location.pathname}#more`);
+        history.pushState(
+            { ...history.state, more: true },
+            "",
+            `${location.pathname}#more`,
+        );
         setHighlights();
     });
 

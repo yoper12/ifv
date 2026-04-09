@@ -3,19 +3,26 @@ import { mapDay } from "../apis/mapTimetable.js";
 import { waitForRender } from "../apis/waitForElement.js";
 
 const mapData = () =>
-    Array.from(document.querySelectorAll(".app__content .MuiPaper-root"), (element) => {
-        return {
-            note: element.querySelector(".plan-zajec__accordion__wolne")?.innerText,
-            day: element.querySelector(".MuiAccordionSummary-content > h2")?.innerText,
-            lessons: mapDay(element),
-        };
-    });
-const isOpened = (element) => element.querySelector(".MuiCollapse-root")?.style?.height !== "0px";
+    Array.from(
+        document.querySelectorAll(".app__content .MuiPaper-root"),
+        (element) => {
+            return {
+                note: element.querySelector(".plan-zajec__accordion__wolne")
+                    ?.innerText,
+                day: element.querySelector(".MuiAccordionSummary-content > h2")
+                    ?.innerText,
+                lessons: mapDay(element),
+            };
+        },
+    );
+const isOpened = (element) =>
+    element.querySelector(".MuiCollapse-root")?.style?.height !== "0px";
 
 const openAll = async () => {
     const container = document.querySelectorAll(".app__content .MuiPaper-root");
     for (const element of container) {
-        if (!isOpened(element)) element.querySelector(".accordion__full-width__header h2")?.click();
+        if (!isOpened(element))
+            element.querySelector(".accordion__full-width__header h2")?.click();
         await waitForRender(() => isOpened(element), element);
     }
 };
@@ -24,19 +31,25 @@ const mapStartingHours = (data) => {
     const all = new Set();
     for (const day of data)
         if (day.lessons)
-            for (const lesson of day.lessons) if (lesson.startingHour) all.add(lesson.startingHour);
+            for (const lesson of day.lessons)
+                if (lesson.startingHour) all.add(lesson.startingHour);
     const result = all.toSorted();
     const [firstHour, firstMinutes] = (result[0] || "08:00").split(":");
-    return Number(firstHour) <= 7 && Number(firstMinutes) <= 30 ? result : ["7:00", ...result];
+    return Number(firstHour) <= 7 && Number(firstMinutes) <= 30 ?
+            result
+        :   ["7:00", ...result];
 };
 
-const getStartingHours = () => JSON.parse(localStorage.getItem("startingHours") || "[]");
+const getStartingHours = () =>
+    JSON.parse(localStorage.getItem("startingHours") || "[]");
 
 const renderDay = async (data) => {
     await openAll();
 
     if (!data.note) {
-        await waitForRender(() => document.querySelector(".details-btn--position-r-bottom"));
+        await waitForRender(() =>
+            document.querySelector(".details-btn--position-r-bottom"),
+        );
     }
 
     const startingHours = getStartingHours();
@@ -48,7 +61,9 @@ const renderDay = async (data) => {
         const infoElement = document.createElement("div");
         infoElement.innerHTML =
             "<div><span class='no-lessons-title'>Nie ma lekcji 😎</span><br><span></span></div>";
-        if (data.note) infoElement.querySelector("span:last-of-type").innerText = data.note;
+        if (data.note)
+            infoElement.querySelector("span:last-of-type").innerText =
+                data.note;
         element.appendChild(infoElement);
     } else {
         for (const lesson of lessons) {
@@ -76,7 +91,8 @@ const renderDay = async (data) => {
                 `;
             } else {
                 lessonDataElement.innerHTML = `<div class="subject"></div> <div class="additional-info"></div>`;
-                lessonDataElement.querySelector(".subject").innerText = lesson.subject;
+                lessonDataElement.querySelector(".subject").innerText =
+                    lesson.subject;
                 lessonDataElement.querySelector(".additional-info").innerText =
                     `${lesson.classroom} ${lesson.teacher?.split(" ")?.reverse()?.join(" ")}`;
             }
@@ -92,11 +108,18 @@ const renderDay = async (data) => {
 };
 
 const run = async () => {
-    document.querySelector("section.app__content .app__content__header").style.display = "none";
-    document.querySelector("section.app__content .mobile__frame > div").style.display = "none";
+    document.querySelector(
+        "section.app__content .app__content__header",
+    ).style.display = "none";
+    document.querySelector(
+        "section.app__content .mobile__frame > div",
+    ).style.display = "none";
 
     await openAll();
-    localStorage.setItem("startingHours", JSON.stringify(mapStartingHours(mapData())));
+    localStorage.setItem(
+        "startingHours",
+        JSON.stringify(mapStartingHours(mapData())),
+    );
 
     new SelectorRenderer(renderDay);
 };
@@ -105,7 +128,9 @@ const isLoaded = () =>
     document.querySelector(".app__content .MuiCollapse-root")?.style?.minHeight
     && document.querySelector("section.app__content .mobile__frame .plan-zajec")
     && !document.querySelector(".spinner")
-    && document.querySelector(".position__lesson__hours, .conflicted--details--hours");
+    && document.querySelector(
+        ".position__lesson__hours, .conflicted--details--hours",
+    );
 
 window.appendModule({
     isLoaded,

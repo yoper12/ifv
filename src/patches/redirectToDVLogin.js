@@ -10,9 +10,13 @@ window.appendModule({
         && !window.location.pathname.split("/")[2],
 });
 
-const pathSegment = encodeURIComponent(window.location.pathname.split("/")[1] ?? "");
+const pathSegment = encodeURIComponent(
+    window.location.pathname.split("/")[1] ?? "",
+);
 
-const targetSpan = document.querySelector(".input-components ~ .form-gap > span");
+const targetSpan = document.querySelector(
+    ".input-components ~ .form-gap > span",
+);
 
 if (targetSpan) {
     const spanHTML = targetSpan.innerHTML;

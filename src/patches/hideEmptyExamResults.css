@@ -3,7 +3,9 @@
 }
 
 main
-    .app__content:has(.accordion__full-width__one-item #panel-content-egzaminy td[colspan="3"])
+    .app__content:has(
+        .accordion__full-width__one-item #panel-content-egzaminy td[colspan="3"]
+    )
     .content-container.content-container__pure
     > div:nth-child(2) {
     border-bottom-left-radius: 10px;

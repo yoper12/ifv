@@ -4,7 +4,10 @@ import { onSettingsChange } from "@/utils/SettingsManager";
 import { onUrlChange } from "@/utils/spaRouter";
 import { syncPatches } from "@/utils/syncPatches";
 
-const patches = import.meta.glob<Patch>("@/patches/**/index.ts", { import: "default", eager: true });
+const patches = import.meta.glob<Patch>("@/patches/**/index.ts", {
+    import: "default",
+    eager: true,
+});
 
 export default defineContentScript({
     matches: [
@@ -18,7 +21,11 @@ export default defineContentScript({
     runAt: "document_start",
     world: "MAIN",
     main() {
-        const lifecycle = { document_start: true, document_end: false, document_idle: false };
+        const lifecycle = {
+            document_start: true,
+            document_end: false,
+            document_idle: false,
+        };
 
         async function runSync(
             trigger: "INITIAL" | "URL_CHANGE" | "SETTINGS_CHANGE",
@@ -53,30 +60,48 @@ export default defineContentScript({
         runSync("INITIAL");
 
         onUrlChange(() => runSync("URL_CHANGE"));
-        onSettingsChange((changedPatches) => runSync("SETTINGS_CHANGE", changedPatches));
+        onSettingsChange((changedPatches) =>
+            runSync("SETTINGS_CHANGE", changedPatches),
+        );
 
         if (document.readyState === "loading") {
             window.addEventListener(
                 "DOMContentLoaded",
                 () => {
-                    syncPatches(patches, { world: "MAIN", runAt: "document_end" }, "INITIAL");
+                    syncPatches(
+                        patches,
+                        { world: "MAIN", runAt: "document_end" },
+                        "INITIAL",
+                    );
                     lifecycle.document_end = true;
                 },
                 { once: true },
             );
         } else {
-            syncPatches(patches, { world: "MAIN", runAt: "document_end" }, "INITIAL");
+            syncPatches(
+                patches,
+                { world: "MAIN", runAt: "document_end" },
+                "INITIAL",
+            );
             lifecycle.document_end = true;
         }
 
         if (document.readyState === "complete") {
-            syncPatches(patches, { world: "MAIN", runAt: "document_idle" }, "INITIAL");
+            syncPatches(
+                patches,
+                { world: "MAIN", runAt: "document_idle" },
+                "INITIAL",
+            );
             lifecycle.document_idle = true;
         } else {
             window.addEventListener(
                 "load",
                 () => {
-                    syncPatches(patches, { world: "MAIN", runAt: "document_idle" }, "INITIAL");
+                    syncPatches(
+                        patches,
+                        { world: "MAIN", runAt: "document_idle" },
+                        "INITIAL",
+                    );
                     lifecycle.document_idle = true;
                 },
                 { once: true },

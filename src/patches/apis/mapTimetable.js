@@ -2,15 +2,21 @@ const groupRegex = / Grupa-| \|/;
 
 const normalizeLesson = (lesson) => {
     const hoursText = (
-        lesson.querySelector(".position__lesson__hours, .conflicted--details--hours")?.innerText || "  "
+        lesson.querySelector(
+            ".position__lesson__hours, .conflicted--details--hours",
+        )?.innerText || "  "
     ).split(" ");
     const startingHour = hoursText[0];
     const endingHour = hoursText[2];
 
     const subjectText =
-        lesson.querySelector(".position__lesson__subject")?.innerText?.split(groupRegex) || [];
+        lesson
+            .querySelector(".position__lesson__subject")
+            ?.innerText?.split(groupRegex) || [];
 
-    const annotationText = lesson.querySelector(".plan-position__adnotation-title")?.innerText;
+    const annotationText = lesson.querySelector(
+        ".plan-position__adnotation-title",
+    )?.innerText;
 
     const type =
         lesson.classList.contains("cell--multi--conflicted") ? "conflicted"
@@ -25,7 +31,10 @@ const normalizeLesson = (lesson) => {
         subject: subjectText[0],
         group: subjectText[1],
         teacher: lesson.querySelector(".position__lesson__teacher")?.innerText,
-        classroom: [...(lesson.querySelector(".position__lesson__subject + span")?.innerText || "")]
+        classroom: [
+            ...(lesson.querySelector(".position__lesson__subject + span")
+                ?.innerText || ""),
+        ]
             .filter((c) => !"()".includes(c))
             .join("")
             .trim(),
@@ -35,4 +44,7 @@ const normalizeLesson = (lesson) => {
     };
 };
 export const mapDay = (element) =>
-    Array.from(element.querySelectorAll(".cell--single, .cell--multi--conflicted"), normalizeLesson);
+    Array.from(
+        element.querySelectorAll(".cell--single, .cell--multi--conflicted"),
+        normalizeLesson,
+    );

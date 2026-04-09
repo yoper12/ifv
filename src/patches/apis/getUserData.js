@@ -20,8 +20,10 @@ export const getUserData = async () => {
                         ?.firstChild?.textContent?.split(" ")
                         .reverse()
                         .join(" ")
-                :   document.querySelector(".side_important-text.side_student")?.textContent,
-            username: document.querySelector(".user div:nth-child(2)").lastChild.textContent,
+                :   document.querySelector(".side_important-text.side_student")
+                        ?.textContent,
+            username: document.querySelector(".user div:nth-child(2)").lastChild
+                .textContent,
         };
     });
 };
