@@ -189,7 +189,7 @@ export async function watchElement(
 ): Promise<void> {
     signal?.throwIfAborted();
 
-    await waitForRender(selector, document.body, signal);
+    await waitForRender(selector, document.documentElement, signal);
     const el = selector();
     if (!el) return;
 
