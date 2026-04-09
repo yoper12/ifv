@@ -1,5 +1,3 @@
-import type { ElementBuilder } from "./ElementBuilder";
-import { createElement } from "./ElementBuilder";
 import type { Patch, PatchDefWithSettings, PatchDefWithoutSettings, PatchDefinition } from "@/types/Patch";
 import type { Setting } from "@/types/Setting";
 
@@ -30,19 +28,22 @@ import type { Setting } from "@/types/Setting";
 export function definePatch<const S extends readonly Setting[]>(patch: PatchDefWithSettings<S>): Patch;
 export function definePatch(patch: PatchDefWithoutSettings): Patch;
 export function definePatch(patch: PatchDefinition): Patch {
-    let styleElement: ElementBuilder<"style"> | null = null;
-    let abortController: AbortController | null = null;
+    const injectedStylesheets: CSSStyleSheet[] = [];
+    let abortController: AbortController | undefined;
 
     return {
         meta: patch.meta,
 
         async init(settings: Record<string, Setting["defaultValue"]> | Record<string, never>) {
-            if (patch.css && !styleElement) {
-                const css = Array.isArray(patch.css) ? patch.css.join("\n") : patch.css;
-                styleElement = createElement("style")
-                    .id(`patch-css-${patch.meta.id}`)
-                    .text(css)
-                    .appendTo(document.head || document.documentElement);
+            if (patch.css && injectedStylesheets.length === 0) {
+                const cssStrings = Array.isArray(patch.css) ? patch.css : [patch.css];
+
+                for (const cssString of cssStrings) {
+                    const css = new CSSStyleSheet();
+                    await css.replace(cssString);
+                    document.adoptedStyleSheets.push(css);
+                    injectedStylesheets.push(css);
+                }
             }
 
             if (patch.init) {
@@ -55,14 +56,16 @@ export function definePatch(patch: PatchDefinition): Patch {
         },
 
         async cleanup() {
-            if (styleElement) {
-                styleElement.remove();
-                styleElement = null;
+            if (injectedStylesheets.length > 0) {
+                document.adoptedStyleSheets = document.adoptedStyleSheets.filter(
+                    (sheet) => !injectedStylesheets.includes(sheet),
+                );
+                injectedStylesheets.length = 0;
             }
 
             if (abortController) {
                 abortController.abort();
-                abortController = null;
+                abortController = undefined;
             }
 
             if (patch.cleanup) {

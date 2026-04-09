@@ -2,6 +2,15 @@ import { definePatch } from "@/utils/definePatch.js";
 
 beforeEach(() => {
     document.head.innerHTML = "";
+    document.adoptedStyleSheets = [];
+
+    globalThis.CSSStyleSheet = class {
+        cssRules = new Set<string>();
+        async replace(css: string) {
+            this.cssRules.add(css);
+            return this;
+        }
+    } as unknown as typeof CSSStyleSheet;
 });
 
 it("should inject css string and remove it on cleanup", async () => {
@@ -12,13 +21,13 @@ it("should inject css string and remove it on cleanup", async () => {
 
     await patch.init({});
 
-    const styleElement = document.querySelector("#patch-css-test-css");
-    expect(styleElement).not.toBeNull();
-    expect(styleElement?.textContent).toBe("body { background: red; }");
+    expect(document.adoptedStyleSheets.length).toBe(1);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((document.adoptedStyleSheets[0] as any).cssRules.has("body { background: red; }")).toBe(true);
 
     await patch.cleanup();
 
-    expect(document.querySelector("#patch-css-test-css")).toBeNull();
+    expect(document.adoptedStyleSheets).toStrictEqual([]);
 });
 
 it("should inject css strings array and remove it on cleanup", async () => {
@@ -29,14 +38,15 @@ it("should inject css strings array and remove it on cleanup", async () => {
 
     await patch.init({});
 
-    const styleElement = document.querySelector("#patch-css-test-css-array");
-    expect(styleElement).not.toBeNull();
-    expect(styleElement?.textContent).toContain("body { background: red; }");
-    expect(styleElement?.textContent).toContain("p { color: green; }");
+    expect(document.adoptedStyleSheets.length).toBe(2);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((document.adoptedStyleSheets[0] as any).cssRules.has("body { background: red; }")).toBe(true);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((document.adoptedStyleSheets[1] as any).cssRules.has("p { color: green; }")).toBe(true);
 
     await patch.cleanup();
 
-    expect(document.querySelector("#patch-css-test-css-array")).toBeNull();
+    expect(document.adoptedStyleSheets).toStrictEqual([]);
 });
 
 it("should pass settings to init and cleanup", async () => {
