@@ -279,10 +279,8 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
     append(...children: (HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>)[]): this {
-        for (const child of children) {
-            const _element = child instanceof ElementBuilder ? child.node() : child;
-            this._element.appendChild(_element);
-        }
+        const nodes = children.map((child) => (child instanceof ElementBuilder ? child.node() : child));
+        this._element.append(...nodes);
 
         return this;
     }
@@ -305,11 +303,8 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      * @returns The current instance of `ElementBuilder` for method chaining.
      */
     prepend(...children: (HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>)[]): this {
-        children.reverse();
-        for (const child of children) {
-            const _element = child instanceof ElementBuilder ? child.node() : child;
-            this._element.prepend(_element);
-        }
+        const nodes = children.map((child) => (child instanceof ElementBuilder ? child.node() : child));
+        this._element.prepend(...nodes);
 
         return this;
     }
@@ -353,7 +348,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      */
     insertBefore(reference: HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>): this {
         const refElement = reference instanceof ElementBuilder ? reference.node() : reference;
-        refElement.parentNode?.insertBefore(this._element, refElement);
+        refElement.before(this._element);
         return this;
     }
 
@@ -375,7 +370,7 @@ export class ElementBuilder<K extends keyof HTMLElementTagNameMap> {
      */
     insertAfter(reference: HTMLElement | ElementBuilder<keyof HTMLElementTagNameMap>): this {
         const refElement = reference instanceof ElementBuilder ? reference.node() : reference;
-        refElement.parentNode?.insertBefore(this._element, refElement.nextSibling);
+        refElement.after(this._element);
         return this;
     }
 
