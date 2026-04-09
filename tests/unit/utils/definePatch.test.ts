@@ -22,8 +22,8 @@ it("should inject css string and remove it on cleanup", async () => {
     await patch.init({});
 
     expect(document.adoptedStyleSheets.length).toBe(1);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (document.adoptedStyleSheets[0] as any).cssRules.has(
             "body { background: red; }",
         ),
@@ -43,14 +43,14 @@ it("should inject css strings array and remove it on cleanup", async () => {
     await patch.init({});
 
     expect(document.adoptedStyleSheets.length).toBe(2);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (document.adoptedStyleSheets[0] as any).cssRules.has(
             "body { background: red; }",
         ),
     ).toBe(true);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (document.adoptedStyleSheets[1] as any).cssRules.has(
             "p { color: green; }",
         ),
