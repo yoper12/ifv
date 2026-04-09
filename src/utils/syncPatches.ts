@@ -95,5 +95,5 @@ export async function syncPatches(
 }
 
 function getDeviceType() {
-    return window.innerWidth < 1024 ? "mobile" : "desktop";
+    return window.matchMedia("(max-width: 1023px)").matches ? "mobile" : "desktop";
 }
