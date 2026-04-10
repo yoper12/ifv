@@ -1,3 +1,4 @@
+import { createElement } from "./ElementBuilder";
 import type {
     Patch,
     PatchDefWithSettings,
@@ -47,14 +48,26 @@ export function definePatch(patch: PatchDefinition): Patch {
                 | Record<string, never>,
         ) {
             if (patch.css && injectedStylesheets.length === 0) {
-                const cssStrings =
-                    Array.isArray(patch.css) ? patch.css : [patch.css];
+                try {
+                    const cssStrings =
+                        Array.isArray(patch.css) ? patch.css : [patch.css];
 
-                for (const cssString of cssStrings) {
-                    const css = new CSSStyleSheet();
-                    await css.replace(cssString);
-                    document.adoptedStyleSheets.push(css);
-                    injectedStylesheets.push(css);
+                    for (const cssString of cssStrings) {
+                        const css = new CSSStyleSheet();
+                        await css.replace(cssString);
+                        document.adoptedStyleSheets.push(css);
+                        injectedStylesheets.push(css);
+                    }
+                } catch {
+                    const cssString =
+                        Array.isArray(patch.css) ?
+                            patch.css.join("\n")
+                        :   patch.css;
+
+                    createElement("style")
+                        .id(`patch-style-${patch.meta.id}`)
+                        .text(cssString)
+                        .appendTo(document.head ?? document.documentElement);
                 }
             }
 
@@ -77,6 +90,8 @@ export function definePatch(patch: PatchDefinition): Patch {
                     );
                 injectedStylesheets.length = 0;
             }
+
+            document.querySelector(`#patch-style-${patch.meta.id}`)?.remove();
 
             if (abortController) {
                 abortController.abort();

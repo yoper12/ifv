@@ -27,6 +27,7 @@ export default definePatch({
                             'a[aria-label="Logowanie/tworzenie konta"]',
                         )
                     ) {
+                        disconnect();
                         window.location.pathname = "/logowanie";
                     }
                 },
