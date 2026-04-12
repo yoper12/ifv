@@ -118,6 +118,8 @@ async function getPort() {
                 const channel = new MessageChannel();
                 bridgePort = channel.port1;
 
+                bridgePort.start();
+
                 bridgePort.addEventListener("message", (event) => {
                     const data: PortMessage = JSON.parse(event.data);
 

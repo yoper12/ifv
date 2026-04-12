@@ -67,6 +67,8 @@ export function initBridgeServer(exposedMethods: BridgeAPI) {
 
             connectedPort = event.ports[0]!;
 
+            connectedPort.start();
+
             connectedPort.addEventListener("message", async (event) => {
                 const data: PortMessage = JSON.parse(event.data);
 
