@@ -5,29 +5,18 @@ import { waitForRender } from "../apis/waitForElement.js";
 const mapData = () =>
     Array.from(
         document.querySelectorAll(".app__content .MuiPaper-root"),
-        (element) => {
-            return {
-                note: element.querySelector(".plan-zajec__accordion__wolne")
-                    ?.innerText,
-                day: element.querySelector(".MuiAccordionSummary-content > h2")
-                    ?.innerText,
-                lessons: mapDay(element),
-            };
-        },
+        (element) => ({
+            day: element.querySelector(".MuiAccordionSummary-content > h2")
+                ?.textContent,
+            lessons: mapDay(element),
+            note: element.querySelector(".plan-zajec__accordion__wolne")
+                ?.textContent,
+        }),
     );
 const isOpened = (element) =>
     element.querySelector(".MuiCollapse-root")?.style?.height !== "0px";
 
-const openAll = async () => {
-    const container = document.querySelectorAll(".app__content .MuiPaper-root");
-    for (const element of container) {
-        if (!isOpened(element))
-            element.querySelector(".accordion__full-width__header h2")?.click();
-        await waitForRender(() => isOpened(element), element);
-    }
-};
-
-const mapStartingHours = (data) => {
+function mapStartingHours(data) {
     const all = new Set();
     for (const day of data)
         if (day.lessons)
@@ -38,12 +27,21 @@ const mapStartingHours = (data) => {
     return Number(firstHour) <= 7 && Number(firstMinutes) <= 30 ?
             result
         :   ["7:00", ...result];
-};
+}
+
+async function openAll() {
+    const container = document.querySelectorAll(".app__content .MuiPaper-root");
+    for (const element of container) {
+        if (!isOpened(element))
+            element.querySelector(".accordion__full-width__header h2")?.click();
+        await waitForRender(() => isOpened(element), element);
+    }
+}
 
 const getStartingHours = () =>
     JSON.parse(localStorage.getItem("startingHours") || "[]");
 
-const renderDay = async (data) => {
+async function renderDay(data) {
     await openAll();
 
     if (!data.note) {
@@ -57,19 +55,19 @@ const renderDay = async (data) => {
     const element = document.createElement("section");
     element.classList.add("timetable");
 
-    if (lessons.length < 1) {
+    if (lessons.length === 0) {
         const infoElement = document.createElement("div");
         infoElement.innerHTML =
             "<div><span class='no-lessons-title'>Nie ma lekcji 😎</span><br><span></span></div>";
         if (data.note)
-            infoElement.querySelector("span:last-of-type").innerText =
+            infoElement.querySelector("span:last-of-type").textContent =
                 data.note;
-        element.appendChild(infoElement);
+        element.append(infoElement);
     } else {
         for (const lesson of lessons) {
             const lessonElement = document.createElement("div");
             lessonElement.innerHTML = `
-                <div>${startingHours.findIndex((h) => h === lesson.startingHour)}</div>
+                <div>${startingHours.indexOf(lesson.startingHour)}</div>
                 <article>
                     <div class='info'><span></span><span></span></div>
                     <div class='data'></div>
@@ -78,11 +76,10 @@ const renderDay = async (data) => {
             const lessonDataElement = lessonElement.querySelector(".data");
 
             const timeContainer = lessonElement.querySelector(".info");
-            timeContainer.firstElementChild.innerText = lesson.startingHour;
-            timeContainer.lastElementChild.innerText = lesson.endingHour;
+            timeContainer.firstElementChild.textContent = lesson.startingHour;
+            timeContainer.lastElementChild.textContent = lesson.endingHour;
 
-            lessonElement.classList.add("lesson");
-            lessonElement.classList.add(lesson.type);
+            lessonElement.classList.add("lesson", lesson.type);
 
             if (lesson.type === "conflicted") {
                 lessonDataElement.innerHTML = `
@@ -91,23 +88,26 @@ const renderDay = async (data) => {
                 `;
             } else {
                 lessonDataElement.innerHTML = `<div class="subject"></div> <div class="additional-info"></div>`;
-                lessonDataElement.querySelector(".subject").innerText =
+                lessonDataElement.querySelector(".subject").textContent =
                     lesson.subject;
-                lessonDataElement.querySelector(".additional-info").innerText =
+                lessonDataElement.querySelector(
+                    ".additional-info",
+                ).textContent =
+                    // eslint-disable-next-line unicorn/no-array-reverse
                     `${lesson.classroom} ${lesson.teacher?.split(" ")?.reverse()?.join(" ")}`;
             }
 
             lessonElement.addEventListener("click", () =>
                 lesson.originalElement.querySelector("button").click(),
             );
-            element.appendChild(lessonElement);
+            element.append(lessonElement);
         }
     }
 
     return element;
-};
+}
 
-const run = async () => {
+async function run() {
     document.querySelector(
         "section.app__content .app__content__header",
     ).style.display = "none";
@@ -122,7 +122,7 @@ const run = async () => {
     );
 
     new SelectorRenderer(renderDay);
-};
+}
 
 const isLoaded = () =>
     document.querySelector(".app__content .MuiCollapse-root")?.style?.minHeight
@@ -132,9 +132,9 @@ const isLoaded = () =>
         ".position__lesson__hours, .conflicted--details--hours",
     );
 
-window.appendModule({
+globalThis.appendModule({
+    doesRunHere: () => globalThis.location.pathname.endsWith("planZajec"),
     isLoaded,
     onlyOnReloads: false,
     run,
-    doesRunHere: () => window.location.pathname.endsWith("planZajec"),
 });

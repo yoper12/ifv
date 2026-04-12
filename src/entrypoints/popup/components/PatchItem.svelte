@@ -1,15 +1,17 @@
 <script lang="ts">
-    import PatchSettings from "./PatchSettings.svelte";
-    import type { Meta } from "@/types/Meta";
     import { onMount } from "svelte";
 
+    import type { Meta } from "@/types/Meta";
+
+    import PatchSettings from "./PatchSettings.svelte";
+
     let {
-        meta,
         isEnabled,
+        meta,
         toggle,
     }: {
-        meta: Meta;
         isEnabled: boolean;
+        meta: Meta;
         toggle: (next: boolean) => Promise<void>;
     } = $props();
 

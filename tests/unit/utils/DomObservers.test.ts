@@ -8,7 +8,7 @@ describe("waitForRender", () => {
     it("should resolve if the element is already present", async () => {
         const div = document.createElement("div");
         div.id = "test-element";
-        document.body.appendChild(div);
+        document.body.append(div);
 
         await expect(
             DomObservers.waitForRender(
@@ -28,7 +28,7 @@ describe("waitForRender", () => {
 
         const div = document.createElement("div");
         div.id = "test-element";
-        document.body.appendChild(div);
+        document.body.append(div);
 
         await promise;
 
@@ -53,7 +53,7 @@ describe("waitForRender", () => {
 
     it("should throw when the parent element is removed", async () => {
         const parent = document.createElement("div");
-        document.body.appendChild(parent);
+        document.body.append(parent);
 
         const promise = expect(
             DomObservers.waitForRender(
@@ -65,7 +65,7 @@ describe("waitForRender", () => {
         );
 
         parent.remove();
-        parent.appendChild(document.createElement("div")); // Trigger mutation observer to detect disconnection
+        parent.append(document.createElement("div")); // Trigger mutation observer to detect disconnection
 
         await promise;
     });
@@ -83,7 +83,7 @@ describe("waitForReplacement", () => {
 
         const div = document.createElement("div");
         div.id = "test-element";
-        document.body.appendChild(div);
+        document.body.append(div);
 
         await promise;
 
@@ -95,7 +95,7 @@ describe("waitForReplacement", () => {
 
         const initialDiv = document.createElement("div");
         initialDiv.id = "test-element";
-        document.body.appendChild(initialDiv);
+        document.body.append(initialDiv);
 
         const promise = DomObservers.waitForReplacement(
             () => document.querySelector("#test-element") as HTMLElement,
@@ -130,7 +130,7 @@ describe("waitForReplacement", () => {
 
     it("should throw when the parent element is removed", async () => {
         const parent = document.createElement("div");
-        document.body.appendChild(parent);
+        document.body.append(parent);
 
         const promise = expect(
             DomObservers.waitForReplacement(
@@ -142,7 +142,7 @@ describe("waitForReplacement", () => {
         );
 
         parent.remove();
-        parent.appendChild(document.createElement("div")); // Trigger mutation observer to detect disconnection
+        parent.append(document.createElement("div")); // Trigger mutation observer to detect disconnection
 
         await promise;
     });
@@ -154,7 +154,7 @@ describe("watchElement", () => {
 
         const div = document.createElement("div");
         div.id = "test-element";
-        document.body.appendChild(div);
+        document.body.append(div);
 
         await DomObservers.watchElement(
             () => document.querySelector("#test-element") as HTMLElement,
@@ -174,7 +174,7 @@ describe("watchElement", () => {
 
         const div = document.createElement("div");
         div.id = "test-element";
-        document.body.appendChild(div);
+        document.body.append(div);
 
         await DomObservers.watchElement(
             () => document.querySelector("#test-element") as HTMLElement,
@@ -197,7 +197,7 @@ describe("watchElement", () => {
 
         const div = document.createElement("div");
         div.id = "test-element";
-        document.body.appendChild(div);
+        document.body.append(div);
 
         const controller = new AbortController();
 
@@ -206,7 +206,7 @@ describe("watchElement", () => {
             () => {
                 mockCallback();
             },
-            { subtree: true, childList: true },
+            { childList: true, subtree: true },
             controller.signal,
         );
 
@@ -225,7 +225,7 @@ describe("watchElement", () => {
 
         const div = document.createElement("div");
         div.id = "test-element";
-        document.body.appendChild(div);
+        document.body.append(div);
 
         await DomObservers.watchElement(
             () => document.querySelector("#test-element") as HTMLElement,
@@ -239,7 +239,7 @@ describe("watchElement", () => {
 
         div.textContent = "Changed";
         await Promise.resolve();
-        document.body.appendChild(div);
+        document.body.append(div);
         await Promise.resolve();
 
         expect(mockCallback).toHaveBeenCalledTimes(1);
@@ -252,7 +252,7 @@ describe("watchElementReplacement", () => {
 
         const initialDiv = document.createElement("div");
         initialDiv.id = "test-element";
-        document.body.appendChild(initialDiv);
+        document.body.append(initialDiv);
 
         await DomObservers.watchElementReplacement(
             () => document.querySelector("#test-element") as HTMLElement,
@@ -275,7 +275,7 @@ describe("watchElementReplacement", () => {
 
         const initialDiv = document.createElement("div");
         initialDiv.id = "test-element";
-        document.body.appendChild(initialDiv);
+        document.body.append(initialDiv);
 
         await DomObservers.watchElementReplacement(
             () => document.querySelector("#test-element") as HTMLElement,
@@ -301,7 +301,7 @@ describe("watchElementReplacement", () => {
 
         const initialDiv = document.createElement("div");
         initialDiv.id = "test-element";
-        document.body.appendChild(initialDiv);
+        document.body.append(initialDiv);
 
         const controller = new AbortController();
 
@@ -330,11 +330,11 @@ describe("watchElementReplacement", () => {
         const mockCallback = vi.fn();
 
         const parent = document.createElement("div");
-        document.body.appendChild(parent);
+        document.body.append(parent);
 
         const initialDiv = document.createElement("div");
         initialDiv.id = "test-element";
-        parent.appendChild(initialDiv);
+        parent.append(initialDiv);
 
         await DomObservers.watchElementReplacement(
             () => document.querySelector("#test-element") as HTMLElement,
@@ -345,11 +345,11 @@ describe("watchElementReplacement", () => {
         expect(mockCallback).toHaveBeenCalledTimes(1);
 
         parent.remove();
-        parent.appendChild(document.createElement("div")); // Trigger mutation observer to detect disconnection
+        parent.append(document.createElement("div")); // Trigger mutation observer to detect disconnection
 
         const newDiv = document.createElement("div");
         newDiv.id = "test-element";
-        parent.appendChild(newDiv);
+        parent.append(newDiv);
         await Promise.resolve(); // Wait one event loop tick for the mutation observer to trigger
 
         expect(mockCallback).toHaveBeenCalledTimes(1);

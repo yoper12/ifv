@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { Meta } from "@/types/Meta";
     import type { Setting } from "@/types/Setting.js";
+
     import { savePatchSetting } from "@/utils/SettingsManager.js";
 
     let {
@@ -21,8 +22,8 @@
     let translateX = $state(0);
     let indicatorWidth = $state(0);
 
-    let optionOn: HTMLSpanElement | null = $state(null);
-    let optionOff: HTMLSpanElement | null = $state(null);
+    let optionOn: HTMLSpanElement | undefined = $state();
+    let optionOff: HTMLSpanElement | undefined = $state();
 
     function updateIndicator() {
         const isChecked = currentSettings[setting.id];

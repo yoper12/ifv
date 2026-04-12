@@ -68,16 +68,97 @@ export async function generateSettingsList() {
                 );
             }
 
-            settingContainerDiv.appendChild(settingInputDiv);
-            settingsListDiv.appendChild(settingContainerDiv);
+            settingContainerDiv.append(settingInputDiv);
+            settingsListDiv.append(settingContainerDiv);
         }
-        patchesSettingsDiv.appendChild(patchDiv);
+        patchesSettingsDiv.append(patchDiv);
     }
 
     addListenersToInputs(patchesSettingsDiv);
     addBttmButtons(patchesSettingsDiv, patches);
 
     return patchesSettingsDiv;
+}
+
+/**
+ * Dodaje dolne przyciski.
+ *
+ * @param {Node} patchesSettingsDiv
+ * @returns {void}
+ */
+function addBttmButtons(patchesSettingsDiv, patches) {
+    const buttonsDiv = document.createElement("div");
+    buttonsDiv.className = "buttons";
+    buttonsDiv.innerHTML = `
+        <button class="reset-button" title="spowoduje odświeżenie strony">Zresetuj do domyślnych</button>
+        <button class="apply-button" title="spowoduje odświeżenie strony">Zastosuj ustawienia</button>
+    `;
+    patchesSettingsDiv.append(buttonsDiv);
+
+    patchesSettingsDiv
+        .querySelector(".apply-button")
+        .addEventListener("click", () => globalThis.location.reload());
+    patchesSettingsDiv
+        .querySelector(".reset-button")
+        .addEventListener("click", () => {
+            for (const patch of patches) {
+                if (!patch.settings?.length) continue;
+                for (const setting of patch.settings) {
+                    saveSetting(patch.name, setting.id, setting.default);
+                }
+            }
+            globalThis.location.reload();
+        });
+}
+
+/**
+ * Dodaje listenery do inputów.
+ *
+ * @param {Node} patchesSettingsDiv
+ * @returns {void}
+ */
+function addListenersToInputs(patchesSettingsDiv) {
+    for (const toggle of patchesSettingsDiv.querySelectorAll(
+        ".setting-boolean-toggle",
+    )) {
+        toggle.querySelector(".toggle-switch").addEventListener("click", () => {
+            toggle.querySelector(".toggle-input").checked =
+                !toggle.querySelector(".toggle-input").checked;
+            saveSetting(
+                toggle.querySelector(".toggle-input").dataset.patch,
+                toggle.querySelector(".toggle-input").dataset.setting,
+                toggle.querySelector(".toggle-input").checked,
+            );
+        });
+    }
+
+    for (const input of patchesSettingsDiv.querySelectorAll(
+        ".setting-select, .setting-text, .setting-color, .setting-number",
+    )) {
+        input.addEventListener("change", () => {
+            saveSetting(
+                input.dataset.patch,
+                input.dataset.setting,
+                input.value,
+            );
+        });
+    }
+
+    for (const checkbox of patchesSettingsDiv.querySelectorAll(
+        ".setting-multiselect-checkbox",
+    )) {
+        checkbox.addEventListener("change", () => {
+            const patchName = checkbox.dataset.patch;
+            const settingId = checkbox.dataset.setting;
+            const selectedValues = Array.from(
+                patchesSettingsDiv.querySelectorAll(
+                    `.setting-multiselect-checkbox[data-patch='${patchName}'][data-setting='${settingId}']:checked`,
+                ),
+                (callback) => callback.value,
+            );
+            saveSetting(patchName, settingId, selectedValues);
+        });
+    }
 }
 
 /**
@@ -96,29 +177,30 @@ function setupSearchbar(patchesSettingsDiv) {
         );
         let visiblePatchesCount = 0;
 
-        patchesSettingsDiv.querySelectorAll(".patch").forEach((patchDiv) => {
-            const patchNameEl = patchDiv.querySelector(".patch-name");
-            const patchDescEl = patchDiv.querySelector(".patch-description");
+        for (const patchDiv of patchesSettingsDiv.querySelectorAll(".patch")) {
+            const patchNameElement = patchDiv.querySelector(".patch-name");
+            const patchDescElement =
+                patchDiv.querySelector(".patch-description");
 
-            removeMarks(patchNameEl);
-            removeMarks(patchDescEl);
-            patchDiv.querySelectorAll(".setting").forEach((settingDiv) => {
+            removeMarks(patchNameElement);
+            removeMarks(patchDescElement);
+            for (const settingDiv of patchDiv.querySelectorAll(".setting")) {
                 removeMarks(settingDiv.querySelector(".setting-name"));
                 removeMarks(settingDiv.querySelector(".setting-description"));
-            });
+            }
 
             if (query === "") {
                 patchDiv.style.display = "block";
-                return;
+                continue;
             }
 
             let combinedTextContent =
-                patchNameEl.textContent.toLowerCase()
+                patchNameElement.textContent.toLowerCase()
                 + " "
-                + patchDescEl.textContent.toLowerCase()
+                + patchDescElement.textContent.toLowerCase()
                 + " ";
 
-            patchDiv.querySelectorAll(".setting").forEach((settingDiv) => {
+            for (const settingDiv of patchDiv.querySelectorAll(".setting")) {
                 combinedTextContent +=
                     settingDiv
                         .querySelector(".setting-name")
@@ -127,16 +209,18 @@ function setupSearchbar(patchesSettingsDiv) {
                     settingDiv
                         .querySelector(".setting-description")
                         .textContent.toLowerCase() + " ";
-            });
+            }
 
             if (combinedTextContent.includes(query)) {
                 patchDiv.style.display = "block";
                 visiblePatchesCount++;
 
-                markTextInElement(patchNameEl, query);
-                markTextInElement(patchDescEl, query);
+                markTextInElement(patchNameElement, query);
+                markTextInElement(patchDescElement, query);
 
-                patchDiv.querySelectorAll(".setting").forEach((settingDiv) => {
+                for (const settingDiv of patchDiv.querySelectorAll(
+                    ".setting",
+                )) {
                     markTextInElement(
                         settingDiv.querySelector(".setting-name"),
                         query,
@@ -145,11 +229,11 @@ function setupSearchbar(patchesSettingsDiv) {
                         settingDiv.querySelector(".setting-description"),
                         query,
                     );
-                });
+                }
             } else {
                 patchDiv.style.display = "none";
             }
-        });
+        }
 
         if (query === "") {
             noResultsMessageDiv.style.display = "none";
@@ -165,89 +249,4 @@ function setupSearchbar(patchesSettingsDiv) {
         searchInput.value = "";
         searchInput.dispatchEvent(new Event("input"));
     });
-}
-
-/**
- * Dodaje listenery do inputów.
- *
- * @param {Node} patchesSettingsDiv
- * @returns {void}
- */
-function addListenersToInputs(patchesSettingsDiv) {
-    patchesSettingsDiv
-        .querySelectorAll(".setting-boolean-toggle")
-        .forEach((toggle) => {
-            toggle
-                .querySelector(".toggle-switch")
-                .addEventListener("click", () => {
-                    toggle.querySelector(".toggle-input").checked =
-                        !toggle.querySelector(".toggle-input").checked;
-                    saveSetting(
-                        toggle.querySelector(".toggle-input").dataset.patch,
-                        toggle.querySelector(".toggle-input").dataset.setting,
-                        toggle.querySelector(".toggle-input").checked,
-                    );
-                });
-        });
-
-    patchesSettingsDiv
-        .querySelectorAll(
-            ".setting-select, .setting-text, .setting-color, .setting-number",
-        )
-        .forEach((input) => {
-            input.addEventListener("change", () => {
-                saveSetting(
-                    input.dataset.patch,
-                    input.dataset.setting,
-                    input.value,
-                );
-            });
-        });
-
-    patchesSettingsDiv
-        .querySelectorAll(".setting-multiselect-checkbox")
-        .forEach((checkbox) => {
-            checkbox.addEventListener("change", () => {
-                const patchName = checkbox.dataset.patch;
-                const settingId = checkbox.dataset.setting;
-                const selectedValues = Array.from(
-                    patchesSettingsDiv.querySelectorAll(
-                        `.setting-multiselect-checkbox[data-patch='${patchName}'][data-setting='${settingId}']:checked`,
-                    ),
-                    (cb) => cb.value,
-                );
-                saveSetting(patchName, settingId, selectedValues);
-            });
-        });
-}
-
-/**
- * Dodaje dolne przyciski.
- *
- * @param {Node} patchesSettingsDiv
- * @returns {void}
- */
-function addBttmButtons(patchesSettingsDiv, patches) {
-    const buttonsDiv = document.createElement("div");
-    buttonsDiv.className = "buttons";
-    buttonsDiv.innerHTML = `
-        <button class="reset-button" title="spowoduje odświeżenie strony">Zresetuj do domyślnych</button>
-        <button class="apply-button" title="spowoduje odświeżenie strony">Zastosuj ustawienia</button>
-    `;
-    patchesSettingsDiv.appendChild(buttonsDiv);
-
-    patchesSettingsDiv
-        .querySelector(".apply-button")
-        .addEventListener("click", () => window.location.reload());
-    patchesSettingsDiv
-        .querySelector(".reset-button")
-        .addEventListener("click", () => {
-            for (const patch of patches) {
-                if (!patch.settings?.length) continue;
-                for (const setting of patch.settings) {
-                    saveSetting(patch.name, setting.id, setting.default);
-                }
-            }
-            window.location.reload();
-        });
 }

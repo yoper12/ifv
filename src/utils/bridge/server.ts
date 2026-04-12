@@ -8,13 +8,45 @@ import type {
 let connectedPort: MessagePort;
 
 /**
- * Initializes the bridge server by setting up a message listener on the window object to handle incoming connection requests from the bridge client. When a client attempts to connect, it establishes a MessageChannel for communication and listens for incoming requests from the client. The server processes these requests by invoking the corresponding methods provided in the `exposedMethods` object and sends back responses with the results or error messages.
+ * Emits an event from the bridge server to all connected clients. The event is
+ * identified by its name and can carry an associated data payload. Clients that
+ * have registered listeners for the specified event name will receive the event
+ * data when it is emitted. This allows the server to notify clients of
+ * asynchronous occurrences or changes in state without requiring a direct
+ * request from the client.
  *
- * @param exposedMethods An object containing the methods that the bridge server will expose to the client.
+ * @param eventName - The name of the event to emit to the clients. Clients can
+ *   listen for this event name to receive the associated data when the event is
+ *   emitted.
+ * @param data - The data payload to send along with the event. This can be of
+ *   any type and will be received by clients that are listening for the
+ *   specified event name.
+ */
+export function emitExtensionEvent(eventName: string, data: unknown) {
+    if (!connectedPort) return;
+
+    const payload: BridgeEvent = { data, eventName };
+    const message: PortMessage = { payload, type: "EVENT" };
+
+    connectedPort.postMessage(JSON.stringify(message));
+}
+
+/**
+ * Initializes the bridge server by setting up a message listener on the window
+ * object to handle incoming connection requests from the bridge client. When a
+ * client attempts to connect, it establishes a MessageChannel for communication
+ * and listens for incoming requests from the client. The server processes these
+ * requests by invoking the corresponding methods provided in the
+ * `exposedMethods` object and sends back responses with the results or error
+ * messages.
+ *
+ * @param exposedMethods - An object containing the methods that the bridge
+ *   server will expose to the client.
  */
 export function initBridgeServer(exposedMethods: BridgeAPI) {
     async function onWindowMessage(event: MessageEvent) {
         if (
+            // eslint-disable-next-line unicorn/prefer-global-this
             event.source !== window
             || !event.data
             || event.data.source !== "hephaestus-bridge"
@@ -33,43 +65,47 @@ export function initBridgeServer(exposedMethods: BridgeAPI) {
         ) {
             window.removeEventListener("message", onWindowMessage);
 
-            connectedPort = event.ports[0];
+            connectedPort = event.ports[0]!;
 
-            connectedPort.onmessage = async (e) => {
-                const data: PortMessage = JSON.parse(e.data);
+            connectedPort.addEventListener("message", async (event) => {
+                const data: PortMessage = JSON.parse(event.data);
 
                 if (data.type === "BRIDGE_REQUEST") {
-                    const req = data.payload;
+                    const request = data.payload;
                     const response: BridgeResponse = {
-                        id: req.id,
+                        id: request.id,
                         success: false,
                     };
 
                     try {
-                        const methodKey = req.method as keyof BridgeAPI;
+                        const methodKey = request.method as keyof BridgeAPI;
                         const method = exposedMethods[methodKey];
 
                         if (typeof method === "function") {
                             const callableMethod = method as (
-                                ...args: unknown[]
+                                ...arguments_: unknown[]
                             ) => unknown;
-                            response.data = await callableMethod(...req.args);
+                            response.data = await callableMethod(
+                                ...request.args,
+                            );
                             response.success = true;
                         } else {
-                            response.error = `Method '${req.method}' not initialized on bridge server`;
+                            response.error = `Method '${request.method}' not initialized on bridge server`;
                         }
-                    } catch (err) {
+                    } catch (error) {
                         response.error =
-                            err instanceof Error ? err.message : String(err);
+                            error instanceof Error ?
+                                error.message
+                            :   String(error);
                     }
 
                     const responseMessage: PortMessage = {
-                        type: "BRIDGE_RESPONSE",
                         payload: response,
+                        type: "BRIDGE_RESPONSE",
                     };
                     connectedPort?.postMessage(JSON.stringify(responseMessage));
                 }
-            };
+            });
         }
     }
 
@@ -79,19 +115,4 @@ export function initBridgeServer(exposedMethods: BridgeAPI) {
         { source: "hephaestus-bridge", type: "BRIDGE_READY" },
         "*",
     );
-}
-
-/**
- * Emits an event from the bridge server to all connected clients. The event is identified by its name and can carry an associated data payload. Clients that have registered listeners for the specified event name will receive the event data when it is emitted. This allows the server to notify clients of asynchronous occurrences or changes in state without requiring a direct request from the client.
- *
- * @param eventName The name of the event to emit to the clients. Clients can listen for this event name to receive the associated data when the event is emitted.
- * @param data The data payload to send along with the event. This can be of any type and will be received by clients that are listening for the specified event name.
- */
-export function emitExtensionEvent(eventName: string, data: unknown) {
-    if (!connectedPort) return;
-
-    const payload: BridgeEvent = { eventName, data };
-    const message: PortMessage = { type: "EVENT", payload };
-
-    connectedPort.postMessage(JSON.stringify(message));
 }

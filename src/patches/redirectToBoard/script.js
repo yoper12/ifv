@@ -1,24 +1,27 @@
 import { clickOnAside } from "../apis/aside.js";
 
-const messagesRegex = /^(dziennik-)?wiadomosci.*/;
-const studentOrMessagesRegex = /^(dziennik-)?(wiadomosci|uczen).*/;
+const messagesRegex = /^(?:dziennik-)?wiadomosci.*/;
+const studentOrMessagesRegex = /^(?:dziennik-)?(?:wiadomosci|uczen).*/;
 
-const isEV = () => !window.location.hostname.startsWith("dziennik");
+const isEV = () => !globalThis.location.hostname.startsWith("dziennik");
 
 const getLogoElement = () =>
     document.querySelector(".header__logo-product")?.firstChild;
 
 function setUpRedirectToBoard() {
     const logoElement = getLogoElement();
-    if (messagesRegex.test(window.location.hostname)) {
-        const url = `https://${window.location.hostname.replace(
+    if (messagesRegex.test(globalThis.location.hostname)) {
+        const url = `https://${globalThis.location.hostname.replace(
             "wiadomosci",
             "uczen",
-        )}/${window.location.pathname.split("/")[1]}/App`;
+        )}/${globalThis.location.pathname.split("/")[1]}/App`;
 
         if (isEV()) logoElement.href = url;
         else {
-            logoElement.onclick = () => (window.location.href = url);
+            logoElement.addEventListener(
+                "click",
+                () => (globalThis.location.href = url),
+            );
             logoElement.style = "cursor: pointer;";
         }
     } else {
@@ -28,9 +31,10 @@ function setUpRedirectToBoard() {
     }
 }
 
-window.appendModule({
+globalThis.appendModule({
+    doesRunHere: () =>
+        !!studentOrMessagesRegex.test(globalThis.location.hostname),
     isLoaded: getLogoElement,
     onlyOnReloads: true,
     run: setUpRedirectToBoard,
-    doesRunHere: () => !!window.location.hostname.match(studentOrMessagesRegex),
 });

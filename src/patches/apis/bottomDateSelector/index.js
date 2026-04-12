@@ -10,33 +10,26 @@ const dayNames = [
     "niedziela",
 ];
 
-const getWeekStartingMonday = (i) => (i === 0 ? 6 : i - 1);
+const getWeekStartingMonday = (index) => (index === 0 ? 6 : index - 1);
 
-const getWeek = (date) => {
+function getWeek(date) {
     const DAY = 24 * 60 * 60 * 1000;
     const firstDay = new Date(`${date.getFullYear()}-01-01`);
     return Math.floor((date.getTime() - firstDay.getTime()) / DAY / 7);
-};
+}
 
 const isSameWeek = (date, comparedDate) =>
     getWeek(date) === getWeek(comparedDate);
 
-const updateReactInput = (input, value) => {
-    const setValue = Object.getOwnPropertyDescriptor(
-        Object.getPrototypeOf(input),
-        "value",
-    ).set;
-    const event = new Event("input", { bubbles: true });
-
-    setValue.call(input, value);
-    input.dispatchEvent(event);
-};
-
 export class SelectorRenderer {
-    constructor(renderContentFn) {
-        this.renderContent = renderContentFn;
+    constructor(renderContentFunction) {
+        this.renderContent = renderContentFunction;
 
-        this.#render().then(() => console.debug("Rendered date selector"));
+        this.#render()
+            .then(() => console.debug("Rendered date selector"))
+            .catch((error) =>
+                console.error("Failed to render date selector", error),
+            );
     }
 
     #createSelector(dayName) {
@@ -51,7 +44,7 @@ export class SelectorRenderer {
         `;
 
         const dayDisplay = element.querySelector("span");
-        dayDisplay.innerText = dayName;
+        dayDisplay.textContent = dayName;
         dayDisplay.addEventListener("click", () =>
             element.querySelector("input").showPicker(),
         );
@@ -72,19 +65,15 @@ export class SelectorRenderer {
         return element;
     }
 
-    #updateSelectorDate(name) {
-        document.querySelector(".date-selector span").innerText = name;
-    }
-
     #getDaysDropdowns() {
         return Array.from(
             document.querySelectorAll(".app__content .MuiPaper-root"),
             (element) => ({
+                day: element.querySelector(".MuiAccordionSummary-content > h2")
+                    ?.textContent,
                 element,
                 note: element.querySelector(".plan-zajec__accordion__wolne")
-                    ?.innerText,
-                day: element.querySelector(".MuiAccordionSummary-content > h2")
-                    ?.innerText,
+                    ?.textContent,
             }),
         );
     }
@@ -98,50 +87,7 @@ export class SelectorRenderer {
             !this.firstDayName
             || document.querySelector(
                 ".app__content .MuiPaper-root .MuiAccordionSummary-content > h2",
-            )?.innerText !== this.firstDayName
-        );
-    }
-
-    async #setDay(value, valueDate) {
-        if (
-            !isSameWeek(
-                document.querySelector(".week-selector input").valueAsDate,
-                valueDate,
-            )
-        ) {
-            this.#setChecking();
-
-            if (!value || !valueDate) return;
-            updateReactInput(
-                document.querySelector(".week-selector input"),
-                value,
-            );
-
-            await waitForRender(() => this.#isDayListLoaded());
-        }
-
-        this.currentWeekDay = Math.min(
-            getWeekStartingMonday(valueDate.getDay()),
-            this.cachedWeek.length - 1,
-        );
-        await this.#render();
-    }
-
-    async #setupAutoRender() {
-        if (this.observer) return;
-        this.observer = new MutationObserver(async () => {
-            const content = await this.renderContent(
-                this.cachedWeek[this.currentWeekDay],
-            );
-            content.classList.add("day-content");
-            document.querySelector(".day-content").replaceWith(content);
-        });
-
-        this.observer.observe(
-            document.querySelector(
-                ".content-container__tab-subheader:has(.week-selector) + div",
-            ),
-            { childList: true, subtree: true },
+            )?.textContent !== this.firstDayName
         );
     }
 
@@ -151,7 +97,7 @@ export class SelectorRenderer {
             replaceable = document.createElement("div");
             document
                 .querySelector("section.app__content .mobile__frame")
-                .appendChild(replaceable);
+                .append(replaceable);
         }
 
         this.cachedWeek = this.#getDaysDropdowns();
@@ -179,7 +125,7 @@ export class SelectorRenderer {
         } else
             document
                 .querySelector("section.app__content .mobile__frame")
-                .appendChild(
+                .append(
                     this.#createSelector(
                         this.cachedWeek[this.currentWeekDay].day,
                     ),
@@ -190,6 +136,31 @@ export class SelectorRenderer {
 
     #setChecking() {
         this.firstDayName = this.cachedWeek[0].day;
+    }
+
+    async #setDay(value, valueDate) {
+        if (
+            !isSameWeek(
+                document.querySelector(".week-selector input").valueAsDate,
+                valueDate,
+            )
+        ) {
+            this.#setChecking();
+
+            if (!value || !valueDate) return;
+            updateReactInput(
+                document.querySelector(".week-selector input"),
+                value,
+            );
+
+            await waitForRender(() => this.#isDayListLoaded());
+        }
+
+        this.currentWeekDay = Math.min(
+            getWeekStartingMonday(valueDate.getDay()),
+            this.cachedWeek.length - 1,
+        );
+        await this.#render();
     }
 
     async #setSiblingDay(direction = 1) {
@@ -217,4 +188,37 @@ export class SelectorRenderer {
 
         await this.#render();
     }
+
+    async #setupAutoRender() {
+        if (this.observer) return;
+        this.observer = new MutationObserver(async () => {
+            const content = await this.renderContent(
+                this.cachedWeek[this.currentWeekDay],
+            );
+            content.classList.add("day-content");
+            document.querySelector(".day-content").replaceWith(content);
+        });
+
+        this.observer.observe(
+            document.querySelector(
+                ".content-container__tab-subheader:has(.week-selector) + div",
+            ),
+            { childList: true, subtree: true },
+        );
+    }
+
+    #updateSelectorDate(name) {
+        document.querySelector(".date-selector span").textContent = name;
+    }
+}
+
+function updateReactInput(input, value) {
+    const setValue = Object.getOwnPropertyDescriptor(
+        Object.getPrototypeOf(input),
+        "value",
+    ).set;
+    const event = new Event("input", { bubbles: true });
+
+    setValue.call(input, value);
+    input.dispatchEvent(event);
 }

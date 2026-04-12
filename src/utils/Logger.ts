@@ -2,8 +2,8 @@ const DEV = import.meta.env?.DEV;
 
 export const Logger = {
     /**
-     * Used to log debugging messages (lowest priority). This will be disabled in production builds to avoid
-     * performance impact.
+     * Used to log debugging messages (lowest priority). This will be disabled
+     * in production builds to avoid performance impact.
      *
      * @example
      *
@@ -11,7 +11,8 @@ export const Logger = {
      * Logger.debug("This is a debugging message.", { some: "data" });
      * ```
      *
-     * @returns A logging function that accepts the same arguments as `console.debug`.
+     * @returns A logging function that accepts the same arguments as
+     *   `console.debug`.
      */
     get debug() {
         if (!DEV) return () => {};
@@ -25,8 +26,30 @@ export const Logger = {
     },
 
     /**
-     * Used to log informational messages (medium-low priority). This will be disabled in production builds
-     * to avoid performance impact.
+     * Used to log error messages (highest priority). This is the only logging
+     * method that is preserved in production.
+     *
+     * @example
+     *
+     * ```typescript
+     * Logger.error("This is an error message.", { some: "data" });
+     * ```
+     *
+     * @returns A logging function that accepts the same arguments as
+     *   `console.error`.
+     */
+    get error() {
+        return console.error.bind(
+            console,
+            `%c[${new Date().toLocaleTimeString()}] %c[ERROR]`,
+            "color: gray;",
+            "color: red;",
+        );
+    },
+
+    /**
+     * Used to log informational messages (medium-low priority). This will be
+     * disabled in production builds to avoid performance impact.
      *
      * @example
      *
@@ -34,7 +57,8 @@ export const Logger = {
      * Logger.info("This is an informational message.", { some: "data" });
      * ```
      *
-     * @returns A logging function that accepts the same arguments as `console.info`.
+     * @returns A logging function that accepts the same arguments as
+     *   `console.info`.
      */
     get info() {
         if (!DEV) return () => {};
@@ -48,8 +72,8 @@ export const Logger = {
     },
 
     /**
-     * Used to log warning messages (medium-high priority). This will be disabled in production builds to
-     * avoid performance impact.
+     * Used to log warning messages (medium-high priority). This will be
+     * disabled in production builds to avoid performance impact.
      *
      * @example
      *
@@ -57,7 +81,8 @@ export const Logger = {
      * Logger.warn("This is a warning message.", { some: "data" });
      * ```
      *
-     * @returns A logging function that accepts the same arguments as `console.warn`.
+     * @returns A logging function that accepts the same arguments as
+     *   `console.warn`.
      */
     get warn() {
         if (!DEV) return () => {};
@@ -67,27 +92,6 @@ export const Logger = {
             `%c[${new Date().toLocaleTimeString()}] %c[WARN]`,
             "color: gray;",
             "color: orange;",
-        );
-    },
-
-    /**
-     * Used to log error messages (highest priority). This is the only logging method that is preserved in
-     * production.
-     *
-     * @example
-     *
-     * ```typescript
-     * Logger.error("This is an error message.", { some: "data" });
-     * ```
-     *
-     * @returns A logging function that accepts the same arguments as `console.error`.
-     */
-    get error() {
-        return console.error.bind(
-            console,
-            `%c[${new Date().toLocaleTimeString()}] %c[ERROR]`,
-            "color: gray;",
-            "color: red;",
         );
     },
 };

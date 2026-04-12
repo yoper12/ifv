@@ -1,14 +1,14 @@
 const startingWidth = window.innerWidth;
 
-const startListening = () => {
+function startListening() {
     addEventListener("resize", () => {
         if (startingWidth < 1024 !== window.innerWidth < 1024)
-            window.location.reload();
+            globalThis.location.reload();
     });
-};
+}
 
-window.appendModule({
-    run: startListening,
-    onlyOnReloads: true,
+globalThis.appendModule({
     doesRunHere: () => true,
+    onlyOnReloads: true,
+    run: startListening,
 });

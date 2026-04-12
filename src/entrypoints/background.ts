@@ -1,5 +1,7 @@
 import { browser, defineBackground } from "#imports";
-import type { Setting } from "@/types/Setting.js";
+
+import type { Setting } from "@/types/Setting";
+
 import { Logger } from "@/utils/Logger";
 
 interface PatchSettings {
@@ -19,8 +21,8 @@ export default defineBackground(() => {
         try {
             await browser.storage.sync.set(dataToWrite);
             Logger.debug("Saved settings to storage:", dataToWrite);
-        } catch (err) {
-            Logger.error("Error writing data to storage:", err);
+        } catch (error) {
+            Logger.error("Error writing data to storage:", error);
         }
     }
 

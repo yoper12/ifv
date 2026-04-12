@@ -1,12 +1,12 @@
 import { getFromAside } from "./aside.js";
 import { waitForRender } from "./waitForElement.js";
 
-export const getUserData = async () => {
-    return await getFromAside(async () => {
+export const getUserData = async () =>
+    await getFromAside(async () => {
         await waitForRender(
             () =>
                 document.querySelector(
-                    window.location.hostname.includes("wiadomosci") ?
+                    globalThis.location.hostname.includes("wiadomosci") ?
                         ".account__name span"
                     :   ".side_important-text.side_student",
                 ) && document.querySelector(".user div:nth-child(2)"),
@@ -14,10 +14,11 @@ export const getUserData = async () => {
 
         return {
             fullName:
-                window.location.hostname.includes("wiadomosci") ?
+                globalThis.location.hostname.includes("wiadomosci") ?
                     document
                         .querySelector(".account__name span")
                         ?.firstChild?.textContent?.split(" ")
+                        // eslint-disable-next-line unicorn/no-array-reverse
                         .reverse()
                         .join(" ")
                 :   document.querySelector(".side_important-text.side_student")
@@ -26,4 +27,3 @@ export const getUserData = async () => {
                 .textContent,
         };
     });
-};

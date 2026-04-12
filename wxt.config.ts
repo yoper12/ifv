@@ -2,15 +2,15 @@ import { defineConfig } from "wxt";
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
-    srcDir: "src",
     imports: false,
-    manifestVersion: 3,
     manifest: {
-        name: "Hephaestus",
+        browser_specific_settings: { gecko: { id: "j.skup.test@gmail.com" } },
         description:
             "Poprawia uciążliwe elementy stron usług █████████ oraz ████████ ██████",
-        browser_specific_settings: { gecko: { id: "j.skup.test@gmail.com" } },
+        name: "Hephaestus",
         permissions: ["storage"],
     },
+    manifestVersion: 3,
     modules: ["@wxt-dev/module-svelte"],
+    srcDir: "src",
 });

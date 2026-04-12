@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { Meta } from "@/types/Meta";
     import type { Setting } from "@/types/Setting.js";
+
     import { savePatchSetting } from "@/utils/SettingsManager.js";
 
     let {
@@ -22,8 +23,8 @@
     class="setting-text"
     value={currentSettings[setting.id]}
     placeholder={setting.defaultValue}
-    onchange={(e) => {
-        const value = (e.target as HTMLInputElement).value;
+    onchange={(event) => {
+        const value = (event.target as HTMLInputElement).value;
         currentSettings[setting.id] = value;
         savePatchSetting(meta.id, setting.id, value);
     }}

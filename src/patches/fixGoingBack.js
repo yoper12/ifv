@@ -1,26 +1,26 @@
 import { waitForRender } from "./apis/waitForElement.js";
 
-const fixGoingBack = async () => {
+async function fixGoingBack() {
     const observer = new MutationObserver(mutationHandler);
     observer.observe(document.body, { childList: true });
-};
+}
 
-const mutationHandler = async (mutationList) => {
-    for (let i = 0; i < mutationList.length; i++) {
+async function mutationHandler(mutationList) {
+    for (let index = 0; index < mutationList.length; index++) {
         const modals = document.querySelectorAll(".MuiDrawer-modal");
         const modal = modals.at(-1) || undefined;
 
-        if (modal && modal.getAttribute("data-has-listener") !== "true") {
+        if (modal && modal.dataset.hasListener !== "true") {
             history.pushState(
                 { ...history.state, details: true },
                 "",
                 `${location.pathname}#`,
             );
-            modal.setAttribute("data-has-listener", "true");
+            modal.dataset.hasListener = "true";
 
-            for (const e of modals) {
-                if (e === modal) continue;
-                e.removeAttribute("data-has-listener");
+            for (const element of modals) {
+                if (element === modal) continue;
+                delete element.dataset.hasListener;
             }
 
             await waitForRender(() =>
@@ -28,7 +28,7 @@ const mutationHandler = async (mutationList) => {
             );
             const closeButton = modal.querySelector(".modal-button--close");
 
-            addEventListener("popstate", popstateHandler(closeButton), {
+            addEventListener("popstate", () => popstateHandler(closeButton), {
                 once: true,
             });
 
@@ -39,29 +39,28 @@ const mutationHandler = async (mutationList) => {
             });
         }
     }
-};
+}
 
-const popstateHandler = (e) => () => {
+function popstateHandler(element) {
     if (
-        e
-            ?.closest("div[role=presentation].MuiDrawer-modal")
-            ?.getAttribute("data-has-listener") !== "true"
+        element?.closest("div[role=presentation].MuiDrawer-modal")?.dataset
+            .hasListener !== "true"
     )
         return;
-    e?.click();
-};
+    element?.click();
+}
 
-window.appendModule({
-    isLoaded: () => true,
-    onlyOnReloads: true,
-    run: fixGoingBack,
+globalThis.appendModule({
     doesRunHere: () =>
         [
+            "dziennik-uczen.vulcan.net.pl",
+            "dziennik-wiadomosci.vulcan.net.pl",
             "eduvulcan.pl",
             "uczen.eduvulcan.pl",
             "wiadomosci.eduvulcan.pl",
-            "dziennik-uczen.vulcan.net.pl",
-            "dziennik-wiadomosci.vulcan.net.pl",
-        ].includes(window.location.hostname)
+        ].includes(globalThis.location.hostname)
         && typeof InstallTrigger !== "undefined",
+    isLoaded: () => true,
+    onlyOnReloads: true,
+    run: fixGoingBack,
 });

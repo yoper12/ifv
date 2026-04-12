@@ -1,4 +1,6 @@
 import { defineContentScript } from "#imports";
+
+import { initBridgeServer } from "@/utils/bridge/server";
 import {
     disablePatch,
     enablePatch,
@@ -7,9 +9,18 @@ import {
     savePatchSetting,
     togglePatch,
 } from "@/utils/SettingsManager";
-import { initBridgeServer } from "@/utils/bridge/server";
 
 export default defineContentScript({
+    main() {
+        initBridgeServer({
+            disablePatch,
+            enablePatch,
+            getPatchSettings,
+            isPatchEnabled,
+            savePatchSetting,
+            togglePatch,
+        });
+    },
     matches: [
         "*://dziennik-uczen.vulcan.net.pl/*",
         "*://dziennik-wiadomosci.vulcan.net.pl/*",
@@ -20,14 +31,4 @@ export default defineContentScript({
     ],
     runAt: "document_start",
     world: "ISOLATED",
-    main() {
-        initBridgeServer({
-            getPatchSettings,
-            savePatchSetting,
-            enablePatch,
-            disablePatch,
-            isPatchEnabled,
-            togglePatch,
-        });
-    },
 });

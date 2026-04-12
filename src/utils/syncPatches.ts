@@ -1,10 +1,11 @@
-import { Logger } from "./Logger";
-import { getPatchSettings, isPatchEnabled } from "./SettingsManager";
 import type { Patch } from "@/types/Patch";
 
+import { Logger } from "./Logger";
+import { getPatchSettings, isPatchEnabled } from "./SettingsManager";
+
 interface PatchLoaderConfig {
-    world: "MAIN" | "ISOLATED";
-    runAt: "document_start" | "document_end" | "document_idle";
+    runAt: "document_end" | "document_idle" | "document_start";
+    world: "ISOLATED" | "MAIN";
 }
 
 const activePatches = new Map<string, Patch>();
@@ -13,24 +14,25 @@ const patchLifecyclePromises = new Map<string, Promise<void>>();
 /**
  * Loads and initializes patches based on the provided configuration.
  *
- * @param patches A record of patch modules to be loaded.
- * @param config The configuration specifying the world and runAt timing.
- * @param trigger The event that triggered the sync.
- * @param changedPatches An optional set of patch IDs that were changed (only for SETTINGS_CHANGE trigger).
- * @returns A promise that resolves when all applicable patches have been initialized.
+ * @param patches - A record of patch modules to be loaded.
+ * @param config - The configuration specifying the world and runAt timing.
+ * @param trigger - The event that triggered the sync.
+ * @param changedPatches - An optional set of patch IDs that were changed (only
+ *   for SETTINGS_CHANGE trigger).
+ * @returns A promise that resolves when all applicable patches have been
+ *   initialized.
  */
 export async function syncPatches(
     patches: Record<string, Patch>,
     config: PatchLoaderConfig,
-    trigger: "INITIAL" | "URL_CHANGE" | "SETTINGS_CHANGE",
+    trigger: "INITIAL" | "SETTINGS_CHANGE" | "URL_CHANGE",
     changedPatches?: Set<string>,
 ) {
-    const currentUrl = window.location.href;
+    const currentUrl = globalThis.location.href;
 
     // Logger.debug(`Syncing patches states for world "${config.world}" at "${config.runAt}"`);
 
-    for (const path in patches) {
-        const patch = patches[path];
+    for (const patch of Object.values(patches)) {
         const { meta } = patch;
 
         if (
@@ -51,7 +53,7 @@ export async function syncPatches(
         const isEligible = isUrlMatching && isEnabled;
         const isActive = activePatches.has(meta.id);
 
-        let action: "NONE" | "INIT" | "CLEANUP" | "RELOAD" = "NONE";
+        let action: "CLEANUP" | "INIT" | "NONE" | "RELOAD" = "NONE";
 
         if (isEligible && !isActive)
             action = "INIT"; // if patch should be active, but is not, initialize it
@@ -87,11 +89,12 @@ export async function syncPatches(
                         `Cleaned up patch "${patch.meta.name}" (${patch.meta.id}) in ${(performance.now() - t0).toFixed(2)}ms`,
                     );
                 }
-            } catch (err) {
-                if (err instanceof Error && err.name === "AbortError") return;
+            } catch (error) {
+                if (error instanceof Error && error.name === "AbortError")
+                    return;
                 Logger.error(
                     `Error cleaning up patch "${patch.meta.name}" (${patch.meta.id}):`,
-                    err,
+                    error,
                 );
             }
 
@@ -107,22 +110,22 @@ export async function syncPatches(
                         `Initialized patch "${meta.name}" (${meta.id}) in ${(performance.now() - t0).toFixed(2)}ms`,
                     );
                 }
-            } catch (err) {
+            } catch (error) {
                 activePatches.delete(meta.id);
-                if (err instanceof Error && err.name === "AbortError") return;
+                if (error instanceof Error && error.name === "AbortError")
+                    return;
                 Logger.error(
                     `Error initializing patch "${meta.name}" (${meta.id}):`,
-                    err,
+                    error,
                 );
             }
+
+            return;
         });
 
         patchLifecyclePromises.set(meta.id, currentTask);
     }
 }
 
-function getDeviceType() {
-    return window.matchMedia("(max-width: 1023px)").matches ?
-            "mobile"
-        :   "desktop";
-}
+const getDeviceType = () =>
+    globalThis.matchMedia("(max-width: 1023px)").matches ? "mobile" : "desktop";

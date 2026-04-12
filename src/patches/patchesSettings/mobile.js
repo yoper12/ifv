@@ -6,7 +6,7 @@ const backIconUrl =
 const settingsIconUrl =
     "https://raw.githubusercontent.com/banocean/ifv/refs/heads/main/assets/icons/settings.svg";
 
-function addMobileSettings() {
+async function addMobileSettings() {
     const settingsButton = document.createElement("div");
     settingsButton.innerHTML = `<div class="icon" style="content: url(&quot;${settingsIconUrl}&quot;);"></div><span class="name">Ustawienia ifv</span>`;
     settingsButton.addEventListener("click", async () => {
@@ -17,29 +17,26 @@ function addMobileSettings() {
             settingsModal.remove();
         });
         const settingsList = await generateSettingsList();
-        settingsModal
-            .querySelector("div:last-of-type")
-            .appendChild(settingsList);
+        settingsModal.querySelector("div:last-of-type").append(settingsList);
         settingsModal
             .querySelector("div:last-of-type")
             .classList.add("ifv-patches-mobile");
-        document.body.appendChild(settingsModal);
+        document.body.append(settingsModal);
     });
 
-    waitForRender(
+    await waitForRender(
         () => document.querySelectorAll(".more-popup.list-modal div")[1],
-    ).then(() => {
-        document
-            .querySelectorAll(".more-popup.list-modal div")[1]
-            .appendChild(settingsButton);
-    });
+    );
+    document
+        .querySelectorAll(".more-popup.list-modal div")[1]
+        .append(settingsButton);
 }
 
-window.appendModule({
-    run: addMobileSettings,
-    onlyOnReloads: true,
+globalThis.appendModule({
     doesRunHere: () =>
-        ["uczen.eduvulcan.pl", "dziennik-uczen.vulcan.net.pl"].includes(
-            window.location.hostname,
+        ["dziennik-uczen.vulcan.net.pl", "uczen.eduvulcan.pl"].includes(
+            globalThis.location.hostname,
         ) && window.innerWidth < 1024,
+    onlyOnReloads: true,
+    run: addMobileSettings,
 });

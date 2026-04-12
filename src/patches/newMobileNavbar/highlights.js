@@ -1,28 +1,27 @@
 const studentRegex = /^(dziennik-)?(uczen).*/;
 
-export const setHighlights = () => {
-    let i;
-    if (document.querySelector(".more-popup").style.display === "block") i = 4;
-    else if (window.location.pathname.endsWith("tablica")) i = 0;
-    else if (window.location.pathname.endsWith("oceny")) i = 1;
-    else if (window.location.pathname.endsWith("frekwencja")) i = 2;
-    else if (window.location.pathname.endsWith("planZajec")) i = 3;
+export function setHighlights() {
+    let index;
+    if (document.querySelector(".more-popup").style.display === "block")
+        index = 4;
+    else if (globalThis.location.pathname.endsWith("tablica")) index = 0;
+    else if (globalThis.location.pathname.endsWith("oceny")) index = 1;
+    else if (globalThis.location.pathname.endsWith("frekwencja")) index = 2;
+    else if (globalThis.location.pathname.endsWith("planZajec")) index = 3;
 
     const buttons = [
         ...document.querySelector(".bottom-navigation-bar").children,
     ];
-    for (let j = 0; j < buttons.length; j++) {
-        const button = buttons[j];
+    for (const [index_, button] of buttons.entries()) {
         const img = button.querySelector("div > img");
-        if (i === j) img.classList.add("highlight");
-        else img.classList.remove("highlight");
+        img.classList.toggle("highlight", index === index_);
     }
-};
+}
 
-window.appendModule({
-    run: setHighlights,
-    onlyOnReloads: false,
+globalThis.appendModule({
+    doesRunHere: () => globalThis.location.hostname.match(studentRegex),
     isLoaded: () =>
         document.querySelector(".bottom-navigation-bar")?.children?.length,
-    doesRunHere: () => window.location.hostname.match(studentRegex),
+    onlyOnReloads: false,
+    run: setHighlights,
 });

@@ -2,14 +2,21 @@
     "extends": "./.wxt/tsconfig.json",
     "compilerOptions": {
         "useDefineForClassFields": true,
-        "strict": true,
-        "types": ["vitest/globals"]
-    },
-    "allowImportingTsExtensions": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noEmit": true,
-    "isolatedModules": true,
-    "noUncheckedSideEffectImports": true
+        "types": ["vitest/globals"],
+        "allowImportingTsExtensions": false,
+        "noFallthroughCasesInSwitch": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "isolatedModules": true,
+        "noUncheckedSideEffectImports": true,
+        "noUncheckedIndexedAccess": true,
+        "noImplicitReturns": true,
+        "noImplicitOverride": true,
+        "exactOptionalPropertyTypes": true,
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "verbatimModuleSyntax": true,
+        "forceConsistentCasingInFileNames": true,
+        "strictBindCallApply": true
+    }
 }

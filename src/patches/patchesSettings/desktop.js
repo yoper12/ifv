@@ -1,7 +1,7 @@
 import { generateSettingsList } from "./generateSettingsList.js";
 
 const ifvLogoUrl =
-    window.location.hostname.includes("eduvulcan") ?
+    globalThis.location.hostname.includes("eduvulcan") ?
         "https://raw.githubusercontent.com/banocean/ifv/refs/heads/main/assets/logo/logo-128-blue.png"
     :   "https://raw.githubusercontent.com/banocean/ifv/refs/heads/main/assets/logo/logo-128-red.png";
 const settingsIconUrl =
@@ -33,12 +33,12 @@ async function addDesktopSettings() {
         .addEventListener("click", hideModal);
     modalBackground.addEventListener("click", hideModal);
 
-    modalDiv.appendChild(await generateSettingsList());
-    document.body.appendChild(modalBackground);
-    document.body.appendChild(modalDiv);
+    modalDiv.append(await generateSettingsList());
+    document.body.append(modalBackground);
+    document.body.append(modalDiv);
     document
         .querySelector(".app__aside__desktop + .app__main .header__tools")
-        .appendChild(settingsButton);
+        .append(settingsButton);
 }
 
 async function hideModal() {
@@ -62,14 +62,14 @@ async function showModal() {
     document.body.style.overflow = "hidden";
 }
 
-window.appendModule({
-    run: addDesktopSettings,
-    onlyOnReloads: true,
+globalThis.appendModule({
     doesRunHere: () =>
         [
-            "uczen.eduvulcan.pl",
             "dziennik-uczen.vulcan.net.pl",
-            "wiadomosci.eduvulcan.pl",
             "dziennik-wiadomosci.vulcan.net.pl",
-        ].includes(window.location.hostname) && window.innerWidth >= 1024,
+            "uczen.eduvulcan.pl",
+            "wiadomosci.eduvulcan.pl",
+        ].includes(globalThis.location.hostname) && window.innerWidth >= 1024,
+    onlyOnReloads: true,
+    run: addDesktopSettings,
 });

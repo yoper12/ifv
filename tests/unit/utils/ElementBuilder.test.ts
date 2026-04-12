@@ -7,7 +7,7 @@ beforeEach(() => {
 describe("attr", () => {
     it("should set multiple attributes on the element", () => {
         const element = createElement("input")
-            .attr({ type: "text", placeholder: "enter text", disabled: true })
+            .attr({ disabled: true, placeholder: "enter text", type: "text" })
             .node();
 
         expect(element.getAttribute("type")).toBe("text");
@@ -23,9 +23,9 @@ describe("attr", () => {
 
         const builder = builderFromElement(element)
             .attr({
-                type: "password",
-                placeholder: "enter password",
                 disabled: false,
+                placeholder: "enter password",
+                type: "password",
             })
             .node();
 
@@ -71,7 +71,7 @@ describe("id", () => {
 describe("style", () => {
     it("should set multiple CSS styles on the element", () => {
         const element = createElement("div")
-            .style({ color: "red", backgroundColor: "blue" })
+            .style({ backgroundColor: "blue", color: "red" })
             .node();
 
         expect(element.style.color).toBe("red");
@@ -84,7 +84,7 @@ describe("style", () => {
         element.style.backgroundColor = "blue";
 
         const builder = builderFromElement(element)
-            .style({ color: "green", backgroundColor: "yellow" })
+            .style({ backgroundColor: "yellow", color: "green" })
             .node();
 
         expect(builder.style.color).toBe("green");
@@ -171,7 +171,7 @@ describe("tgClass", () => {
 describe("data", () => {
     it("should set multiple data attributes on the element", () => {
         const element = createElement("div")
-            .data({ userId: "123", role: "admin" })
+            .data({ role: "admin", userId: "123" })
             .node();
 
         expect(element.dataset.userId).toBe("123");
@@ -184,7 +184,7 @@ describe("data", () => {
         element.dataset.role = "admin";
 
         const builder = builderFromElement(element)
-            .data({ userId: "456", role: "user" })
+            .data({ role: "user", userId: "456" })
             .node();
 
         expect(builder.dataset.userId).toBe("456");
@@ -238,8 +238,8 @@ describe("append", () => {
         const element = createElement("div").append(child1, child2).node();
 
         expect(element.children.length).toBe(2);
-        expect(element.children[0].textContent).toBe("child 1");
-        expect(element.children[1].textContent).toBe("child 2");
+        expect(element.children[0]?.textContent).toBe("child 1");
+        expect(element.children[1]?.textContent).toBe("child 2");
     });
 });
 
@@ -255,8 +255,8 @@ describe("prepend", () => {
         builderFromElement(element).prepend(child2).node();
 
         expect(element.children.length).toBe(2);
-        expect(element.children[0].textContent).toBe("child 2");
-        expect(element.children[1].textContent).toBe("child 1");
+        expect(element.children[0]?.textContent).toBe("child 2");
+        expect(element.children[1]?.textContent).toBe("child 1");
     });
 });
 
@@ -274,7 +274,7 @@ describe("insertBefore", () => {
     it("should insert the element before the specified reference element", () => {
         const parent = document.createElement("div");
         const reference = document.createElement("span");
-        parent.appendChild(reference);
+        parent.append(reference);
         const element = createElement("strong").insertBefore(reference).node();
 
         expect(parent.children.length).toBe(2);
@@ -287,7 +287,7 @@ describe("insertAfter", () => {
     it("should insert the element after the specified reference element", () => {
         const parent = document.createElement("div");
         const reference = document.createElement("span");
-        parent.appendChild(reference);
+        parent.append(reference);
         const element = createElement("strong").insertAfter(reference).node();
 
         expect(parent.children.length).toBe(2);
@@ -340,8 +340,8 @@ describe("remove", () => {
 describe("if, elseIf, else", () => {
     it("should execute if callback if the first condition is true", () => {
         const element = createElement("div")
-            .if(true, (el) => el.text("condition 1 met"))
-            .else((el) => el.text("no conditions met"))
+            .if(true, (element_) => element_.text("condition 1 met"))
+            .else((element_) => element_.text("no conditions met"))
             .node();
 
         expect(element.textContent).toBe("condition 1 met");
@@ -349,9 +349,9 @@ describe("if, elseIf, else", () => {
 
     it("should execute the elseIf callback if the first condition is false and the second condition is true", () => {
         const element = createElement("div")
-            .if(false, (el) => el.text("condition 1 met"))
-            .elseIf(true, (el) => el.text("condition 2 met"))
-            .else((el) => el.text("no conditions met"))
+            .if(false, (element_) => element_.text("condition 1 met"))
+            .elseIf(true, (element_) => element_.text("condition 2 met"))
+            .else((element_) => element_.text("no conditions met"))
             .node();
 
         expect(element.textContent).toBe("condition 2 met");
@@ -359,9 +359,9 @@ describe("if, elseIf, else", () => {
 
     it("should execute the else callback if all conditions are false", () => {
         const element = createElement("div")
-            .if(false, (el) => el.text("condition 1 met"))
-            .elseIf(false, (el) => el.text("condition 2 met"))
-            .else((el) => el.text("no conditions met"))
+            .if(false, (element_) => element_.text("condition 1 met"))
+            .elseIf(false, (element_) => element_.text("condition 2 met"))
+            .else((element_) => element_.text("no conditions met"))
             .node();
 
         expect(element.textContent).toBe("no conditions met");
@@ -369,55 +369,55 @@ describe("if, elseIf, else", () => {
 
     it("should execute nested conditional callbacks correctly", () => {
         const element = createElement("div")
-            .if(true, (el) =>
-                el
-                    .if(false, (nestedEl) =>
-                        nestedEl.text("nested condition met"),
+            .if(true, (element_) =>
+                element_
+                    .if(false, (nestedElement) =>
+                        nestedElement.text("nested condition met"),
                     )
-                    .else((nestedEl) =>
-                        nestedEl.text("nested condition not met"),
+                    .else((nestedElement) =>
+                        nestedElement.text("nested condition not met"),
                     ),
             )
-            .else((el) => el.text("outer condition not met"))
+            .else((element_) => element_.text("outer condition not met"))
             .node();
 
         expect(element.textContent).toBe("nested condition not met");
 
         builderFromElement(element)
-            .if(false, (el) =>
-                el
-                    .if(true, (nestedEl) =>
-                        nestedEl.text("nested condition met"),
+            .if(false, (element_) =>
+                element_
+                    .if(true, (nestedElement) =>
+                        nestedElement.text("nested condition met"),
                     )
-                    .else((nestedEl) =>
-                        nestedEl.text("nested condition not met"),
+                    .else((nestedElement) =>
+                        nestedElement.text("nested condition not met"),
                     ),
             )
-            .else((el) => el.text("outer condition not met"))
+            .else((element_) => element_.text("outer condition not met"))
             .node();
 
         expect(element.textContent).toBe("outer condition not met");
 
         builderFromElement(element)
-            .if(false, (el) =>
-                el
-                    .if(true, (nestedEl) =>
-                        nestedEl.text("nested condition met"),
+            .if(false, (element_) =>
+                element_
+                    .if(true, (nestedElement) =>
+                        nestedElement.text("nested condition met"),
                     )
-                    .else((nestedEl) =>
-                        nestedEl.text("nested condition not met"),
+                    .else((nestedElement) =>
+                        nestedElement.text("nested condition not met"),
                     ),
             )
-            .elseIf(true, (el) =>
-                el
-                    .if(true, (nestedEl) =>
-                        nestedEl.text("second nested condition met"),
+            .elseIf(true, (element_) =>
+                element_
+                    .if(true, (nestedElement) =>
+                        nestedElement.text("second nested condition met"),
                     )
-                    .else((nestedEl) =>
-                        nestedEl.text("second nested condition not met"),
+                    .else((nestedElement) =>
+                        nestedElement.text("second nested condition not met"),
                     ),
             )
-            .else((el) => el.text("outer condition not met"))
+            .else((element_) => element_.text("outer condition not met"))
             .node();
 
         expect(element.textContent).toBe("second nested condition met");
@@ -425,16 +425,16 @@ describe("if, elseIf, else", () => {
 
     it("should throw when elseIf is called before if", () => {
         expect(() => {
-            createElement("div").elseIf(true, (el) => {
-                el.appendTo(document.body);
+            createElement("div").elseIf(true, (element) => {
+                element.appendTo(document.body);
             });
         }).toThrow("elseIf() cannot be used before or without if()");
     });
 
     it("should throw when else is called before if", () => {
         expect(() => {
-            createElement("div").else((el) => {
-                el.appendTo(document.body);
+            createElement("div").else((element) => {
+                element.appendTo(document.body);
             });
         }).toThrow("else() cannot be used before or without if()");
     });
@@ -442,9 +442,9 @@ describe("if, elseIf, else", () => {
     it("should throw when two subsequent else are called", () => {
         expect(() => {
             createElement("div")
-                .if(false, (el) => el.appendTo(document.body))
-                .else((el) => el.appendTo(document.body))
-                .else((el) => el.appendTo(document.body));
+                .if(false, (element) => element.appendTo(document.body))
+                .else((element) => element.appendTo(document.body))
+                .else((element) => element.appendTo(document.body));
         }).toThrow("else() cannot be used before or without if()");
     });
 });

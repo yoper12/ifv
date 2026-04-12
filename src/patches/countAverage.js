@@ -1,6 +1,6 @@
 import { getSetting } from "./apis/settings.js";
 
-const gradeRegex = /^[0-6](\+|-)?$/;
+const gradeRegex = /^[0-6](?:\+|-)?$/;
 
 function modifyGradesRequests() {
     const originalXHROpen = XMLHttpRequest.prototype.open;
@@ -9,14 +9,14 @@ function modifyGradesRequests() {
     XMLHttpRequest.prototype.open = function () {
         this._requestMethod = arguments[0];
         this._requestURL = arguments[1];
-        return originalXHROpen.apply(this, arguments);
+        return Reflect.apply(originalXHROpen, this, arguments);
     };
 
     XMLHttpRequest.prototype.send = function () {
         if (this._requestURL && this._requestURL.includes("/api/Oceny?")) {
             const originalOnReadyStateChange = this.onreadystatechange;
 
-            this.onreadystatechange = function () {
+            this.addEventListener("readystatechange", function () {
                 if (this.readyState === 4 && this.status === 200) {
                     try {
                         let data = JSON.parse(this.responseText);
@@ -33,7 +33,7 @@ function modifyGradesRequests() {
                             && Array.isArray(data.ocenyPrzedmioty)
                             && !data.ustawienia.isSredniaAndPunkty
                         ) {
-                            data.ocenyPrzedmioty.forEach((subject) => {
+                            for (const subject of data.ocenyPrzedmioty) {
                                 let sum = 0;
                                 let totalWeight = 0;
 
@@ -43,56 +43,43 @@ function modifyGradesRequests() {
                                         subject.kolumnyOcenyCzastkowe,
                                     )
                                 ) {
-                                    subject.kolumnyOcenyCzastkowe.forEach(
-                                        (column) => {
-                                            if (
-                                                column.oceny
-                                                && Array.isArray(column.oceny)
-                                            ) {
-                                                column.oceny.forEach(
-                                                    (grade) => {
-                                                        if (
-                                                            grade.wpis
-                                                            && gradeRegex.test(
-                                                                grade.wpis,
-                                                            )
-                                                        ) {
-                                                            let value =
-                                                                parseFloat(
-                                                                    grade.wpis,
-                                                                );
-                                                            if (
-                                                                grade.wpis.includes(
-                                                                    "+",
-                                                                )
-                                                            )
-                                                                value +=
-                                                                    getSetting(
-                                                                        "Count averages",
-                                                                        "plusValue",
-                                                                    );
-                                                            else if (
-                                                                grade.wpis.includes(
-                                                                    "-",
-                                                                )
-                                                            )
-                                                                value -=
-                                                                    getSetting(
-                                                                        "Count averages",
-                                                                        "minusValue",
-                                                                    );
+                                    for (const column of subject.kolumnyOcenyCzastkowe) {
+                                        if (
+                                            column.oceny
+                                            && Array.isArray(column.oceny)
+                                        ) {
+                                            for (const grade of column.oceny) {
+                                                if (
+                                                    grade.wpis
+                                                    && gradeRegex.test(
+                                                        grade.wpis,
+                                                    )
+                                                ) {
+                                                    let value =
+                                                        Number.parseFloat(
+                                                            grade.wpis,
+                                                        );
+                                                    if (
+                                                        grade.wpis.includes("+")
+                                                    )
+                                                        value += getSetting(
+                                                            "Count averages",
+                                                            "plusValue",
+                                                        );
+                                                    else if (
+                                                        grade.wpis.includes("-")
+                                                    )
+                                                        value -= getSetting(
+                                                            "Count averages",
+                                                            "minusValue",
+                                                        );
 
-                                                            sum +=
-                                                                value
-                                                                * grade.waga;
-                                                            totalWeight +=
-                                                                grade.waga;
-                                                        }
-                                                    },
-                                                );
+                                                    sum += value * grade.waga;
+                                                    totalWeight += grade.waga;
+                                                }
                                             }
-                                        },
-                                    );
+                                        }
+                                    }
                                 }
 
                                 if (totalWeight > 0) {
@@ -100,7 +87,7 @@ function modifyGradesRequests() {
                                         sum / totalWeight
                                     ).toFixed(2);
                                 }
-                            });
+                            }
 
                             if (data.ustawienia) {
                                 data.ustawienia.isSredniaAndPunkty = true;
@@ -110,29 +97,25 @@ function modifyGradesRequests() {
                         }
 
                         Object.defineProperty(this, "responseText", {
-                            get: function () {
-                                return data;
-                            },
+                            get: () => data,
                         });
 
                         Object.defineProperty(this, "response", {
-                            get: function () {
-                                return data;
-                            },
+                            get: () => data,
                         });
-                    } catch (e) {
-                        console.debug("Błąd modyfikacji odpowiedzi:", e);
+                    } catch (error) {
+                        console.debug("Błąd modyfikacji odpowiedzi:", error);
                     }
                 }
 
                 if (typeof originalOnReadyStateChange === "function") {
-                    originalOnReadyStateChange.apply(this, arguments);
+                    Reflect.apply(originalOnReadyStateChange, this, arguments);
                 }
-            };
+            });
         }
 
-        return originalXHRSend.apply(this, arguments);
+        return Reflect.apply(originalXHRSend, this, arguments);
     };
 }
 
-window.appendModule({ run: modifyGradesRequests, onlyOnReloads: true });
+globalThis.appendModule({ onlyOnReloads: true, run: modifyGradesRequests });

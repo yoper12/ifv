@@ -1,15 +1,18 @@
 <script lang="ts">
+    import { onMount } from "svelte";
+    import { slide } from "svelte/transition";
+
+    import type { Meta } from "@/types/Meta";
+    import type { Setting } from "@/types/Setting.js";
+
+    import { getPatchSettings } from "@/utils/SettingsManager.js";
+
     import ColorSetting from "./settingsTypes/ColorSetting.svelte";
     import MultiselectSetting from "./settingsTypes/MultiselectSetting.svelte";
     import NumberSetting from "./settingsTypes/NumberSetting.svelte";
     import SelectSetting from "./settingsTypes/SelectSetting.svelte";
     import SwitchSetting from "./settingsTypes/SwitchSetting.svelte";
     import TextSetting from "./settingsTypes/TextSetting.svelte";
-    import type { Meta } from "@/types/Meta";
-    import type { Setting } from "@/types/Setting.js";
-    import { getPatchSettings } from "@/utils/SettingsManager.js";
-    import { onMount } from "svelte";
-    import { slide } from "svelte/transition";
 
     let { meta }: { meta: Meta } = $props();
 

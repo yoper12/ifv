@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { Meta } from "@/types/Meta";
     import type { Setting } from "@/types/Setting.js";
+
     import { savePatchSetting } from "@/utils/SettingsManager.js";
 
     let {
@@ -16,15 +17,15 @@
         setting: Extract<Setting, { type: "color" }>;
     } = $props();
 
-    const hexColor = /^#[0-9a-fA-F]{6}$/;
+    const hexColor = /^#[0-9a-f]{6}$/i;
 </script>
 
 <div class="setting-color">
     <input
         type="color"
         value={currentSettings[setting.id]}
-        oninput={(e) => {
-            const value = (e.target as HTMLInputElement).value;
+        oninput={(event) => {
+            const value = (event.target as HTMLInputElement).value;
             currentSettings[setting.id] = value;
             savePatchSetting(meta.id, setting.id, value);
         }}
@@ -34,8 +35,8 @@
         value={currentSettings[setting.id]}
         placeholder={setting.defaultValue.toString()}
         maxlength="7"
-        oninput={(e) => {
-            const value = (e.target as HTMLInputElement).value;
+        oninput={(event) => {
+            const value = (event.target as HTMLInputElement).value;
             if (!hexColor.test(value)) return;
             currentSettings[setting.id] = value;
             savePatchSetting(meta.id, setting.id, value);

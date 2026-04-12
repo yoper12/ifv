@@ -1,13 +1,16 @@
 <script lang="ts">
     import { browser } from "#imports";
-    import PatchItem from "./PatchItem.svelte";
+    import { onMount } from "svelte";
+
     import type { Patch } from "@/types/Patch";
+
     import {
         disablePatch,
         enablePatch,
         isPatchEnabled,
     } from "@/utils/SettingsManager.js";
-    import { onMount } from "svelte";
+
+    import PatchItem from "./PatchItem.svelte";
 
     const patches = import.meta.glob<Patch>("@/patches/**/index.ts", {
         eager: true,
@@ -16,7 +19,7 @@
     const patchesMetas = Object.values(patches).map((p) => p.meta);
 
     let searchQuery = $state("");
-    let category = $state<"desktop" | "mobile" | "all">("all");
+    let category = $state<"all" | "desktop" | "mobile">("all");
     let patchEnabledById = $state<Record<string, boolean>>({});
 
     async function loadPatchStates() {
@@ -34,8 +37,8 @@
     );
 
     onMount(async () => {
-        const savedCategory = (await browser.storage.local.get("category"))
-            .category;
+        const { category: savedCategory } =
+            await browser.storage.local.get("category");
 
         category =
             (
@@ -68,7 +71,7 @@
 
                 return matchesSearch && matchesCategory;
             })
-            .sort((a, b) => a.name.localeCompare(b.name, "pl")),
+            .toSorted((a, b) => a.name.localeCompare(b.name, "pl")),
     );
 
     async function toggleAll() {
@@ -140,8 +143,9 @@
                             ...patchEnabledById,
                             [patch.id]: nextState,
                         };
-                        if (nextState) await enablePatch(patch.id);
-                        else await disablePatch(patch.id);
+                        await (nextState ?
+                            enablePatch(patch.id)
+                        :   disablePatch(patch.id));
                     }}
                 />
             {/if}
@@ -161,7 +165,7 @@
                         browser.storage.sync.clear(),
                         browser.storage.local.clear(),
                     ]);
-                    window.location.reload();
+                    globalThis.location.reload();
                 }
             }}>Clear extension storage</button
         >

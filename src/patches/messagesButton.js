@@ -18,14 +18,12 @@ async function move() {
         ".MuiBadge-anchorOriginTopRightRectangle",
     ).style.transitionDuration = "0ms";
 
-    document
-        .querySelector(".header_logo_tools-container")
-        .appendChild(messages);
+    document.querySelector(".header_logo_tools-container").append(messages);
 }
 
-window.appendModule({
-    run: move,
-    doesRunHere: () => window.location.hostname.match(studentRegex),
-    onlyOnReloads: true,
+globalThis.appendModule({
+    doesRunHere: () => globalThis.location.hostname.match(studentRegex),
     isLoaded: () => !!document.querySelector(".header__hamburger__icon"),
+    onlyOnReloads: true,
+    run: move,
 });

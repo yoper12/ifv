@@ -1,32 +1,32 @@
 import { waitForRender, waitForReplacement } from "../apis/waitForElement.js";
 
-const hideEmptyColumns = async () => {
+async function hideEmptyColumns() {
     await waitForRender(() =>
         document.querySelector(".p-datatable-table .details-btn--appearance"),
     );
 
     const headers = document.querySelectorAll(".p-datatable-table th");
 
-    headers.forEach((header, idx) => {
+    for (const [index] of headers.entries()) {
         const cells = [
             ...document.querySelectorAll(
-                "tbody tr td:nth-child(" + (idx + 1) + ")",
+                "tbody tr td:nth-child(" + (index + 1) + ")",
             ),
         ];
         const check = cells.some((cell) => cell.textContent.trim().length > 0);
 
         const columnCells = document.querySelectorAll(
             "tr th:nth-child("
-                + (idx + 1)
+                + (index + 1)
                 + "), tr td:nth-child("
-                + (idx + 1)
+                + (index + 1)
                 + ")",
         );
-        columnCells.forEach((cell) => {
+        for (const cell of columnCells) {
             cell.style.display = check ? "" : "none";
-        });
-    });
-};
+        }
+    }
+}
 
 async function prep() {
     if (window.innerWidth > 1024) {
@@ -35,51 +35,51 @@ async function prep() {
         );
 
         hideEmptyColumns();
-        document
-            .querySelectorAll(".MuiTabs-flexContainer > button")
-            .forEach((e) => {
-                e.addEventListener("click", async () => {
-                    await waitForReplacement(() =>
-                        document.querySelector(
-                            ".p-datatable-table .details-btn--appearance",
-                        ),
-                    );
-                    hideEmptyColumns();
-                });
+        for (const tabButton of document.querySelectorAll(
+            ".MuiTabs-flexContainer > button",
+        )) {
+            tabButton.addEventListener("click", async () => {
+                await waitForReplacement(() =>
+                    document.querySelector(
+                        ".p-datatable-table .details-btn--appearance",
+                    ),
+                );
+                hideEmptyColumns();
             });
+        }
     } else {
         await waitForRender(() =>
             document.querySelector(
                 ".MuiAccordionDetails-root.accordion__full-width__content > .mobile__frame .grades__box",
             ),
         );
-        document
-            .querySelectorAll(
-                ".MuiAccordionDetails-root.accordion__full-width__content > .mobile__frame",
-            )
-            .forEach(async (semester) => {
-                await waitForRender(() =>
-                    semester.querySelector(
-                        ".MuiAccordionDetails-root .grades__box .info-row .info-text > span",
-                    ),
-                );
-                semester.querySelectorAll(".info-row").forEach((e) => {
-                    if (
-                        e.querySelector(".info-text > span").textContent.trim()
-                            === ""
-                        || e
-                            .querySelector(".info-text > span")
-                            .textContent.trim() === "0"
-                    ) {
-                        e.remove();
-                    }
-                });
-            });
+        const mobileFrames = document.querySelectorAll(
+            ".MuiAccordionDetails-root.accordion__full-width__content > .mobile__frame",
+        );
+        for (const semester of mobileFrames) {
+            await waitForRender(() =>
+                semester.querySelector(
+                    ".MuiAccordionDetails-root .grades__box .info-row .info-text > span",
+                ),
+            );
+            for (const infoRow of semester.querySelectorAll(".info-row")) {
+                if (
+                    infoRow
+                        .querySelector(".info-text > span")
+                        .textContent.trim() === ""
+                    || infoRow
+                        .querySelector(".info-text > span")
+                        .textContent.trim() === "0"
+                ) {
+                    infoRow.remove();
+                }
+            }
+        }
     }
 }
 
-window.appendModule({
-    run: prep,
+globalThis.appendModule({
+    doesRunHere: () => globalThis.location.pathname.endsWith("oceny"),
     onlyOnReloads: false,
-    doesRunHere: () => window.location.pathname.endsWith("oceny"),
+    run: prep,
 });

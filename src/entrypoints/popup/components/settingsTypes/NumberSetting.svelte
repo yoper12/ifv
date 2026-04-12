@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { Meta } from "@/types/Meta";
     import type { Setting } from "@/types/Setting.js";
+
     import { savePatchSetting } from "@/utils/SettingsManager.js";
 
     let {
@@ -23,9 +24,9 @@
     value={currentSettings[setting.id]}
     step={setting.step || 1}
     placeholder={String(setting.defaultValue)}
-    onchange={(e) => {
-        let value = (e.target as HTMLInputElement).valueAsNumber;
-        value = isNaN(value) ? (setting.defaultValue as number) : value;
+    onchange={(event) => {
+        let value = (event.target as HTMLInputElement).valueAsNumber;
+        value = Number.isNaN(value) ? (setting.defaultValue as number) : value;
         currentSettings[setting.id] = value;
         savePatchSetting(meta.id, setting.id, value);
     }}

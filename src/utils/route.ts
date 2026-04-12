@@ -1,8 +1,8 @@
 /**
  * A helper function to create URLPattern objects.
- * @param path A string representing the pathname pattern. E.g. "*\/oceny". To match all paths use "*".
  *
  * @example
+ *
  * ```typescript
  * // Matches URLs with any hostname and path starting with "/oceny"
  * route("/oceny*");
@@ -11,12 +11,13 @@
  * route("*");
  * ```
  *
+ * @param path - Path A string representing the pathname pattern. E.g.
+ *   "(asterisk)/oceny". To match all paths use an asterisk.
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/URLPattern/pathname|Check on MDN}
  */
 export function route(path: string): URLPattern;
 /**
  * A helper function to create URLPattern objects.
- * @param options An object containing any of the following optional properties: `host`, `path` and `hash`. Each property corresponds to the respective component of a URL and accepts the same patterns as the URLPattern API.
  *
  * @example
  *
@@ -31,29 +32,38 @@ export function route(path: string): URLPattern;
  * route({ host: "*wiadomosci*" });
  * ```
  *
+ * @param options - An object containing any of the following optional
+ *   properties: `host`, `path` and `hash`. Each property corresponds to the
+ *   respective component of a URL and accepts the same patterns as the
+ *   URLPattern API.
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/URLPattern|Check on MDN}
  */
 export function route(options: {
+    hash?: string;
     host?: string;
     path?: string;
-    hash?: string;
 }): URLPattern;
 /**
  * A helper function to create URLPattern objects.
  *
- * @param arg Either a string representing the pathname pattern or an object containing any of the following optional properties: `host`, `path` and `hash`. Each property corresponds to the respective component of a URL and accepts the same patterns as the URLPattern API.
+ * @param arg - Either a string representing the pathname pattern or an object
+ *   containing any of the following optional properties: `host`, `path` and
+ *   `hash`. Each property corresponds to the respective component of a URL and
+ *   accepts the same patterns as the URLPattern API.
  * @returns A URLPattern object created based on the provided argument.
  */
 export function route(
-    arg: string | { host?: string; path?: string; hash?: string },
+    argument: string | { hash?: string; host?: string; path?: string },
 ) {
-    if (typeof arg === "string") {
-        return new URLPattern({ pathname: arg });
+    if (typeof argument === "string") {
+        return new URLPattern({ pathname: argument });
     }
 
-    return new URLPattern({
-        hostname: arg.host,
-        pathname: arg.path,
-        hash: arg.hash,
-    });
+    const pattern: URLPatternInit = {};
+
+    if (argument.hash !== undefined) pattern.hash = argument.hash;
+    if (argument.host !== undefined) pattern.hostname = argument.host;
+    if (argument.path !== undefined) pattern.pathname = argument.path;
+
+    return new URLPattern(pattern);
 }

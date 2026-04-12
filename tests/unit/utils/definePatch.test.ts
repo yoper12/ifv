@@ -15,8 +15,8 @@ beforeEach(() => {
 
 it("should inject css string and remove it on cleanup", async () => {
     const patch = definePatch({
-        meta: { id: "test-css", name: "", description: "", matches: [] },
         css: "body { background: red; }",
+        meta: { description: "", id: "test-css", matches: [], name: "" },
     });
 
     await patch.init({});
@@ -36,8 +36,8 @@ it("should inject css string and remove it on cleanup", async () => {
 
 it("should inject css strings array and remove it on cleanup", async () => {
     const patch = definePatch({
-        meta: { id: "test-css-array", name: "", description: "", matches: [] },
         css: ["body { background: red; }", "p { color: green; }"],
+        meta: { description: "", id: "test-css-array", matches: [], name: "" },
     });
 
     await patch.init({});
@@ -66,9 +66,9 @@ it("should pass settings to init and cleanup", async () => {
     const mockCleanup = vi.fn();
 
     const patch = definePatch({
-        meta: { id: "test-functions", name: "", description: "", matches: [] },
-        init: mockInit,
         cleanup: mockCleanup,
+        init: mockInit,
+        meta: { description: "", id: "test-functions", matches: [], name: "" },
     });
 
     await patch.init({ color: "#ff0000" });
@@ -78,7 +78,7 @@ it("should pass settings to init and cleanup", async () => {
         expect.any(AbortSignal),
     );
 
-    const passedSignal = mockInit.mock.calls[0][1];
+    const passedSignal = mockInit.mock.calls[0]![1];
 
     await patch.cleanup();
     expect(mockCleanup).toHaveBeenCalledOnce();

@@ -1,23 +1,4 @@
 /**
- * Usuwa znaczniki <mark> z elementu
- *
- * @param {Node} element Element, z którego usuwamy znaczniki <mark>
- * @returns {void}
- */
-export async function removeMarks(element) {
-    const marks = element.querySelectorAll("mark");
-    marks.forEach(async (mark) => {
-        const parent = mark.parentNode;
-        while (mark.firstChild) {
-            parent.insertBefore(mark.firstChild, mark);
-        }
-        parent.removeChild(mark);
-    });
-
-    element.normalize();
-}
-
-/**
  * Zaznacza tekst w elemencie, który pasuje do podanego zapytania.
  *
  * @param {Node} element Element, w którym zaznaczamy tekst
@@ -36,38 +17,57 @@ export async function markTextInElement(element, textQueryToHighlight) {
         if (lowerNodeText.includes(textQueryToHighlight)) {
             nodesToModify.push({
                 node: currentNode,
-                text: nodeText,
                 query: textQueryToHighlight,
+                text: nodeText,
             });
         }
     }
 
-    nodesToModify.forEach(async ({ node, text, query }) => {
+    for (const { node, query, text } of nodesToModify) {
         const lowerText = text.toLowerCase();
         let matchIndex = lowerText.indexOf(query);
         const fragment = document.createDocumentFragment();
         let lastIndex = 0;
 
         while (matchIndex !== -1) {
-            fragment.appendChild(
-                document.createTextNode(text.substring(lastIndex, matchIndex)),
+            fragment.append(
+                document.createTextNode(text.slice(lastIndex, matchIndex)),
             );
             const mark = document.createElement("mark");
-            mark.textContent = text.substring(
+            mark.textContent = text.slice(
                 matchIndex,
                 matchIndex + query.length,
             );
-            fragment.appendChild(mark);
+            fragment.append(mark);
 
             lastIndex = matchIndex + query.length;
             matchIndex = lowerText.indexOf(query, lastIndex);
         }
-        fragment.appendChild(
-            document.createTextNode(text.substring(lastIndex)),
+        fragment.append(
+            document.createTextNode(text.slice(Math.max(0, lastIndex))),
         );
 
         node.parentNode.replaceChild(fragment, node);
-    });
+    }
+
+    element.normalize();
+}
+
+/**
+ * Usuwa znaczniki <mark> z elementu
+ *
+ * @param {Node} element Element, z którego usuwamy znaczniki <mark>
+ * @returns {void}
+ */
+export async function removeMarks(element) {
+    const marks = element.querySelectorAll("mark");
+    for (const mark of marks) {
+        const parent = mark.parentNode;
+        while (mark.firstChild) {
+            parent.insertBefore(mark.firstChild, mark);
+        }
+        mark.remove();
+    }
 
     element.normalize();
 }

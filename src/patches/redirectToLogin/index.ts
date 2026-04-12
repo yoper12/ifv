@@ -1,22 +1,10 @@
-import { watchElement } from "@/utils/DomObservers";
 import { definePatch } from "@/utils/definePatch";
+import { watchElement } from "@/utils/DomObservers";
 import { route } from "@/utils/route";
 
 export default definePatch({
-    meta: {
-        id: "redirect-to-login",
-        name: "Auto redirect to login page",
-        description:
-            "Automatically redirects to the login page when opening the homepage.",
-        matches: [
-            route({ host: "eduvulcan.pl", path: "/" }),
-            route({ host: "dziennik-uczen.vulcan.net.pl", path: "/:symbol/" }),
-        ],
-        runAt: "document_start",
-        runStrategy: "once",
-    },
     init() {
-        if (window.location.hostname === "eduvulcan.pl") {
+        if (globalThis.location.hostname === "eduvulcan.pl") {
             watchElement(
                 () => document.querySelector(".user-controls"),
                 (disconnect) => {
@@ -28,12 +16,24 @@ export default definePatch({
                         )
                     ) {
                         disconnect();
-                        window.location.pathname = "/logowanie";
+                        globalThis.location.pathname = "/logowanie";
                     }
                 },
             );
         } else {
-            window.location.pathname = `/${window.location.pathname.split("/")[1]}/LoginEndpoint.aspx`;
+            globalThis.location.pathname = `/${globalThis.location.pathname.split("/")[1]}/LoginEndpoint.aspx`;
         }
+    },
+    meta: {
+        description:
+            "Automatically redirects to the login page when opening the homepage.",
+        id: "redirect-to-login",
+        matches: [
+            route({ host: "eduvulcan.pl", path: "/" }),
+            route({ host: "dziennik-uczen.vulcan.net.pl", path: "/:symbol/" }),
+        ],
+        name: "Auto redirect to login page",
+        runAt: "document_start",
+        runStrategy: "once",
     },
 });

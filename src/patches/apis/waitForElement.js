@@ -1,28 +1,30 @@
-export const waitForRender = async (fn, target = document.body) => {
-    let resolve;
-    const wait = new Promise((r) => (resolve = r));
+export async function waitForRender(getElement, target = document.body) {
+    let promiseResolve;
+    const wait = new Promise((resolve) => (promiseResolve = resolve));
     const observer = new MutationObserver((mutations, observer) => {
-        if (!fn()) return;
-        resolve();
+        if (!getElement()) return;
+        promiseResolve();
         observer.disconnect();
     });
-    observer.observe(target, { subtree: true, childList: true });
+    observer.observe(target, { childList: true, subtree: true });
 
-    const lastTry = fn();
+    const lastTry = getElement();
     if (!lastTry) {
         await wait;
     }
-};
+}
 
-export const waitForReplacement = async (fn, target = document.body) => {
-    const initialElement = fn();
+export async function waitForReplacement(getElement, target = document.body) {
+    const initialElement = getElement();
 
     if (!initialElement) {
-        return waitForRender(fn, target);
+        return waitForRender(getElement, target);
     }
 
     let resolveDisappear;
-    const waitForDisappear = new Promise((r) => (resolveDisappear = r));
+    const waitForDisappear = new Promise(
+        (resolve) => (resolveDisappear = resolve),
+    );
 
     const disappearObserver = new MutationObserver((mutations, observer) => {
         if (!document.body.contains(initialElement)) {
@@ -31,9 +33,9 @@ export const waitForReplacement = async (fn, target = document.body) => {
         }
     });
 
-    disappearObserver.observe(target, { subtree: true, childList: true });
+    disappearObserver.observe(target, { childList: true, subtree: true });
 
     await waitForDisappear;
 
-    return waitForRender(fn, target);
-};
+    return waitForRender(getElement, target);
+}

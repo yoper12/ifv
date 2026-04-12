@@ -1,6 +1,8 @@
 // @vitest-environment node
 import { fakeBrowser } from "#imports";
+
 import type { Meta } from "@/types/Meta.js";
+
 import * as SettingsManager from "@/utils/SettingsManager.js";
 
 beforeEach(() => {
@@ -57,11 +59,11 @@ describe("enablePatch", () => {
 
         expect(sendMessageSpy).toHaveBeenCalledWith(
             expect.objectContaining({
-                type: "SCHEDULE_WRITE",
                 payload: expect.objectContaining({
                     key: "patch_enabled_test-patch",
                     value: true,
                 }),
+                type: "SCHEDULE_WRITE",
             }),
         );
     });
@@ -75,11 +77,11 @@ describe("disablePatch", () => {
 
         expect(sendMessageSpy).toHaveBeenCalledWith(
             expect.objectContaining({
-                type: "SCHEDULE_WRITE",
                 payload: expect.objectContaining({
                     key: "patch_enabled_test-patch",
                     value: false,
                 }),
+                type: "SCHEDULE_WRITE",
             }),
         );
     });
@@ -97,11 +99,11 @@ describe("togglePatch", () => {
 
         expect(sendMessageSpy).toHaveBeenCalledWith(
             expect.objectContaining({
-                type: "SCHEDULE_WRITE",
                 payload: expect.objectContaining({
                     key: "patch_enabled_test-patch",
                     value: true,
                 }),
+                type: "SCHEDULE_WRITE",
             }),
         );
     });
@@ -113,11 +115,11 @@ describe("togglePatch", () => {
 
         expect(sendMessageSpy).toHaveBeenLastCalledWith(
             expect.objectContaining({
-                type: "SCHEDULE_WRITE",
                 payload: expect.objectContaining({
                     key: "patch_enabled_test-patch",
                     value: false,
                 }),
+                type: "SCHEDULE_WRITE",
             }),
         );
     });
@@ -126,24 +128,24 @@ describe("togglePatch", () => {
 describe("getPatchSettings", () => {
     it("should join default and stored values", async () => {
         const patchMeta: Meta = {
-            id: "test-patch",
-            name: "",
             description: "",
+            id: "test-patch",
             matches: [],
+            name: "",
             settings: [
                 {
-                    name: "",
-                    id: "color",
-                    description: "",
-                    type: "color",
                     defaultValue: "#ff0000",
+                    description: "",
+                    id: "color",
+                    name: "",
+                    type: "color",
                 },
                 {
-                    name: "",
-                    id: "size",
-                    description: "",
-                    type: "number",
                     defaultValue: 10,
+                    description: "",
+                    id: "size",
+                    name: "",
+                    type: "number",
                 },
             ],
         };
@@ -159,10 +161,10 @@ describe("getPatchSettings", () => {
 
     it("should return empty object when patch has no settings defined", async () => {
         const patchMeta: Meta = {
-            id: "test-patch",
-            name: "",
             description: "",
+            id: "test-patch",
             matches: [],
+            name: "",
         };
 
         const settings = await SettingsManager.getPatchSettings(patchMeta);

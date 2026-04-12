@@ -1,5 +1,6 @@
-import { Logger } from "../Logger";
 import type { BridgeAPI, BridgeRequest, PortMessage } from "@/types/Bridge";
+
+import { Logger } from "../Logger";
 
 let bridgePort: MessagePort | undefined;
 let initPromise: Promise<MessagePort> | undefined;
@@ -9,97 +10,22 @@ const eventListeners: Record<string, Set<EventCallback>> = {};
 
 const pendingRequests: Record<
     string,
-    { resolve: (data: unknown) => void; reject: (err: Error) => void }
+    { reject: (error: Error) => void; resolve: (data: unknown) => void }
 > = {};
 
 /**
- * Initializes the bridge client by establishing a connection to the bridge server through a MessageChannel. It listens for messages from the server and routes them to the appropriate handlers based on their type (requests, responses, or events).
+ * Sends a request to the bridge server to invoke a specific method with the
+ * provided arguments. Rejects if an error occurs or if no response is received
+ * within 5 seconds.
  *
- * @returns A promise that resolves to the connected MessagePort for communication with the bridge server.
- */
-async function getPort() {
-    if (bridgePort) return bridgePort;
-    if (initPromise) return initPromise;
-
-    initPromise = new Promise((resolve) => {
-        function onWindowMessage(event: MessageEvent) {
-            if (
-                event.source !== window
-                || !event.data
-                || event.data.source !== "hephaestus-bridge"
-            )
-                return;
-
-            if (event.data.type === "BRIDGE_READY") {
-                window.removeEventListener("message", onWindowMessage);
-                clearInterval(pingInterval);
-
-                const channel = new MessageChannel();
-                bridgePort = channel.port1;
-
-                bridgePort.onmessage = (e) => {
-                    const data: PortMessage = JSON.parse(e.data);
-
-                    if (data.type === "BRIDGE_RESPONSE") {
-                        const response = data.payload;
-                        if (pendingRequests[response.id]) {
-                            if (response.success)
-                                pendingRequests[response.id].resolve(
-                                    response.data,
-                                );
-                            else
-                                pendingRequests[response.id].reject(
-                                    new Error(
-                                        `Bridge error: ${response.error}`,
-                                    ),
-                                );
-                            delete pendingRequests[response.id];
-                        }
-                    } else if (data.type === "EVENT") {
-                        const payload = data.payload;
-                        const listeners = eventListeners[payload.eventName];
-                        if (listeners) {
-                            for (const cb of listeners) cb(payload.data);
-                        }
-                    }
-                };
-
-                bridgePort.onmessageerror = () => {
-                    resetConnection();
-                };
-
-                window.postMessage(
-                    { source: "hephaestus-bridge", type: "INIT_BRIDGE" },
-                    "*",
-                    [channel.port2],
-                );
-                resolve(bridgePort);
-            }
-        }
-
-        window.addEventListener("message", onWindowMessage);
-
-        const pingInterval = window.setInterval(() => {
-            window.postMessage(
-                { source: "hephaestus-bridge", type: "CLIENT_PING" },
-                "*",
-            );
-        }, 50);
-    });
-
-    return initPromise;
-}
-
-/**
- * Sends a request to the bridge server to invoke a specific method with the provided arguments. Rejects if an error occurs or if no response is received within 5 seconds.
- *
- * @param method The name of the method to invoke on the bridge server.
- * @param args Arguments to pass to the server method.
- * @returns A promise that resolves with the response data from the server or rejects with an error if the request fails or times out.
+ * @param method - The name of the method to invoke on the bridge server.
+ * @param args - Arguments to pass to the server method.
+ * @returns A promise that resolves with the response data from the server or
+ *   rejects with an error if the request fails or times out.
  */
 export async function callIsolated<K extends keyof BridgeAPI>(
     method: K,
-    ...args: Parameters<BridgeAPI[K]>
+    ...arguments_: Parameters<BridgeAPI[K]>
 ): Promise<Awaited<ReturnType<BridgeAPI[K]>>> {
     const port = await getPort();
 
@@ -117,20 +43,20 @@ export async function callIsolated<K extends keyof BridgeAPI>(
         }, 5000);
 
         pendingRequests[id] = {
+            reject: (error) => {
+                clearTimeout(timeoutId);
+                reject(error);
+            },
             resolve: (data) => {
                 clearTimeout(timeoutId);
                 resolve(data as Awaited<ReturnType<BridgeAPI[K]>>);
             },
-            reject: (err) => {
-                clearTimeout(timeoutId);
-                reject(err);
-            },
         };
 
-        const request: BridgeRequest = { id, method, args };
+        const request: BridgeRequest = { args: arguments_, id, method };
         const message: PortMessage = {
-            type: "BRIDGE_REQUEST",
             payload: request,
+            type: "BRIDGE_REQUEST",
         };
 
         port.postMessage(JSON.stringify(message));
@@ -138,11 +64,17 @@ export async function callIsolated<K extends keyof BridgeAPI>(
 }
 
 /**
- * Registers a callback function to be invoked when a specific event is emitted from the bridge server. The callback will receive the data payload associated with the event whenever it occurs. This allows the client to react to asynchronous events sent by the server.
+ * Registers a callback function to be invoked when a specific event is emitted
+ * from the bridge server. The callback will receive the data payload associated
+ * with the event whenever it occurs. This allows the client to react to
+ * asynchronous events sent by the server.
  *
- * @param eventName The name of the event to listen for from the bridge server.
- * @param callback A function to be called with the event data whenever the specified event is emitted by the server.
- * @returns A promise that resolves once the event listener has been registered and the bridge connection is established.
+ * @param eventName - The name of the event to listen for from the bridge
+ *   server.
+ * @param callback - A function to be called with the event data whenever the
+ *   specified event is emitted by the server.
+ * @returns A promise that resolves once the event listener has been registered
+ *   and the bridge connection is established.
  */
 export async function onExtensionEvent<T = unknown>(
     eventName: string,
@@ -154,6 +86,90 @@ export async function onExtensionEvent<T = unknown>(
         eventListeners[eventName] = new Set();
     }
     eventListeners[eventName].add(callback as EventCallback);
+}
+
+/**
+ * Initializes the bridge client by establishing a connection to the bridge
+ * server through a MessageChannel. It listens for messages from the server and
+ * routes them to the appropriate handlers based on their type (requests,
+ * responses, or events).
+ *
+ * @returns A promise that resolves to the connected MessagePort for
+ *   communication with the bridge server.
+ */
+async function getPort() {
+    if (bridgePort) return bridgePort;
+    if (initPromise) return initPromise;
+
+    initPromise = new Promise((resolve) => {
+        function onWindowMessage(event: MessageEvent) {
+            if (
+                // eslint-disable-next-line unicorn/prefer-global-this
+                event.source !== window
+                || !event.data
+                || event.data.source !== "hephaestus-bridge"
+            )
+                return;
+
+            if (event.data.type === "BRIDGE_READY") {
+                window.removeEventListener("message", onWindowMessage);
+                clearInterval(pingInterval);
+
+                const channel = new MessageChannel();
+                bridgePort = channel.port1;
+
+                bridgePort.addEventListener("message", (event) => {
+                    const data: PortMessage = JSON.parse(event.data);
+
+                    if (data.type === "BRIDGE_RESPONSE") {
+                        const response = data.payload;
+                        if (pendingRequests[response.id]) {
+                            if (response.success)
+                                pendingRequests[response.id]?.resolve(
+                                    response.data,
+                                );
+                            else
+                                pendingRequests[response.id]?.reject(
+                                    new Error(
+                                        `Bridge error: ${response.error}`,
+                                    ),
+                                );
+                            delete pendingRequests[response.id];
+                        }
+                    } else if (data.type === "EVENT") {
+                        const payload = data.payload;
+                        const listeners = eventListeners[payload.eventName];
+                        if (listeners) {
+                            for (const callback of listeners)
+                                callback(payload.data);
+                        }
+                    }
+                });
+
+                bridgePort.addEventListener("messageerror", () => {
+                    resetConnection();
+                });
+
+                window.postMessage(
+                    { source: "hephaestus-bridge", type: "INIT_BRIDGE" },
+                    "*",
+                    [channel.port2],
+                );
+                resolve(bridgePort);
+            }
+        }
+
+        window.addEventListener("message", onWindowMessage);
+
+        const pingInterval = globalThis.setInterval(() => {
+            window.postMessage(
+                { source: "hephaestus-bridge", type: "CLIENT_PING" },
+                "*",
+            );
+        }, 50);
+    });
+
+    return initPromise;
 }
 
 function resetConnection() {

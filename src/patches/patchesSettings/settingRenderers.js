@@ -9,52 +9,23 @@
  * @property {string} id Unikalny identyfikator ustawienia.
  * @property {string} name Nazwa ustawienia wyświetlana użytkownikowi.
  * @property {string} description Opis ustawienia.
- * @property {string} type Typ ustawienia (np. "select", "text", "boolean", "multiselect", "color",
- *   "number").
- * @property {string | boolean | number | string[]} default Domyślna wartość ustawienia.
- * @property {SettingOption[]} [options] Tablica opcji dla ustawień typu "select" i "multiselect".
+ * @property {string} type Typ ustawienia (np. "select", "text", "boolean",
+ *   "multiselect", "color", "number").
+ * @property {string | boolean | number | string[]} default Domyślna wartość
+ *   ustawienia.
+ * @property {SettingOption[]} [options] Tablica opcji dla ustawień typu
+ *   "select" i "multiselect".
  * @property {number} [step] Krok dla ustawień typu "number".
  */
 
 /**
- * Obiekt mapujący typy ustawień na funkcje renderujące odpowiednie inputy HTML. Każda funkcja renderująca
- * przyjmuje obiekt ustawienia, nazwę patcha oraz aktualną wartość ustawienia.
+ * Obiekt mapujący typy ustawień na funkcje renderujące odpowiednie inputy HTML.
+ * Każda funkcja renderująca przyjmuje obiekt ustawienia, nazwę patcha oraz
+ * aktualną wartość ustawienia.
  *
  * @type {Object<string, function(Setting, string, any): string>}
  */
 export const settingRenderers = {
-    /**
-     * Renderuje input typu select (lista rozwijana).
-     *
-     * @param {Setting} setting Obiekt konfiguracji ustawienia.
-     * @param {string} patchName Nazwa patcha.
-     * @param {string} currentValue Aktualna wartość ustawienia.
-     * @returns {string} Ciąg HTML reprezentujący input select.
-     */
-    select: (setting, patchName, currentValue) => `
-        <select class="setting-select" data-patch="${patchName}" data-setting="${setting.id}">
-            ${setting.options
-                .map(
-                    (option) => `
-                <option value="${option.value}" ${
-                    option.value === currentValue ? "selected" : ""
-                }>${option.name}</option>
-            `,
-                )
-                .join("")}
-        </select>
-    `,
-    /**
-     * Renderuje input typu text (pole tekstowe).
-     *
-     * @param {Setting} setting Obiekt konfiguracji ustawienia.
-     * @param {string} patchName Nazwa patcha.
-     * @param {string} currentValue Aktualna wartość ustawienia.
-     * @returns {string} Ciąg HTML reprezentujący input tekstowy.
-     */
-    text: (setting, patchName, currentValue) => `
-        <input type="text" class="setting-text" data-patch="${patchName}" data-setting="${setting.id}" value="${currentValue}" placeholder="${setting.default}">
-    `,
     /**
      * Renderuje input typu boolean (checkbox).
      *
@@ -72,6 +43,17 @@ export const settingRenderers = {
                 <div class="toggle-switch"></div>
             </div>
         </div>
+    `,
+    /**
+     * Renderuje input typu color (próbnik kolorów).
+     *
+     * @param {Setting} setting Obiekt konfiguracji ustawienia.
+     * @param {string} patchName Nazwa patcha.
+     * @param {string} currentValue Aktualna wartość koloru (hex).
+     * @returns {string} Ciąg HTML reprezentujący input color.
+     */
+    color: (setting, patchName, currentValue) => `
+        <input type="color" class="setting-color" data-patch="${patchName}" data-setting="${setting.id}" value="${currentValue}">
     `,
     /**
      * Renderuje input typu multiselect (wiele checkboxów).
@@ -108,17 +90,6 @@ export const settingRenderers = {
         `;
     },
     /**
-     * Renderuje input typu color (próbnik kolorów).
-     *
-     * @param {Setting} setting Obiekt konfiguracji ustawienia.
-     * @param {string} patchName Nazwa patcha.
-     * @param {string} currentValue Aktualna wartość koloru (hex).
-     * @returns {string} Ciąg HTML reprezentujący input color.
-     */
-    color: (setting, patchName, currentValue) => `
-        <input type="color" class="setting-color" data-patch="${patchName}" data-setting="${setting.id}" value="${currentValue}">
-    `,
-    /**
      * Renderuje input typu number (pole numeryczne).
      *
      * @param {Setting} setting Obiekt konfiguracji ustawienia.
@@ -130,5 +101,37 @@ export const settingRenderers = {
         <input type="number" class="setting-number" data-patch="${patchName}" data-setting="${
             setting.id
         }" value="${currentValue}" step="${setting.step || 1}" placeholder="${setting.default}">
+    `,
+    /**
+     * Renderuje input typu select (lista rozwijana).
+     *
+     * @param {Setting} setting Obiekt konfiguracji ustawienia.
+     * @param {string} patchName Nazwa patcha.
+     * @param {string} currentValue Aktualna wartość ustawienia.
+     * @returns {string} Ciąg HTML reprezentujący input select.
+     */
+    select: (setting, patchName, currentValue) => `
+        <select class="setting-select" data-patch="${patchName}" data-setting="${setting.id}">
+            ${setting.options
+                .map(
+                    (option) => `
+                <option value="${option.value}" ${
+                    option.value === currentValue ? "selected" : ""
+                }>${option.name}</option>
+            `,
+                )
+                .join("")}
+        </select>
+    `,
+    /**
+     * Renderuje input typu text (pole tekstowe).
+     *
+     * @param {Setting} setting Obiekt konfiguracji ustawienia.
+     * @param {string} patchName Nazwa patcha.
+     * @param {string} currentValue Aktualna wartość ustawienia.
+     * @returns {string} Ciąg HTML reprezentujący input tekstowy.
+     */
+    text: (setting, patchName, currentValue) => `
+        <input type="text" class="setting-text" data-patch="${patchName}" data-setting="${setting.id}" value="${currentValue}" placeholder="${setting.default}">
     `,
 };
