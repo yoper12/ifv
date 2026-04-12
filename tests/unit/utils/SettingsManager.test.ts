@@ -4,8 +4,11 @@ import type { Meta } from "@/types/Meta.js";
 import * as SettingsManager from "@/utils/SettingsManager.js";
 
 beforeEach(() => {
-    fakeBrowser.reset();
-    SettingsManager.resetCache();
+    beforeEach(async () => {
+        fakeBrowser.reset();
+        vi.resetModules();
+        SettingsManager.resetCache();
+    });
 });
 
 describe("onSettingsChange", () => {

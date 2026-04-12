@@ -48,7 +48,7 @@ export function definePatch(patch: PatchDefinition): Patch {
                 | Record<string, never>,
         ) {
             if (patch.css && injectedStylesheets.length === 0) {
-                try {
+                if (document.adoptedStyleSheets?.push !== undefined) {
                     const cssStrings =
                         Array.isArray(patch.css) ? patch.css : [patch.css];
 
@@ -58,7 +58,7 @@ export function definePatch(patch: PatchDefinition): Patch {
                         document.adoptedStyleSheets.push(css);
                         injectedStylesheets.push(css);
                     }
-                } catch {
+                } else {
                     const cssString =
                         Array.isArray(patch.css) ?
                             patch.css.join("\n")
