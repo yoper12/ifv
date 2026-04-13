@@ -10,5 +10,7 @@ export default definePatch({
         id: "hide-wcag",
         matches: [route("*")],
         name: "Hide WCAG",
+        runAt: "document_start",
+        runStrategy: "once",
     },
 });

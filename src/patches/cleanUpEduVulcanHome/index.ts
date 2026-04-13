@@ -11,5 +11,7 @@ export default definePatch({
         id: "cleanup-eduvulcan-home",
         matches: [route({ host: "eduvulcan.pl" })],
         name: "Hide unnecessary tiles in eduVulcan home",
+        runAt: "document_start",
+        runStrategy: "once",
     },
 });

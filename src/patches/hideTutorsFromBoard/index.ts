@@ -10,5 +10,6 @@ export default definePatch({
         id: "hide-tutors-from-board",
         matches: [route("*/tablica")],
         name: "Hide tutors from board",
+        runStrategy: "once",
     },
 });

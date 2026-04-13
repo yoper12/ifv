@@ -10,5 +10,6 @@ export default definePatch({
         id: "hide-help-on-dashboard",
         matches: [route("*/tablica")],
         name: "Hide help on dashboard",
+        runStrategy: "once",
     },
 });

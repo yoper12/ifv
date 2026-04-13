@@ -16,5 +16,6 @@ export default definePatch({
             route({ host: "dziennik-wiadomosci.vulcan.net.pl" }),
         ],
         name: "Hide footer",
+        runStrategy: "once",
     },
 });

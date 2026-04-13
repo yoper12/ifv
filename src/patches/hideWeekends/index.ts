@@ -15,5 +15,6 @@ export default definePatch({
             route("*/frekwencja"),
         ],
         name: "Hide weekends in monthly calendars",
+        runStrategy: "once",
     },
 });

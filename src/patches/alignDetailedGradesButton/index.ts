@@ -10,5 +10,6 @@ export default definePatch({
         id: "align-detailed-grades-button",
         matches: [route("*/oceny")],
         name: "Align detailed grades button",
+        runStrategy: "once",
     },
 });

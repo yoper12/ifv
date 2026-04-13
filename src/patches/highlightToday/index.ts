@@ -14,5 +14,6 @@ export default definePatch({
             route("*/frekwencja"),
         ],
         name: "Highlight today",
+        runStrategy: "once",
     },
 });

@@ -11,5 +11,6 @@ export default definePatch({
         id: "hide-empty-exam-results",
         matches: [route("*/oceny")],
         name: "Hide empty exam results",
+        runStrategy: "once",
     },
 });

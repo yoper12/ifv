@@ -12,5 +12,6 @@ export default definePatch({
         id: "arrows",
         matches: [route("*")],
         name: "Change close button icon",
+        runStrategy: "once",
     },
 });
