@@ -16,91 +16,85 @@
 
     let { meta }: { meta: Meta } = $props();
 
-    let initialized = $state(false);
     let currentSettings = $state<Record<string, Setting["defaultValue"]>>({});
 
     onMount(async () => {
         currentSettings = await getPatchSettings(meta);
-        initialized = true;
     });
 </script>
 
-{#if initialized}
-    <div class="patch-settings" transition:slide={{ duration: 200 }}>
-        {#each meta.settings ?? [] as setting (setting.id)}
-            <div class="setting-item">
-                <div class="setting-header">
-                    <span class="setting-name">{setting.name}</span>
-                    <span class="setting-description"
-                        >{setting.description}</span
-                    >
-                </div>
-                <div class="setting-input">
-                    {#if setting.type === "switch"}
-                        <SwitchSetting
-                            currentSettings={currentSettings as Record<
-                                string,
-                                boolean
-                            >}
-                            {meta}
-                            {setting}
-                        />
-                    {/if}
-                    {#if setting.type === "number"}
-                        <NumberSetting
-                            currentSettings={currentSettings as Record<
-                                string,
-                                number
-                            >}
-                            {meta}
-                            {setting}
-                        />
-                    {/if}
-                    {#if setting.type === "text"}
-                        <TextSetting
-                            currentSettings={currentSettings as Record<
-                                string,
-                                string
-                            >}
-                            {meta}
-                            {setting}
-                        />
-                    {/if}
-                    {#if setting.type === "color"}
-                        <ColorSetting
-                            currentSettings={currentSettings as Record<
-                                string,
-                                string
-                            >}
-                            {meta}
-                            {setting}
-                        />
-                    {/if}
-                    {#if setting.type === "select"}
-                        <SelectSetting
-                            currentSettings={currentSettings as Record<
-                                string,
-                                string
-                            >}
-                            {meta}
-                            {setting}
-                        />
-                    {/if}
-                    {#if setting.type === "multiselect"}
-                        <MultiselectSetting
-                            currentSettings={currentSettings as Record<
-                                string,
-                                string[]
-                            >}
-                            {meta}
-                            {setting}
-                        />
-                    {/if}
-                </div>
+<div class="patch-settings" transition:slide={{ duration: 200 }}>
+    {#each meta.settings ?? [] as setting (setting.id)}
+        <div class="setting-item">
+            <div class="setting-header">
+                <span class="setting-name">{setting.name}</span>
+                <span class="setting-description">{setting.description}</span>
             </div>
-        {/each}
-    </div>
-{/if}
+            <div class="setting-input">
+                {#if setting.type === "switch"}
+                    <SwitchSetting
+                        currentSettings={currentSettings as Record<
+                            string,
+                            boolean
+                        >}
+                        {meta}
+                        {setting}
+                    />
+                {/if}
+                {#if setting.type === "number"}
+                    <NumberSetting
+                        currentSettings={currentSettings as Record<
+                            string,
+                            number
+                        >}
+                        {meta}
+                        {setting}
+                    />
+                {/if}
+                {#if setting.type === "text"}
+                    <TextSetting
+                        currentSettings={currentSettings as Record<
+                            string,
+                            string
+                        >}
+                        {meta}
+                        {setting}
+                    />
+                {/if}
+                {#if setting.type === "color"}
+                    <ColorSetting
+                        currentSettings={currentSettings as Record<
+                            string,
+                            string
+                        >}
+                        {meta}
+                        {setting}
+                    />
+                {/if}
+                {#if setting.type === "select"}
+                    <SelectSetting
+                        currentSettings={currentSettings as Record<
+                            string,
+                            string
+                        >}
+                        {meta}
+                        {setting}
+                    />
+                {/if}
+                {#if setting.type === "multiselect"}
+                    <MultiselectSetting
+                        currentSettings={currentSettings as Record<
+                            string,
+                            string[]
+                        >}
+                        {meta}
+                        {setting}
+                    />
+                {/if}
+            </div>
+        </div>
+    {/each}
+</div>
 
 <style>
     .patch-settings {

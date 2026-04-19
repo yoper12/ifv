@@ -69,8 +69,8 @@
         onclick={toggleSwitch}
     >
         <div class="indicator"></div>
-        <span bind:this={optionOn}>On</span>
         <span bind:this={optionOff}>Off</span>
+        <span bind:this={optionOn}>On</span>
     </button>
 </div>
 
@@ -140,8 +140,8 @@
         transition: color 0.3s ease;
     }
 
-    .switch-button[aria-checked="true"] span:first-of-type,
-    .switch-button[aria-checked="false"] span:last-of-type {
+    .switch-button[aria-checked="true"] span:last-of-type,
+    .switch-button[aria-checked="false"] span:first-of-type {
         color: #dfdfdd;
     }
 

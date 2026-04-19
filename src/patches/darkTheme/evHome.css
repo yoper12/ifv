@@ -1,4 +1,5 @@
-:root.evHome-dark {
+:root.evHome-dark,
+:root.evHome-pureBlack {
     * {
         box-shadow: none !important;
     }
@@ -60,7 +61,7 @@
     .hint-rectangle,
     .account-option-box-narrow,
     .panelLogin {
-        background-color: var(--component-background) !important;
+        background-color: var(--primary-component-background) !important;
         border-color: var(--borders);
     }
 
@@ -213,7 +214,7 @@
 
     .input-components input:read-only,
     .input-components textarea:read-only {
-        background-color: var(--primary--component--background);
+        background-color: var(--primary-component-background);
         border-color: var(--borders);
     }
 }

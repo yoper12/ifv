@@ -1,6 +1,16 @@
-:root.dark {
+:root.dark,
+:root.pureBlack {
     * {
         box-shadow: none !important;
+    }
+
+    #vulcan-loader-container {
+        background-color: var(--primary-background);
+        color: var(--secondary-text);
+    }
+
+    #vulcan-spinner-container {
+        filter: invert(1) hue-rotate(180deg);
     }
 
     main > section {
@@ -46,7 +56,7 @@
     main > * > * .content-container,
     .p-datatable .p-datatable-tbody > tr,
     .p-datatable .p-datatable-thead > tr > th {
-        background-color: var(--component-background) !important;
+        background-color: var(--primary-component-background) !important;
     }
 
     .tabsview__header {
@@ -164,7 +174,7 @@
     }
 
     .logoEduVulcan_ciemne_r_svg__cls-1 {
-        fill: #fff !important;
+        fill: oklch(1 0 0) !important;
     }
 
     .tile__content {
@@ -188,9 +198,9 @@
 
     .tile__list__rectangle__ribbon {
         background-color: color-mix(
-            in srgb,
+            in oklch,
             var(--tertiary-text) 80%,
-            #000 20%
+            oklch(0 0 0) 20%
         );
     }
 
@@ -202,7 +212,7 @@
     .cell--multi--conflicted,
     .plan-scheduler-cell__position,
     .modal__content > div > .plan-position {
-        color: #000;
+        color: oklch(0 0 0);
         filter: brightness(0.8) invert(1) hue-rotate(180deg) saturate(170%);
     }
 
@@ -346,7 +356,7 @@
     }
 
     .content__header__info-big {
-        color: #bdbdbd;
+        color: oklch(0.8 0 0);
     }
 
     .content__header {
@@ -379,11 +389,11 @@
     }
 
     .plan-position__adnotation.zastepstwo {
-        background-color: #715109;
+        background-color: oklch(0.45 0.1 80);
     }
 
     .plan-position__adnotation.przeniesienie {
-        background-color: #8951cc;
+        background-color: oklch(0.56 0.2 300);
     }
 
     .grades__button__content-new {
@@ -392,7 +402,7 @@
 
     .app .grades__button__one-grade:has(.grades__button__content-new),
     .modal .grades__button__one-grade:has(.grades__button__content-new) {
-        border-color: color-mix(in srgb, var(--evBlue), #000 40%);
+        border-color: color-mix(in oklch, var(--evBlue), oklch(0 0 0) 40%);
     }
 
     .timetable__grid .column__header .swieto {
@@ -460,7 +470,7 @@
         padding-block: 16px;
         padding-inline: 31px;
         margin-top: 3px;
-        border-color: var(--kolor-wcag);
+        border-color: var(--evBlue);
     }
 
     .scheduler .scheduler__header-cell {
@@ -524,7 +534,7 @@
     .file_download_svg__st_brand,
     .file_sending_svg__st_brand,
     .scalanie_kont_red_svg__st_brand {
-        fill: color-mix(in srgb, var(--evBlue), #000 20%);
+        fill: color-mix(in oklch, var(--evBlue), oklch(0 0 0) 20%);
     }
 
     .app .teachers__message:hover {
@@ -651,7 +661,7 @@
     }
 
     .modal .modal__content {
-        background-color: var(--component-background);
+        background-color: var(--primary-component-background);
         color: var(--primary-text);
     }
 
@@ -729,7 +739,7 @@
 
     .MuiButton-contained.Mui-disabled {
         background-color: var(--secondary-component-background);
-        color: color-mix(in srgb, var(--secondary-text), #000 40%);
+        color: color-mix(in oklch, var(--secondary-text), oklch(0 0 0) 40%);
         cursor: not-allowed;
     }
 
@@ -933,7 +943,7 @@
     }
 
     .MuiCollapse-root {
-        background-color: var(--component-background);
+        background-color: var(--primary-component-background);
         color: var(--primary-text);
         border: 1px solid var(--borders);
     }
@@ -1018,7 +1028,7 @@
     }
 
     .MuiPaper-root {
-        background-color: var(--component-background);
+        background-color: var(--primary-component-background);
         color: var(--primary-text);
     }
 
@@ -1053,7 +1063,7 @@
         background: var(--secondary-component-background) !important;
     }
     input.MuiInputBase-input.MuiInput-input {
-        color: #000 !important;
+        color: oklch(0 0 0) !important;
         filter: invert(0.8) !important;
     }
     .tile__list__rectangle-boxes > li {
@@ -1068,34 +1078,34 @@
     }
     div.lesson.normal > article,
     div.lesson.conflicted > article {
-        background-color: var(--component-background) !important;
+        background-color: var(--primary-component-background) !important;
     }
     div.lesson.canceled > article {
         background-color: color-mix(
-            in srgb,
-            var(--component-background) 80%,
-            #f00 20%
+            in oklch,
+            var(--primary-component-background) 80%,
+            oklch(0.63 0.25 30) 20%
         ) !important;
     }
     ol.lessons-container > li.canceled {
         color: color-mix(
-            in srgb,
-            var(--component-background) 20%,
-            #f00 80%
+            in oklch,
+            var(--primary-component-background) 20%,
+            oklch(0.63 0.25 30) 80%
         ) !important;
     }
     div.lesson.substitute > article {
         background-color: color-mix(
-            in srgb,
-            var(--component-background) 60%,
-            #ff0 20%
+            in oklch,
+            var(--primary-component-background) 60%,
+            oklch(0.97 0.21 110) 20%
         ) !important;
     }
     ol.lessons-container > li.substitute {
         color: color-mix(
-            in srgb,
-            var(--component-background) 20%,
-            #ff0 60%
+            in oklch,
+            var(--primary-component-background) 20%,
+            oklch(0.97 0.21 110) 60%
         ) !important;
     }
     div.lesson.normal > div,
@@ -1133,128 +1143,19 @@
     a.linkified {
         color: var(--evBlue);
     }
-    .ifv-settings-button img {
-        filter: invert(0) !important;
-    }
-    .ifv-patches-modal {
-        background-color: var(--component-background);
-        border: 1px solid var(--borders);
-    }
-    .ifv-patches-modal-header h1 {
-        color: var(--primary-text);
-    }
-    .ifv-patches-modal > .patches-list > .patch,
-    .ifv-patches-mobile > .patches-list > .patch {
-        background-color: var(--secondary-component-background);
-        border: 1px solid var(--borders);
-    }
-    .ifv-patches-modal .patch .settings-list,
-    .ifv-patches-mobile .patch .settings-list {
-        background-color: var(--tertiary-component-background);
-        border: 1px solid var(--borders);
-    }
-    .patch-name {
-        color: color-mix(
-            in srgb,
-            var(--secondary-text),
-            var(--tertiary-text) 80%
-        );
-    }
-    .setting-name {
-        color: color-mix(
-            in srgb,
-            var(--secondary-text),
-            var(--tertiary-text) 60%
-        );
-    }
-    .setting-input input[type="text"],
-    .setting-input input[type="number"],
-    .setting-input input[type="color"],
-    .setting-input select {
-        background-color: var(--secondary-background);
-        color: var(--primary-text);
-        border: 1px solid var(--borders);
-        box-shadow: 0 0 300px color-mix(in srgb, var(--evBlue), transparent 85%) !important;
-        transition: 0.1s ease-out box-shadow;
-    }
-    .setting-boolean-toggle .toggle-input,
-    .checkbox-item input[type="checkbox"] {
-        box-shadow: 0 0 30px color-mix(in srgb, var(--evBlue), transparent 90%) !important;
-        transition: 0.1s ease-out box-shadow;
-    }
-    .setting-boolean-toggle .toggle-input:hover,
-    .checkbox-item input[type="checkbox"]:hover {
-        box-shadow: 0 0 15px color-mix(in srgb, var(--evBlue), transparent 85%) !important;
-    }
-    .checkbox-item input[type="checkbox"] {
-        background-color: var(--secondary-background);
-        border: 1px solid var(--borders);
-    }
-    .checkbox-item input[type="checkbox"]:checked {
-        background-color: color-mix(
-            in srgb,
-            var(--evBlue),
-            var(--secondary-background) 70%
-        );
-        border: 1px solid #007bff;
-    }
-    .checkbox-item label {
-        color: var(--primary-text);
-    }
-    .setting-input select {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23DFDFDD'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E");
-    }
-    .search-bar {
-        background-color: var(--secondary-component-background);
-        border: 1px solid var(--borders);
-    }
-    .search-bar input[type="text"] {
-        color: var(--primary-text);
-    }
-    #ifv-close-patches-modal img {
-        filter: invert(1);
-    }
-    .settings-list .setting {
-        border-bottom: 1px solid var(--hr-borders);
-    }
-    .patches-list .buttons {
-        border-top: 1px solid var(--hr-borders);
-    }
-    .settings-list .setting:last-child {
-        border-bottom: none;
-    }
-    .setting-input input[type="text"]:focus,
-    .setting-input input[type="number"]:focus,
-    .setting-input input[type="color"]:focus,
-    .setting-input select:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 30px color-mix(in srgb, var(--evBlue), transparent 85%) !important;
-    }
-    .reset-button {
-        border-color: var(--borders);
-    }
-    .no-results-message {
-        color: var(--primary-text);
-    }
-    .patch > .patch-header > *,
-    .patch .setting-header > * {
-        text-shadow: 0 0 50px color-mix(in srgb, var(--evBlue), transparent 70%);
-    }
-    .checkbox-item input[type="checkbox"]:checked {
-        transition:
-            background-color 0.2s ease-in-out,
-            border-color 0.2s ease-in-out,
-            box-shadow 0.1s ease-out;
-    }
     .icon--attachment {
         color: var(--tertiary-text);
     }
     .go_to_dashboard {
         color: var(--primary-text);
-        background-color: #3a3a3a;
-        border-color: #343434;
+        background-color: var(--tertiary-component-background);
+        border-color: var(--borders);
     }
     .go_to_dashboard > img {
         filter: invert(1);
+    }
+    .content-container .info-row,
+    body .info-row {
+        border-color: var(--borders);
     }
 }
