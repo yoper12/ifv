@@ -2,7 +2,7 @@ import { definePatch } from "@/utils/definePatch";
 import { route } from "@/utils/route";
 
 import colors from "./colors.css?inline";
-import eventHome from "./evHome.css?inline";
+import eduvulcanHome from "./evHome.css?inline";
 import main from "./main.css?inline";
 
 export default definePatch({
@@ -14,7 +14,7 @@ export default definePatch({
             "evHome-pureBlack",
         );
     },
-    css: [main, eventHome, colors],
+    css: [main, eduvulcanHome, colors],
     init(settings) {
         switch (settings.darkThemeEnabled) {
             case "auto": {
@@ -56,6 +56,7 @@ export default definePatch({
         matches: [route("*")],
         name: "Dark theme",
         runAt: "document_start",
+        runStrategy: "once",
         settings: [
             {
                 defaultValue: "auto",
