@@ -1,0 +1,9 @@
+.wcag-mobile,
+.wcag-tools,
+.wcag-controls {
+    display: none !important;
+}
+
+.languages-desktop:has(+ .wcag-tools) {
+    border: none;
+}

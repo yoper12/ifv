@@ -1,0 +1,31 @@
+:root.dark,
+:root.evHome-dark {
+    --primary-background: oklch(14% 0.01 255);
+    --secondary-background: oklch(16% 0.01 255);
+    --primary-component-background: oklch(19% 0.01 255);
+    --secondary-component-background: oklch(23% 0.01 255);
+    --tertiary-component-background: oklch(27% 0.01 255);
+    --primary-text: oklch(96% 0.005 255);
+    --secondary-text: oklch(82% 0.01 255);
+    --tertiary-text: oklch(70% 0.015 255);
+    --evBlue: oklch(70% 0.15 255);
+    --borders: oklch(35% 0.01 255);
+    --hr-borders: oklch(28% 0.01 255);
+    --hover: oklch(40% 0.02 255 / 0.15);
+}
+
+:root.pureBlack,
+:root.evHome-pureBlack {
+    --primary-background: oklch(0% 0 0);
+    --secondary-background: oklch(10% 0 0);
+    --primary-component-background: oklch(8% 0 0);
+    --secondary-component-background: oklch(14% 0 0);
+    --tertiary-component-background: oklch(18% 0 0);
+    --primary-text: oklch(96% 0 0);
+    --secondary-text: oklch(82% 0 0);
+    --tertiary-text: oklch(68% 0 0);
+    --evBlue: oklch(70% 0.15 255);
+    --borders: oklch(24% 0 0);
+    --hr-borders: oklch(16% 0 0);
+    --hover: oklch(100% 0 0 / 0.08);
+}

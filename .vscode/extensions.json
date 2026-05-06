@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "oven.bun-vscode",
+        "vitest.explorer",
+        "editorconfig.editorconfig",
+        "dbaeumer.vscode-eslint",
+        "svelte.svelte-vscode",
+        "esbenp.prettier-vscode"
+    ]
+}

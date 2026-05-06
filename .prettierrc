@@ -1,0 +1,7 @@
+{
+    "objectWrap": "collapse",
+    "experimentalTernaries": true,
+    "experimentalOperatorPosition": "start",
+    "plugins": ["prettier-plugin-svelte", "prettier-plugin-jsdoc"],
+    "tsdoc": true
+}
