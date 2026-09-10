@@ -8,5 +8,5 @@ window.appendModule({
     doesRunHere: () =>
         window.location.hostname === "eduvulcan.pl"
         && window.location.pathname === "/"
-        && !!document.querySelector("#panelLoginButton")
+        && !!document.querySelector(".vdpo-login-link")
 });
