@@ -286,5 +286,12 @@
       "css": ["patchesSettings/style.css"]
     },
     "allowedHostsCss": ["uczen.eduvulcan.pl", "dziennik-uczen.vulcan.net.pl", "wiadomosci.eduvulcan.pl", "dziennik-wiadomosci.vulcan.net.pl"]
+  },
+  {
+    "name": "Redirect to student list",
+    "description": "Redirects to student list after login in eduVulcan.",
+    "files": {
+      "js": ["redirectToStudentList.js"]
+    }
   }
 ]
